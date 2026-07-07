@@ -69,49 +69,55 @@ QUESTIONS = [
         "id": "nd4d-002",
         "domain": 4,
         "objective": "4.6",
-        "type": "multiple_response",
+        "type": "multiple_choice",
         "difficulty": "hard",
         "study_topic": "Access control models",
         "stem": (
-            "Select TWO statements that correctly distinguish mandatory access control (MAC) from discretionary "
-            "access control (DAC)."
+            "A financial firm's compliance policy requires that document access permissions can never be "
+            "altered by employees themselves — not even by the project lead who originally created the file — "
+            "and must instead be strictly enforced by the system according to centrally assigned clearance "
+            "levels, with no exceptions granted at the file level. Which access control model satisfies this "
+            "requirement, and why would discretionary access control (DAC) fail to meet it?"
         ),
         "options": [
             {
                 "id": "a",
-                "text": "In MAC, a central authority assigns fixed classification/clearance labels, and even the resource owner cannot change or override them.",
+                "text": "Mandatory access control (MAC); DAC would fail because it lets the resource owner grant or revoke access at their own discretion, which directly conflicts with the requirement that no one, including the creator, can override centrally assigned clearance levels.",
                 "correct": True,
                 "rationale": (
-                    "Correct. MAC's defining trait is centralized, non-negotiable labeling enforced by the "
-                    "operating system/kernel; not even the file's owner can alter the classification or grant "
-                    "access outside the label rules."
+                    "Correct. MAC enforces centrally assigned, non-negotiable classification/clearance labels "
+                    "at the kernel level, with no owner override. DAC's defining trait — owner discretion over "
+                    "granting access — is exactly what the policy prohibits."
                 ),
             },
             {
                 "id": "b",
-                "text": "In DAC, the owner of a resource decides who else may access it and can grant or revoke that access at their own discretion.",
-                "correct": True,
+                "text": "Discretionary access control (DAC); DAC would fail only because it requires more storage overhead to track ownership records than the firm can support.",
+                "correct": False,
                 "rationale": (
-                    "Correct. DAC is defined by owner discretion: the individual who owns or creates a resource "
-                    "controls who else can access it, without requiring central policy approval."
+                    "Incorrect. DAC does not satisfy the requirement at all, since its core mechanism is owner "
+                    "discretion over granting access — the opposite of what the policy demands — and storage "
+                    "overhead is not the reason it fails here."
                 ),
             },
             {
                 "id": "c",
-                "text": "In MAC, each file's owner independently decides which classification label to apply to their own files.",
+                "text": "Role-based access control (RBAC); DAC would fail because RBAC assigns permissions based on job title rather than file ownership.",
                 "correct": False,
                 "rationale": (
-                    "Incorrect. This describes owner discretion, which is the hallmark of DAC, not MAC. Under "
-                    "MAC, classification labels are assigned by a central authority, not the individual owner."
+                    "Incorrect. RBAC ties permissions to roles, but nothing in RBAC inherently prevents an "
+                    "administrator from reassigning role membership or permissions at will; it does not provide "
+                    "the immutable, centrally enforced clearance labeling the policy specifically requires."
                 ),
             },
             {
                 "id": "d",
-                "text": "In DAC, access decisions are enforced by the OS kernel using immutable security labels that no user can modify.",
+                "text": "Rule-based access control (RuBAC); DAC would fail because it cannot evaluate conditions like time of day.",
                 "correct": False,
                 "rationale": (
-                    "Incorrect. Immutable, kernel-enforced labels set by a central authority describe MAC, not "
-                    "DAC. DAC relies on owner-granted permissions, not fixed, centrally assigned labels."
+                    "Incorrect. The policy's requirement centers on immutable, centrally assigned clearance "
+                    "labels that no owner can override, not on evaluating conditional attributes like time of "
+                    "day, which is unrelated to why DAC fails here."
                 ),
             },
         ],
@@ -119,7 +125,7 @@ QUESTIONS = [
             "MAC centralizes classification/clearance decisions with a governing authority and enforces them at "
             "the kernel level, removing owner discretion entirely. DAC does the opposite: it places access "
             "decisions in the hands of each resource's owner, who can grant or revoke access without a central "
-            "policy authority's approval."
+            "policy authority's approval — precisely the flexibility this compliance policy prohibits."
         ),
     },
     {
