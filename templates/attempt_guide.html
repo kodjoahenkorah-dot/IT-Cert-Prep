@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Your tailored study guide · {{ guide.exam_name }}{% endblock %}
+{% block content %}
+
+<section class="guide-head">
+  <p class="results-exam-name">{{ guide.exam_name }}</p>
+  <h1>📖 Your tailored study guide</h1>
+  <p class="lede">{{ guide.intro }}</p>
+</section>
+
+{% if not guide.has_weak_topics %}
+<p class="all-correct">🎉 You didn't miss anything on this attempt — there's nothing to drill. Try a fresh full exam to keep sharp.</p>
+<section class="next-steps"><a class="btn primary" href="{{ url_for('index') }}">Take another exam →</a></section>
+{% else %}
+
+<section class="guide-actions">
+  <h2>Focused action plan (weakest first)</h2>
+  <ol class="advice">
+    {% for line in guide.actions %}<li>{{ line }}</li>{% endfor %}
+  </ol>
+  <form method="post" action="{{ url_for('study_weak') }}" class="inline-form">
+    <input type="hidden" name="num_questions" value="20">
+    <button type="submit" class="btn accent">🎯 Quiz me on these weak topics now →</button>
+  </form>
+</section>
+
+<section class="guide-notes">
+  <h2>Notes for the topics you missed</h2>
+  {% if guide.notes %}
+    {% for n in guide.notes %}
+    <article class="note-card">
+      <div class="note-card-head">
+        <h3>{{ n.topic }}</h3>
+        <span class="note-obj">
+          {%- if n.objective %}Obj {{ n.objective }}{% endif -%}
+          {%- if n.video %} · 🎬 {{ n.video }}{% endif -%}
+        </span>
+      </div>
+      <div class="note-body">{{ n.body | safe }}</div>
+      {% if n.key_points %}
+      <div class="note-keys">
+        <strong>Key points</strong>
+        <ul>{% for k in n.key_points %}<li>{{ k }}</li>{% endfor %}</ul>
+      </div>
+      {% endif %}
+    </article>
+    {% endfor %}
+  {% else %}
+    <p class="hint">Detailed notes for these specific topics are still being added — the full notes library is under <a href="{{ url_for('notes') }}">Study notes</a>.</p>
+  {% endif %}
+</section>
+
+<section class="next-steps">
+  <a class="btn ghost" href="{{ url_for('results') }}">← Back to results</a>
+  <a class="btn primary" href="{{ url_for('index') }}">Take another exam →</a>
+</section>
+{% endif %}
+
+{% endblock %}

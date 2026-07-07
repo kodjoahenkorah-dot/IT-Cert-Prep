@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Studying · {{ exam_name }}{% endblock %}
+{% block headerextra %}
+  <div class="exam-hud">
+    <span class="hud-item exam-label">{{ exam_name }} · Study mode</span>
+    <span id="progress" class="hud-item">1 / {{ questions|length }}</span>
+    <span id="score" class="hud-item">0 correct</span>
+  </div>
+{% endblock %}
+{% block content %}
+<div id="study-root"></div>
+
+<div class="study-nav">
+  <button id="prev-btn" class="btn ghost">← Previous</button>
+  <button id="next-btn" class="btn primary">Next →</button>
+  <a href="{{ url_for('study_setup') }}" class="btn ghost">Done studying</a>
+</div>
+
+<script id="study-data" type="application/json">{{ questions|tojson }}</script>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='study.js') }}"></script>
+{% endblock %}

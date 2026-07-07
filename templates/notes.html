@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Study notes · {{ profile.name }}{% endblock %}
+{% block content %}
+
+<section class="notes-head">
+  <h1>Study notes</h1>
+  <p class="lede">Comprehensive notes organised by domain, following the official objective order. Read alongside the video course, then quiz yourself.</p>
+
+  <div class="exam-switch">
+    {% for e in exams %}
+    <a class="pill {{ 'active' if e.key == profile.key }}" href="{{ url_for('notes', exam_key=e.key) }}">{{ e.short_name }}</a>
+    {% endfor %}
+  </div>
+  <p class="notes-meta">{{ profile.name }} · {{ total }} note sections</p>
+</section>
+
+{% if total == 0 %}
+<p class="all-correct">Notes for this exam are being added.</p>
+{% endif %}
+
+{% for domain, info in profile.domains.items() %}
+{% set domain_notes = grouped.get(domain, []) %}
+{% if domain_notes %}
+<section class="notes-domain">
+  <h2>Domain {{ domain }} — {{ info.name }}</h2>
+
+  <div class="notes-toc">
+    {% for n in domain_notes %}
+    <a href="#note-{{ domain }}-{{ loop.index }}">{{ n.topic }}</a>
+    {% endfor %}
+  </div>
+
+  {% for n in domain_notes %}
+  <article class="note-card" id="note-{{ domain }}-{{ loop.index }}">
+    <div class="note-card-head">
+      <h3>{{ n.topic }}</h3>
+      <span class="note-obj">
+        {%- if n.objective %}Obj {{ n.objective }}{% endif -%}
+        {%- if n.video %} · 🎬 {{ n.video }}{% endif -%}
+      </span>
+    </div>
+    <div class="note-body">{{ n.body | safe }}</div>
+    {% if n.key_points %}
+    <div class="note-keys">
+      <strong>Key points</strong>
+      <ul>{% for k in n.key_points %}<li>{{ k }}</li>{% endfor %}</ul>
+    </div>
+    {% endif %}
+  </article>
+  {% endfor %}
+</section>
+{% endif %}
+{% endfor %}
+
+{% endblock %}

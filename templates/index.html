@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+  <h1>CompTIA practice exams</h1>
+  <p class="lede">
+    Scenario-based questions written to be <strong>as hard or harder</strong> than the live exam,
+    including performance-based questions (PBQs). Every exam pulls a different mix, so you can keep
+    retesting. After grading you get a full explanation of every miss — including
+    <em>why each wrong answer is wrong</em> — plus a personalised study plan.
+  </p>
+
+  {% if not ai_on %}
+  <p class="hint">💡 AI mode is off. Set <code>ANTHROPIC_API_KEY</code> and <code>pip install anthropic</code>
+     to generate unlimited brand-new questions.</p>
+  {% endif %}
+
+  {% for card in cards %}
+  {% set p = card.profile %}
+  <div class="exam-pick">
+    <div class="exam-pick-head">
+      <h2>{{ p.name }}</h2>
+      <span class="exam-bank">{{ card.stats.total }} questions in bank</span>
+    </div>
+    <p class="exam-blurb">{{ p.blurb }}</p>
+
+    <ul class="domain-bars">
+      {% for d, info in p.domains.items() %}
+      <li>
+        <span class="dlabel">Domain {{ d }} · {{ info.name }}</span>
+        <span class="dcount">{{ card.stats.by_domain.get(d, 0) }} items · {{ (info.weight*100)|round|int }}% of exam</span>
+      </li>
+      {% endfor %}
+    </ul>
+
+    <form class="start-card" method="post" action="{{ url_for('start') }}">
+      <input type="hidden" name="exam" value="{{ p.key }}">
+      <div class="start-row">
+        <div class="field">
+          <label for="nq-{{ p.key }}">Questions</label>
+          <select name="num_questions" id="nq-{{ p.key }}">
+            <option value="90" selected>90 (full exam)</option>
+            <option value="65">65</option>
+            <option value="30">30 (quick drill)</option>
+            <option value="15">15 (mini)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="np-{{ p.key }}">PBQs</label>
+          <select name="num_pbqs" id="np-{{ p.key }}">
+            <option value="5" selected>5 PBQs</option>
+            <option value="3">3 PBQs</option>
+            <option value="0">None</option>
+          </select>
+        </div>
+        {% if ai_on %}
+        <div class="field checkbox">
+          <label><input type="checkbox" name="use_ai"> AI-generate new questions</label>
+        </div>
+        {% endif %}
+      </div>
+      <div class="start-actions">
+        <button type="submit" class="btn primary">Start {{ p.short_name }} exam →</button>
+        <span class="pass-note">Pass line ≈ {{ p.pass_percent }}% · {{ p.time_limit_min }} min</span>
+      </div>
+    </form>
+
+    <form method="post" action="{{ url_for('fresh_start') }}" class="fresh">
+      <input type="hidden" name="exam" value="{{ p.key }}">
+      <button type="submit" class="btn ghost" title="Forget which questions you've already seen so the whole bank is reusable">↺ Reset seen-question history</button>
+    </form>
+  </div>
+  {% endfor %}
+</section>
+{% endblock %}

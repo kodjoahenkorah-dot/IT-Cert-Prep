@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}CompTIA & Cisco Practice Exams{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="{{ url_for('index') }}">🎓 Cert <span>Practice</span> Exams</a>
+    <nav class="topnav">
+      <a href="{{ url_for('index') }}">Exams</a>
+      <a href="{{ url_for('study_setup') }}">Study mode</a>
+      <a href="{{ url_for('notes') }}">Study notes</a>
+    </nav>
+    {% block headerextra %}{% endblock %}
+  </header>
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

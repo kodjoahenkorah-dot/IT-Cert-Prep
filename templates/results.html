@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% set s = report.summary %}
+{% block title %}Results · {{ s.exam_name }}{% endblock %}
+{% block content %}
+
+<p class="results-exam-name">{{ s.exam_name }}</p>
+<section class="score-card {{ 'pass' if s.passed else 'fail' }}">
+  <div class="score-big">
+    <span class="pct">{{ s.percent }}%</span>
+    <span class="scaled">≈ {{ s.scaled_score }} / 900</span>
+  </div>
+  <div class="score-meta">
+    <span class="verdict">{{ 'PASS' if s.passed else 'NOT YET PASSING' }}</span>
+    <span>{{ s.correct }} / {{ s.total }} correct · pass line ≈ {{ s.pass_percent }}%</span>
+  </div>
+</section>
+
+<section class="domain-breakdown">
+  <h2>Score by domain</h2>
+  {% for d, info in s.per_domain.items() %}
+    {% if info.total %}
+    <div class="dbar">
+      <div class="dbar-head">
+        <span>Domain {{ d }} · {{ info.name }}</span>
+        <span class="dbar-num">{{ info.correct }}/{{ info.total }} ({{ info.percent }}%)</span>
+      </div>
+      <div class="dbar-track">
+        <div class="dbar-fill {{ 'good' if info.percent >= 83 else 'bad' }}" style="width: {{ info.percent }}%"></div>
+      </div>
+    </div>
+    {% endif %}
+  {% endfor %}
+</section>
+
+<section class="study-plan">
+  <h2>📚 Your study plan</h2>
+  <p class="headline">{{ report.study_plan.headline }}</p>
+
+  {% if report.study_plan.weak_domains %}
+  <h3>Domains to prioritise</h3>
+  <ul class="advice">
+    {% for line in report.study_plan.weak_domains %}<li>{{ line }}</li>{% endfor %}
+  </ul>
+  {% endif %}
+
+  {% if report.study_plan.weak_topics %}
+  <h3>Specific topics to review (weakest first)</h3>
+  <table class="topic-table">
+    <thead><tr><th>Topic</th><th>Domain</th><th>Score</th></tr></thead>
+    <tbody>
+      {% for t in report.study_plan.weak_topics %}
+      <tr>
+        <td>{{ t.topic }}</td>
+        <td>D{{ t.domain }}</td>
+        <td>{{ t.correct }}/{{ t.total }} ({{ t.percent }}%)</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="all-correct">🎉 No missed topics — outstanding. Keep cycling fresh exams to stay sharp.</p>
+  {% endif %}
+
+  {% if report.study_plan.weak_topic_labels %}
+  <div class="study-cta">
+    <a class="btn primary" href="{{ url_for('attempt_guide') }}">📖 Get my tailored study guide for this attempt →</a>
+    <form method="post" action="{{ url_for('study_weak') }}" class="inline-form">
+      <input type="hidden" name="num_questions" value="20">
+      <button type="submit" class="btn accent">🎯 Take a quiz focused on my weak topics →</button>
+    </form>
+  </div>
+  <p class="hint">The focused quiz pulls only from the topics you missed above. The study guide collects the exact notes you need for this attempt.</p>
+  {% endif %}
+</section>
+
+<section class="review">
+  <div class="review-head">
+    <h2>Question review &amp; explanations</h2>
+    <label class="filter"><input type="checkbox" id="only-wrong" checked> Show only what I got wrong</label>
+  </div>
+
+  {% for r in report.results %}
+  <article class="qreview {{ 'correct' if r.is_correct else 'incorrect' }}" data-correct="{{ '1' if r.is_correct else '0' }}">
+    <div class="qreview-head">
+      <span class="badge {{ 'ok' if r.is_correct else 'no' }}">{{ '✓ Correct' if r.is_correct else '✗ Incorrect' }}</span>
+      <span class="qmeta">Domain {{ r.domain }} · Obj {{ r.objective }} · {{ r.study_topic }}</span>
+    </div>
+
+    {% if r.stem %}<p class="qstem">{{ r.stem }}</p>{% endif %}
+
+    {# ---- Multiple choice / response ---- #}
+    {% if r.type in ('multiple_choice', 'multiple_response') %}
+      <ul class="opt-list">
+        {% for o in r.detail.options %}
+        <li class="opt {{ 'is-correct' if o.correct }} {{ 'is-chosen' if o.chosen }}">
+          <span class="opt-mark">
+            {%- if o.correct and o.chosen %}✓ your answer (correct)
+            {%- elif o.correct %}✓ correct answer
+            {%- elif o.chosen %}✗ you chose this
+            {%- else %}•{% endif -%}
+          </span>
+          <span class="opt-text">{{ o.text }}</span>
+          <span class="opt-rationale">{{ o.rationale }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+
+    {# ---- PBQ matching / categorize ---- #}
+    {% elif r.type in ('pbq_matching', 'pbq_categorize') %}
+      <table class="pbq-review">
+        <thead><tr><th>{{ 'Prompt' if r.type == 'pbq_matching' else 'Item' }}</th><th>Your answer</th><th>Correct answer</th><th>Why</th></tr></thead>
+        <tbody>
+          {% for row in r.detail.rows %}
+          <tr class="{{ 'ok' if row.ok else 'no' }}">
+            <td>{{ row.prompt if r.type == 'pbq_matching' else row.item }}</td>
+            <td class="{{ 'cell-no' if not row.ok }}">{{ row.yours }}</td>
+            <td class="cell-ok">{{ row.correct }}</td>
+            <td class="why">{{ row.rationale }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+    {# ---- PBQ ordering ---- #}
+    {% elif r.type == 'pbq_ordering' %}
+      <table class="pbq-review">
+        <thead><tr><th>#</th><th>Your answer</th><th>Correct answer</th><th>Why</th></tr></thead>
+        <tbody>
+          {% for row in r.detail.rows %}
+          <tr class="{{ 'ok' if row.ok else 'no' }}">
+            <td>{{ row.position }}</td>
+            <td class="{{ 'cell-no' if not row.ok }}">{{ row.yours }}</td>
+            <td class="cell-ok">{{ row.correct }}</td>
+            <td class="why">{{ row.rationale }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% endif %}
+
+    <div class="explanation"><strong>Explanation:</strong> {{ r.explanation }}</div>
+  </article>
+  {% endfor %}
+</section>
+
+<section class="next-steps">
+  <a class="btn primary" href="{{ url_for('index') }}">Generate another exam (different questions) →</a>
+</section>
+
+<script>
+  // Toggle between "only wrong" and "all questions".
+  const onlyWrong = document.getElementById('only-wrong');
+  function applyFilter() {
+    document.querySelectorAll('.qreview').forEach(el => {
+      const wrong = el.dataset.correct === '0';
+      el.style.display = (onlyWrong.checked && !wrong) ? 'none' : '';
+    });
+  }
+  onlyWrong.addEventListener('change', applyFilter);
+  applyFilter();
+</script>
+{% endblock %}

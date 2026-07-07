@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Exam in progress · {{ exam_name }}{% endblock %}
+{% block headerextra %}
+  <div class="exam-hud">
+    <span class="hud-item exam-label">{{ exam_name }}</span>
+    <span id="progress" class="hud-item">0 / {{ questions|length }} answered</span>
+    <span id="timer" class="hud-item timer" data-minutes="{{ time_limit_min }}">{{ time_limit_min }}:00</span>
+  </div>
+{% endblock %}
+{% block content %}
+<div id="exam-root" data-total="{{ questions|length }}"></div>
+
+<div class="exam-footer">
+  <button id="submit-btn" class="btn primary">Submit exam &amp; see results</button>
+  <span class="hint">You can submit any time. Unanswered questions are marked incorrect.</span>
+</div>
+
+<script id="exam-data" type="application/json">{{ questions|tojson }}</script>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='exam.js') }}"></script>
+{% endblock %}
