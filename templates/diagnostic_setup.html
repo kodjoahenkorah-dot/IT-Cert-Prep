@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Diagnostic test · {{ profile.name }}{% endblock %}
+{% block content %}
+<section class="notes-head">
+  <h1>🩺 Diagnostic test</h1>
+  <p class="lede">A short, timed-per-question assessment. At the end you get an <strong>estimated chance of passing</strong>, your <strong>strongest and weakest domains and subtopics</strong>, whether your misses look like <strong>missing knowledge, misreading, or guessing</strong>, and a <strong>recommended study path</strong>.</p>
+
+  <div class="exam-switch">
+    {% for e in exams %}
+    <a class="pill {{ 'active' if e.key == profile.key }}" href="{{ url_for('diagnostic_setup', exam_key=e.key) }}">{{ e.short_name }}</a>
+    {% endfor %}
+  </div>
+  <p class="notes-meta">{{ profile.name }}</p>
+</section>
+
+<form method="post" action="{{ url_for('diagnostic_start') }}" class="start-card">
+  <input type="hidden" name="exam" value="{{ profile.key }}">
+  <div class="field">
+    <label for="num_questions">Number of questions</label>
+    <select name="num_questions" id="num_questions">
+      <option value="5">5 (quick snapshot)</option>
+      <option value="10">10</option>
+      <option value="15" selected>15</option>
+      <option value="20">20 (most reliable)</option>
+    </select>
+  </div>
+  <p class="hint">No answer feedback during the test — you'll get the full analysis at the end. Try to answer as you would on the real exam.</p>
+  <button type="submit" class="btn primary">Start diagnostic →</button>
+</form>
+{% endblock %}

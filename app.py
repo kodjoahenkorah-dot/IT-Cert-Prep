@@ -34,6 +34,12 @@ from exam.generator import (
 from exam.flashcards_loader import build_flashcard_session, has_deck, load_cards
 from exam.grading import grade_exam, grade_one
 from exam.flashcards_loader import build_flashcard_session, has_deck, load_cards
+from exam.acronyms_loader import (
+    build_acronym_session,
+    has_deck as acronyms_has_deck,
+    load_acronyms,
+)
+from exam.diagnostic import analyze_diagnostic, build_diagnostic
 from exam.models import is_pbq
 from exam.notes_loader import load_notes, notes_by_domain
 from exam.study import build_attempt_guide
@@ -239,6 +245,103 @@ def flashcards_start():
         mode=mode,
         exam_name=profile.name,
     )
+
+
+@app.route("/acronyms")
+@app.route("/acronyms/<exam_key>")
+def acronyms_setup(exam_key: str | None = None):
+    profile = get_exam(exam_key)
+    exams = [e for e in EXAMS.values() if acronyms_has_deck(e.key)]
+    return render_template(
+        "acronyms_setup.html",
+        profile=profile,
+        exams=exams,
+        has_deck=acronyms_has_deck(profile.key),
+        deck_size=len(load_acronyms(profile.key)),
+    )
+
+
+@app.route("/acronyms/start", methods=["POST"])
+def acronyms_start():
+    profile = get_exam(request.form.get("exam"))
+    mode = request.form.get("mode", "multiple_choice")
+    if mode not in ("multiple_choice", "typed"):
+        mode = "multiple_choice"
+    num = int(request.form.get("num_cards", 15))
+    cards = build_acronym_session(profile.key, mode=mode, num_cards=num)
+    if not cards:
+        return redirect(url_for("acronyms_setup", exam_key=profile.key))
+    return render_template(
+        "acronyms.html", cards=cards, mode=mode, exam_name=profile.name
+    )
+
+
+# --------------------------------------------------------------------------- #
+# Diagnostic test: short assessment + pass-readiness / behaviour analysis      #
+# --------------------------------------------------------------------------- #
+@app.route("/diagnostic")
+@app.route("/diagnostic/<exam_key>")
+def diagnostic_setup(exam_key: str | None = None):
+    profile = get_exam(exam_key)
+    return render_template("diagnostic_setup.html", profile=profile, exams=list(EXAMS.values()))
+
+
+@app.route("/diagnostic/start", methods=["POST"])
+def diagnostic_start():
+    profile = get_exam(request.form.get("exam"))
+    bank = _bank_for(profile)
+    num = int(request.form.get("num_questions", 15))
+    quiz = build_diagnostic(profile, bank, num)
+    diag_id = secrets.token_hex(8)
+    _EXAMS[diag_id] = {"profile_key": profile.key, "questions": quiz, "mode": "diagnostic"}
+    session["diag_id"] = diag_id
+    questions = [_public_question(profile, q, i) for i, q in enumerate(quiz)]
+    return render_template("diagnostic.html", questions=questions, exam_name=profile.name)
+
+
+@app.route("/diagnostic/submit", methods=["POST"])
+def diagnostic_submit():
+    entry = _EXAMS.get(session.get("diag_id"))
+    if not entry:
+        return jsonify({"error": "no active diagnostic"}), 400
+    profile = get_exam(entry["profile_key"])
+    data = request.get_json(force=True)
+    responses = data.get("responses", {})
+    times = data.get("times", {})
+    report = analyze_diagnostic(profile, entry["questions"], responses, times)
+    report_id = secrets.token_hex(8)
+    report["profile_key"] = profile.key
+    _REPORTS[report_id] = report
+    session["diag_report_id"] = report_id
+    _EXAMS.pop(session.get("diag_id"), None)
+    session.pop("diag_id", None)
+    return jsonify({"redirect": url_for("diagnostic_results")})
+
+
+@app.route("/diagnostic/results")
+def diagnostic_results():
+    report = _REPORTS.get(session.get("diag_report_id"))
+    if not report:
+        return redirect(url_for("diagnostic_setup"))
+    return render_template("diagnostic_results.html", r=report)
+
+
+@app.route("/diagnostic/study-weak", methods=["POST"])
+def diagnostic_study_weak():
+    """Start a Study-Mode session focused on the diagnostic's weak topics."""
+    report = _REPORTS.get(session.get("diag_report_id"))
+    if not report:
+        return redirect(url_for("diagnostic_setup"))
+    profile = get_exam(report.get("profile_key"))
+    weak = report.get("weak_topic_labels", [])
+    if not weak:
+        return redirect(url_for("diagnostic_results"))
+    bank = _bank_for(profile)
+    quiz = build_study_session(profile, bank, topics=weak, num_questions=20)
+    sid = secrets.token_hex(8)
+    _EXAMS[sid] = {"profile_key": profile.key, "questions": quiz, "mode": "study"}
+    session["study_id"] = sid
+    return redirect(url_for("study_session"))
 
 
 @app.route("/submit", methods=["POST"])

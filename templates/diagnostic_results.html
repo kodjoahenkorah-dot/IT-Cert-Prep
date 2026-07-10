@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Diagnostic results · {{ r.exam_name }}{% endblock %}
+{% block content %}
+<p class="results-exam-name">{{ r.exam_name }} · diagnostic</p>
+
+<section class="diag-gauge">
+  {% set cls = 'good' if r.pass_probability >= 70 else ('mid' if r.pass_probability >= 45 else 'low') %}
+  <div class="diag-pct {{ cls }}">{{ r.pass_probability }}%</div>
+  <div class="diag-sub">estimated chance of passing the real exam</div>
+  <div class="diag-sub">You scored {{ r.correct }}/{{ r.total }} ({{ r.percent }}%) on this diagnostic. Pass line ≈ {{ r.pass_percent }}%.</div>
+  <p class="hint" style="margin-top:10px">{{ r.confidence }} This is an estimate for self-assessment, not a guarantee.</p>
+</section>
+
+<div class="diag-grid">
+  <div class="diag-card">
+    <h3>💪 Strongest domains</h3>
+    {% for d in r.strongest_domains %}
+    <p><span class="diag-tag strong">{{ d.percent }}%</span> Domain {{ d.domain }} — {{ d.name }} ({{ d.correct }}/{{ d.total }})</p>
+    {% endfor %}
+  </div>
+  <div class="diag-card">
+    <h3>🎯 Weakest domains</h3>
+    {% if r.weakest_domains %}
+      {% for d in r.weakest_domains %}
+      <p><span class="diag-tag weak">{{ d.percent }}%</span> Domain {{ d.domain }} — {{ d.name }} ({{ d.correct }}/{{ d.total }})</p>
+      {% endfor %}
+    {% else %}<p class="all-correct">No weak domains — strong across the board.</p>{% endif %}
+  </div>
+</div>
+
+<section class="diag-card">
+  <h3>🔎 Weakest subtopics</h3>
+  {% if r.weak_topics %}
+  <table class="topic-table">
+    <thead><tr><th>Subtopic</th><th>Domain</th><th>Score</th></tr></thead>
+    <tbody>
+      {% for t in r.weak_topics %}
+      <tr><td>{{ t.topic }}</td><td>D{{ t.domain }}</td><td>{{ t.correct }}/{{ t.total }} ({{ t.percent }}%)</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}<p class="all-correct">🎉 You didn't miss any subtopic.</p>{% endif %}
+</section>
+
+<section class="diag-card">
+  <h3>🧠 What your misses look like</h3>
+  {% set labels = {'knowledge':'Missing knowledge', 'misreading':'Misreading questions / distractor traps', 'guessing':'Rushing / guessing', 'none':'No errors'} %}
+  <p><span class="diag-tag {{ 'strong' if r.behavior.primary == 'none' else 'weak' }}">{{ labels.get(r.behavior.primary, 'Mixed') }}</span></p>
+  <div class="diag-behavior">{{ r.behavior.detail }}</div>
+  {% if r.behavior.signals %}<p class="hint">Signals: {{ r.behavior.signals | join('; ') }}</p>{% endif %}
+</section>
+
+<section class="study-plan">
+  <h2>🗺️ Recommended study path</h2>
+  <ol class="advice">
+    {% for step in r.study_path %}<li>{{ step }}</li>{% endfor %}
+  </ol>
+  {% if r.weak_topic_labels %}
+  <form method="post" action="{{ url_for('diagnostic_study_weak') }}" class="inline-form" style="margin-top:12px">
+    <button type="submit" class="btn accent">🎯 Study my weak topics now →</button>
+  </form>
+  {% endif %}
+</section>
+
+<section class="next-steps">
+  <a class="btn ghost" href="{{ url_for('diagnostic_setup') }}">Retake diagnostic</a>
+  <a class="btn primary" href="{{ url_for('index') }}">Take a full exam →</a>
+</section>
+{% endblock %}

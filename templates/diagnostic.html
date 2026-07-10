@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}Diagnostic in progress · {{ exam_name }}{% endblock %}
+{% block headerextra %}
+  <div class="exam-hud">
+    <span class="hud-item exam-label">{{ exam_name }} · Diagnostic</span>
+    <span id="progress" class="hud-item">1 / {{ questions|length }}</span>
+  </div>
+{% endblock %}
+{% block content %}
+<div id="diag-root"></div>
+<div class="study-nav">
+  <button id="next-btn" class="btn primary">Next →</button>
+  <span class="hint">Answer to continue. No feedback until the end — you'll get your full analysis.</span>
+</div>
+
+<script id="diag-data" type="application/json">{{ questions|tojson }}</script>
+<script>
+  const QS = JSON.parse(document.getElementById("diag-data").textContent);
+  const root = document.getElementById("diag-root");
+  const answers = {}, times = {};
+  let cur = 0, shownAt = Date.now();
+
+  function el(tag, attrs = {}, ...kids) {
+    const n = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) { if (k === "class") n.className = v; else n.setAttribute(k, v); }
+    for (const c of kids) { if (c == null) continue; n.appendChild(typeof c === "string" ? document.createTextNode(c) : c); }
+    return n;
+  }
+
+  function render() {
+    root.innerHTML = "";
+    const q = QS[cur];
+    const card = el("article", { class: "q-card" });
+    card.appendChild(el("div", { class: "q-head" },
+      el("span", { class: "q-num" }, "Question " + (cur + 1)),
+      el("span", { class: "q-tag" }, q.multi ? "Choose all that apply" : "Multiple choice"),
+      el("span", { class: "q-dom" }, "Domain " + q.domain)));
+    if (q.stem) card.appendChild(el("p", { class: "q-stem" }, q.stem));
+    const wrap = el("div", { class: "q-options" });
+    (q.options || []).forEach((o) => {
+      const input = el("input", { type: q.multi ? "checkbox" : "radio", name: q.id, value: o.id });
+      const chosen = q.multi ? (answers[q.id] || []).includes(o.id) : answers[q.id] === o.id;
+      if (chosen) input.checked = true;
+      input.addEventListener("change", () => {
+        if (q.multi) {
+          const s = new Set(answers[q.id] || []);
+          input.checked ? s.add(o.id) : s.delete(o.id);
+          answers[q.id] = [...s];
+        } else { answers[q.id] = o.id; }
+      });
+      wrap.appendChild(el("label", { class: "opt-choice" }, input, el("span", {}, o.text)));
+    });
+    card.appendChild(wrap);
+    root.appendChild(card);
+    document.getElementById("progress").textContent = (cur + 1) + " / " + QS.length;
+    document.getElementById("next-btn").textContent = cur === QS.length - 1 ? "Finish & analyze" : "Next →";
+    shownAt = Date.now();
+  }
+
+  function recordTime() {
+    const q = QS[cur];
+    times[q.id] = (times[q.id] || 0) + (Date.now() - shownAt);
+  }
+  function answered() {
+    const a = answers[QS[cur].id];
+    if (Array.isArray(a)) return a.length > 0;
+    return a !== undefined && a !== "";
+  }
+
+  async function submit() {
+    const res = await fetch("/diagnostic/submit", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ responses: answers, times }),
+    });
+    const data = await res.json();
+    if (data.redirect) window.location = data.redirect;
+  }
+
+  document.getElementById("next-btn").addEventListener("click", () => {
+    if (!answered() && !confirm("Leave this question blank? Blank counts as incorrect.")) return;
+    recordTime();
+    if (cur < QS.length - 1) { cur++; render(); }
+    else { document.getElementById("next-btn").disabled = true; document.getElementById("next-btn").textContent = "Analyzing…"; submit(); }
+  });
+  render();
+</script>
+{% endblock %}

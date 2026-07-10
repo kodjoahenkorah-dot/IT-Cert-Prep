@@ -261,3 +261,24 @@ select {
 .fc-term-reveal.ok .fc-verdict { color: var(--good); }
 .fc-term-reveal.no .fc-verdict { color: var(--bad); }
 .fc-selfgrade { display: flex; gap: 12px; margin-top: 10px; }
+
+/* ---- Acronym drill ---- */
+.fc-acronym { font-size: 2.4rem; font-weight: 800; letter-spacing: 1px; text-align: center; margin: 12px 0 20px; color: var(--accent); }
+.ac-typed-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.ac-input { flex: 1; min-width: 220px; padding: 11px 14px; font-size: 1rem; background: var(--panel-2); color: var(--ink); border: 1px solid var(--line); border-radius: 8px; }
+.ac-input:disabled { opacity: .8; }
+.fc-opt.is-chosen-wrong { background: rgba(248,81,73,.14); border-color: var(--bad); }
+
+/* ---- Diagnostic ---- */
+.diag-gauge { text-align: center; padding: 22px; border-radius: var(--radius); border: 1px solid var(--line); background: var(--panel); margin: 18px 0; }
+.diag-pct { font-size: 3.2rem; font-weight: 800; line-height: 1; }
+.diag-pct.good { color: var(--good); } .diag-pct.mid { color: var(--warn); } .diag-pct.low { color: var(--bad); }
+.diag-sub { color: var(--muted); margin-top: 6px; }
+.diag-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 18px 0; }
+.diag-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; }
+.diag-card h3 { margin: 0 0 8px; }
+.diag-tag { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: .82rem; font-weight: 700; }
+.diag-tag.strong { background: rgba(46,160,67,.2); color: var(--good); }
+.diag-tag.weak { background: rgba(248,81,73,.2); color: var(--bad); }
+.diag-behavior { padding: 14px 16px; border-left: 3px solid var(--accent); background: var(--panel-2); border-radius: 8px; margin: 8px 0; }
+@media (max-width: 640px) { .diag-grid { grid-template-columns: 1fr; } }
