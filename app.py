@@ -33,6 +33,7 @@ from exam.generator import (
 )
 from exam.flashcards_loader import build_flashcard_session, has_deck, load_cards
 from exam.grading import grade_exam, grade_one
+from exam.flashcards_loader import build_flashcard_session, has_deck, load_cards
 from exam.models import is_pbq
 from exam.notes_loader import load_notes, notes_by_domain
 from exam.study import build_attempt_guide

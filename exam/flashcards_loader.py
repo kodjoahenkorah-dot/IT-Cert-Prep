@@ -19,21 +19,49 @@ Two study modes are served from the same deck:
 from __future__ import annotations
 
 import importlib
+import pkgutil
 import random
 
+_CACHE: dict[str, list[dict]] = {}
 
-def _deck_module(exam_key: str):
+
+def _iter_card_lists(exam_key: str):
+    """Yield every module-level CARDS list for an exam.
+
+    Supports two layouts:
+      * a single module  exam/flashcards/<key>.py  exposing CARDS
+      * a package        exam/flashcards/<key>/*.py each exposing CARDS
+    """
     try:
-        return importlib.import_module(f"exam.flashcards.{exam_key}")
+        obj = importlib.import_module(f"exam.flashcards.{exam_key}")
     except ModuleNotFoundError:
-        return None
+        return
+    if hasattr(obj, "__path__"):  # it's a package -> load all submodules
+        for modinfo in pkgutil.iter_modules(obj.__path__):
+            if modinfo.name.startswith("_"):
+                continue
+            sub = importlib.import_module(f"exam.flashcards.{exam_key}.{modinfo.name}")
+            yield getattr(sub, "CARDS", [])
+    else:
+        yield getattr(obj, "CARDS", [])
 
 
 def load_cards(exam_key: str) -> list[dict]:
-    mod = _deck_module(exam_key)
-    if mod is None:
-        return []
-    return [c for c in getattr(mod, "CARDS", []) if c.get("term") and c.get("definition")]
+    if exam_key in _CACHE:
+        return _CACHE[exam_key]
+    cards: list[dict] = []
+    seen = set()
+    for lst in _iter_card_lists(exam_key):
+        for c in lst:
+            if not (c.get("term") and c.get("definition")):
+                continue
+            key = (c["term"], c["definition"][:60])
+            if key in seen:
+                continue
+            seen.add(key)
+            cards.append(c)
+    _CACHE[exam_key] = cards
+    return cards
 
 
 def has_deck(exam_key: str) -> bool:
