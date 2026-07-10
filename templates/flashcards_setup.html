@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Flashcards · {{ profile.name }}{% endblock %}
+{% block content %}
+<section class="notes-head">
+  <h1>🃏 Flashcards</h1>
+  <p class="lede">Each card shows a <strong>definition</strong> — you recall the <strong>term</strong>. Pick a mode: multiple-choice (choose the term) or open-ended (recall it, then flip to reveal).</p>
+
+  <div class="exam-switch">
+    {% for e in exams %}
+    <a class="pill {{ 'active' if e.key == profile.key }}" href="{{ url_for('flashcards_setup', exam_key=e.key) }}">{{ e.short_name }}</a>
+    {% endfor %}
+  </div>
+  <p class="notes-meta">{{ profile.name }} · {{ deck_size }} cards in deck</p>
+</section>
+
+{% if not has_deck %}
+<p class="all-correct">A flashcard deck for this exam is being added.</p>
+{% else %}
+<form method="post" action="{{ url_for('flashcards_start') }}" class="start-card">
+  <input type="hidden" name="exam" value="{{ profile.key }}">
+
+  <div class="field">
+    <label>Mode</label>
+    <label class="opt-choice"><input type="radio" name="mode" value="multiple_choice" checked> <span><strong>Multiple choice</strong> — see the definition, pick the matching term from 4 options</span></label>
+    <label class="opt-choice"><input type="radio" name="mode" value="open_ended"> <span><strong>Open ended</strong> — see the definition, recall the term, then flip the card to check</span></label>
+  </div>
+
+  <div class="field">
+    <label for="num_cards">Number of cards</label>
+    <select name="num_cards" id="num_cards">
+      <option value="5">5</option>
+      <option value="10">10</option>
+      <option value="15" selected>15</option>
+      <option value="20">20</option>
+      <option value="25">25</option>
+      <option value="50">50</option>
+    </select>
+  </div>
+
+  <button type="submit" class="btn primary">Start flashcards →</button>
+</form>
+{% endif %}
+{% endblock %}

@@ -31,6 +31,7 @@ from exam.generator import (
     reset_seen,
     topics_by_domain,
 )
+from exam.flashcards_loader import build_flashcard_session, has_deck, load_cards
 from exam.grading import grade_exam, grade_one
 from exam.models import is_pbq
 from exam.notes_loader import load_notes, notes_by_domain
@@ -202,6 +203,41 @@ def study_grade():
     if question is None:
         return jsonify({"error": "unknown question"}), 400
     return jsonify(grade_one(question, answer))
+
+
+# --------------------------------------------------------------------------- #
+# Flashcards: definition -> term, in multiple-choice or open-ended mode        #
+# --------------------------------------------------------------------------- #
+@app.route("/flashcards")
+@app.route("/flashcards/<exam_key>")
+def flashcards_setup(exam_key: str | None = None):
+    profile = get_exam(exam_key)
+    exams = [e for e in EXAMS.values() if has_deck(e.key)]
+    return render_template(
+        "flashcards_setup.html",
+        profile=profile,
+        exams=exams,
+        has_deck=has_deck(profile.key),
+        deck_size=len(load_cards(profile.key)),
+    )
+
+
+@app.route("/flashcards/start", methods=["POST"])
+def flashcards_start():
+    profile = get_exam(request.form.get("exam"))
+    mode = request.form.get("mode", "multiple_choice")
+    if mode not in ("multiple_choice", "open_ended"):
+        mode = "multiple_choice"
+    num = int(request.form.get("num_cards", 15))
+    session_cards = build_flashcard_session(profile.key, mode=mode, num_cards=num)
+    if not session_cards:
+        return redirect(url_for("flashcards_setup", exam_key=profile.key))
+    return render_template(
+        "flashcards.html",
+        cards=session_cards,
+        mode=mode,
+        exam_name=profile.name,
+    )
 
 
 @app.route("/submit", methods=["POST"])

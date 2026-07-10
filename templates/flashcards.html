@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}Flashcards · {{ exam_name }}{% endblock %}
+{% block headerextra %}
+  <div class="exam-hud">
+    <span class="hud-item exam-label">{{ exam_name }} · Flashcards</span>
+    <span id="progress" class="hud-item">1 / {{ cards|length }}</span>
+    <span id="score" class="hud-item">0 correct</span>
+  </div>
+{% endblock %}
+{% block content %}
+<div id="fc-root"></div>
+<div class="study-nav">
+  <button id="prev-btn" class="btn ghost">← Previous</button>
+  <button id="next-btn" class="btn primary">Next →</button>
+  <a href="{{ url_for('flashcards_setup') }}" class="btn ghost">Done</a>
+</div>
+
+<script id="fc-data" type="application/json">{{ cards|tojson }}</script>
+<script>
+  const CARDS = JSON.parse(document.getElementById("fc-data").textContent);
+  const MODE = {{ mode|tojson }};
+  const root = document.getElementById("fc-root");
+  const state = CARDS.map(() => ({ answered: false, correct: false, revealed: false }));
+  let cur = 0, correctCount = 0;
+
+  function el(tag, attrs = {}, ...kids) {
+    const n = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) {
+      if (k === "class") n.className = v; else n.setAttribute(k, v);
+    }
+    for (const c of kids) { if (c == null) continue; n.appendChild(typeof c === "string" ? document.createTextNode(c) : c); }
+    return n;
+  }
+
+  function render() {
+    root.innerHTML = "";
+    const c = CARDS[cur], st = state[cur];
+    const card = el("article", { class: "fc-card" });
+    card.appendChild(el("div", { class: "fc-label" }, "Definition"));
+    card.appendChild(el("p", { class: "fc-definition" }, c.definition));
+
+    if (MODE === "multiple_choice") {
+      const wrap = el("div", { class: "q-options" });
+      c.options.forEach((opt, i) => {
+        const b = el("button", { class: "opt-choice fc-opt" }, el("span", {}, opt));
+        if (st.answered) {
+          b.disabled = true;
+          if (i === c.answer_index) b.classList.add("is-correct");
+          else if (st.picked === i) b.classList.add("is-chosen-wrong");
+        }
+        b.addEventListener("click", () => {
+          if (st.answered) return;
+          st.answered = true; st.picked = i; st.correct = (i === c.answer_index);
+          if (st.correct) { correctCount++; document.getElementById("score").textContent = correctCount + " correct"; }
+          render();
+        });
+        wrap.appendChild(b);
+      });
+      card.appendChild(wrap);
+      if (st.answered) {
+        card.appendChild(el("div", { class: "fc-term-reveal " + (st.correct ? "ok" : "no") },
+          el("span", { class: "fc-verdict" }, st.correct ? "✓ Correct" : "✗ Not quite"),
+          el("span", {}, " The term is: "), el("strong", {}, c.term)));
+      }
+    } else {
+      // open ended
+      if (!st.revealed) {
+        const reveal = el("button", { class: "btn accent" }, "Reveal term");
+        reveal.addEventListener("click", () => { st.revealed = true; render(); });
+        card.appendChild(el("div", { class: "fc-hint" }, "Recall the term this defines, then reveal."));
+        card.appendChild(el("div", { class: "study-check" }, reveal));
+      } else {
+        card.appendChild(el("div", { class: "fc-term-reveal ok" }, el("span", {}, "Term: "), el("strong", {}, c.term)));
+        const row = el("div", { class: "fc-selfgrade" });
+        const got = el("button", { class: "btn accent" }, "I got it ✓");
+        const miss = el("button", { class: "btn ghost" }, "Missed it ✗");
+        got.addEventListener("click", () => { if (!st.answered) { st.answered = true; st.correct = true; correctCount++; document.getElementById("score").textContent = correctCount + " correct"; } goNext(); });
+        miss.addEventListener("click", () => { if (!st.answered) { st.answered = true; st.correct = false; } goNext(); });
+        row.appendChild(got); row.appendChild(miss);
+        card.appendChild(el("p", { class: "fc-hint" }, "Did you get it? (updates your score, then advances)"));
+        card.appendChild(row);
+      }
+    }
+
+    root.appendChild(card);
+    document.getElementById("progress").textContent = (cur + 1) + " / " + CARDS.length;
+    document.getElementById("prev-btn").disabled = cur === 0;
+    document.getElementById("next-btn").textContent = cur === CARDS.length - 1 ? "Finish" : "Next →";
+  }
+
+  function goNext() {
+    if (cur < CARDS.length - 1) { cur++; render(); } else window.location = "/flashcards";
+  }
+  document.getElementById("prev-btn").addEventListener("click", () => { if (cur > 0) { cur--; render(); } });
+  document.getElementById("next-btn").addEventListener("click", goNext);
+  render();
+</script>
+{% endblock %}
