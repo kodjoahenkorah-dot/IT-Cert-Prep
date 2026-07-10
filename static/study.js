@@ -193,7 +193,7 @@ async function checkAnswerCached(q, st) {
   st.feedbackNode = renderFeedback(q, result);
   if (result.is_correct) correctCount += 1;
   document.getElementById("score").textContent = `${correctCount} correct`;
-  render();
+  renderQ();
 }
 
 function renderQ() {
