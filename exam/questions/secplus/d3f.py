@@ -1,8 +1,7 @@
 """CompTIA Security+ (SY0-701) practice question bank — Domain 3, file F.
 
-42 scenario-driven questions (38 multiple_choice + 4 multiple_response)
-covering every study_topic label listed under domain 3 in
-``_topic_labels.json``.
+26 scenario-driven questions (23 multiple_choice + 3 multiple_response)
+covering study_topic labels listed under domain 3 in ``_topic_labels.json``.
 """
 
 from __future__ import annotations
@@ -19,390 +18,452 @@ QUESTIONS = [
         "difficulty": "hard",
         "study_topic": "Architecture trade-offs",
         "stem": (
-            "A regional insurance company's claims-processing platform runs on "
-            "physical servers purchased outright and housed in a company-owned "
-            "data center. Leadership is evaluating a migration to a cloud IaaS "
-            "provider. Which trade-off BEST supports migrating to the cloud model?"
+            "A video-streaming startup is choosing an architecture for its "
+            "user-authentication service. Option A is active-active across two "
+            "geographically separate data centers, which doubles infrastructure "
+            "spend but keeps the service available even if an entire data "
+            "center fails. Option B is a single primary data center with a cold "
+            "standby, which costs far less but requires manual failover and "
+            "roughly 45 minutes of downtime. The CFO has capped the "
+            "infrastructure budget increase at 15%, an amount Option A would "
+            "exceed. Which statement BEST reflects the trade-off the company "
+            "must accept?"
         ),
         "options": [
             {
                 "id": "a",
                 "text": (
-                    "Cloud IaaS lets the company convert a large capital "
-                    "expenditure into an elastic operating expense and rapidly "
-                    "provision additional compute during claims surges, such as "
-                    "after a hurricane, at the cost of reduced direct control "
-                    "over the underlying hardware"
+                    "Choosing the cold-standby design trades a lower, "
+                    "budget-compliant infrastructure cost for reduced "
+                    "availability, since a data-center failure will produce an "
+                    "extended outage while failover is performed manually"
                 ),
                 "correct": True,
                 "rationale": (
-                    "Correct. This is the classic cost/elasticity trade-off "
-                    "cloud IaaS offers over owned hardware: rapid, on-demand "
-                    "scaling during demand spikes in exchange for less direct "
-                    "control of the physical infrastructure."
+                    "Correct. This accurately states the trade-off: staying "
+                    "within the 15% budget cap means accepting the cold "
+                    "standby's ~45-minute manual-failover downtime instead of "
+                    "active-active's near-continuous availability."
                 ),
             },
             {
                 "id": "b",
                 "text": (
-                    "Owning physical servers outright provides stronger "
-                    "long-term cost predictability with no dependency on a "
-                    "third party"
+                    "The active-active design should be chosen because it "
+                    "both meets the 15% budget cap and eliminates downtime "
+                    "entirely"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. This is a genuine advantage of staying "
-                    "on-premises, not an argument for migrating to the cloud, "
-                    "so it does not support the decision being evaluated."
+                    "Incorrect. Active-active doubles infrastructure spend, "
+                    "which explicitly exceeds the 15% cap — it cannot satisfy "
+                    "both the budget constraint and the availability goal "
+                    "simultaneously."
                 ),
             },
             {
                 "id": "c",
                 "text": (
-                    "Cloud IaaS eliminates the company's responsibility for "
-                    "patching and securing the guest operating system"
+                    "Cold standby eliminates single points of failure just as "
+                    "effectively as active-active, making the two designs "
+                    "functionally equivalent for availability purposes"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. Under the IaaS shared responsibility model the "
-                    "customer still patches and secures the guest OS; the "
-                    "provider is responsible only for the underlying hardware, "
-                    "virtualization layer, and facilities."
+                    "Incorrect. A cold standby still requires manual "
+                    "intervention and a lengthy failover window, meaning the "
+                    "primary site remains a real single point of failure until "
+                    "someone acts — the two designs are not equivalent."
                 ),
             },
             {
                 "id": "d",
                 "text": (
-                    "On-premises hardware provides better elasticity to handle "
-                    "sudden spikes in claims volume after a natural disaster"
+                    "Active-active architectures cannot span multiple "
+                    "geographic regions, so Option A is not technically "
+                    "feasible as described"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. This reverses the actual advantage — rapid "
-                    "elastic scaling is a hallmark benefit of cloud "
-                    "infrastructure, not fixed, self-owned hardware."
+                    "Incorrect. Active-active deployments across geographically "
+                    "separate sites are a standard, well-established pattern; "
+                    "the limiting factor here is budget, not technical "
+                    "feasibility."
                 ),
             },
         ],
         "explanation": (
-            "Migrating to cloud IaaS trades reduced direct hardware control for "
-            "elastic, on-demand capacity and converts capital expense into "
-            "operating expense — the opposite claims (patch-free OS, superior "
-            "on-prem elasticity, on-prem cost predictability as a migration "
-            "driver) misstate the shared responsibility model or the actual "
-            "direction of the trade-off."
-        ),
-    },
-    {
-        "id": "nd3f-002",
-        "domain": 3,
-        "objective": "3.1",
-        "type": "multiple_choice",
-        "difficulty": "hard",
-        "study_topic": "Architecture trade-offs",
-        "stem": (
-            "A hospital's radiology PACS (picture archiving and communication "
-            "system) vendor has certified the application to run only on an "
-            "end-of-life operating system version. Replacing the OS would void "
-            "the vendor's support contract, but the OS no longer receives "
-            "security patches. Which statement BEST describes the architectural "
-            "trade-off the hospital is making by continuing to run the "
-            "certified but unpatched configuration?"
-        ),
-        "options": [
-            {
-                "id": "a",
-                "text": (
-                    "The hospital is trading patch availability and increased "
-                    "vulnerability exposure for continued vendor-supported "
-                    "functionality of a clinically critical system"
-                ),
-                "correct": True,
-                "rationale": (
-                    "Correct. This is precisely the trade-off described: "
-                    "keeping vendor certification and support means forgoing "
-                    "security patches, increasing the system's vulnerability "
-                    "exposure over time."
-                ),
-            },
-            {
-                "id": "b",
-                "text": (
-                    "Running an end-of-life OS improves system responsiveness "
-                    "because fewer background patching processes compete for "
-                    "resources"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. Any marginal performance benefit from skipping "
-                    "patch cycles is not the relevant trade-off; the real "
-                    "consequence is accumulating unpatched vulnerabilities on a "
-                    "system that stores protected health information."
-                ),
-            },
-            {
-                "id": "c",
-                "text": (
-                    "The hospital eliminates ease-of-recovery concerns because "
-                    "the vendor guarantees rollback support for the certified "
-                    "configuration"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. Vendor certification of an OS version is not "
-                    "the same as a recovery or rollback guarantee, and the "
-                    "scenario states nothing about such a guarantee."
-                ),
-            },
-            {
-                "id": "d",
-                "text": (
-                    "This is purely a cost trade-off, since compliance "
-                    "requirements do not apply to medical imaging systems"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. PACS systems store protected health "
-                    "information and are squarely within HIPAA's scope, so "
-                    "compliance exposure is very much part of the risk, not "
-                    "purely a cost issue."
-                ),
-            },
-        ],
-        "explanation": (
-            "Vendor-certified but unpatchable software is a recurring "
-            "architecture trade-off: functionality and support continuity "
-            "purchased at the price of growing, unremediated vulnerability "
-            "exposure on a system that also carries regulatory data-protection "
-            "obligations."
+            "Architecture trade-off questions hinge on identifying which "
+            "resource is being exchanged for which benefit. Here, the binding "
+            "budget constraint forces a trade of availability (fast, automatic "
+            "failover) for cost, which only the cold-standby design satisfies."
         ),
     },
     # ------------------------------------------------------------------ #
     # Cloud architecture (3.1)
     # ------------------------------------------------------------------ #
     {
-        "id": "nd3f-003",
+        "id": "nd3f-002",
         "domain": 3,
         "objective": "3.1",
         "type": "multiple_choice",
         "difficulty": "hard",
         "study_topic": "Cloud architecture",
         "stem": (
-            "A finance team provisions new virtual machines for month-end "
-            "batch processing directly through a cloud provider's self-service "
-            "portal, without submitting a request to the IT provisioning team "
-            "or waiting for human approval. Which NIST-defined essential "
-            "characteristic of cloud computing does this MOST directly "
-            "represent?"
-        ),
-        "options": [
-            {
-                "id": "a",
-                "text": "On-demand self-service",
-                "correct": True,
-                "rationale": (
-                    "Correct. On-demand self-service is the NIST characteristic "
-                    "describing a consumer's ability to unilaterally provision "
-                    "computing capabilities without requiring human interaction "
-                    "with the provider."
-                ),
-            },
-            {
-                "id": "b",
-                "text": "Resource pooling",
-                "correct": False,
-                "rationale": (
-                    "Incorrect. Resource pooling describes the provider serving "
-                    "multiple tenants from a shared pool of physical resources; "
-                    "it does not describe the finance team's ability to "
-                    "provision without submitting a request."
-                ),
-            },
-            {
-                "id": "c",
-                "text": "Rapid elasticity",
-                "correct": False,
-                "rationale": (
-                    "Incorrect. Rapid elasticity refers to resources scaling up "
-                    "or down automatically to match demand; the scenario "
-                    "describes a manual provisioning request, not automatic "
-                    "scaling."
-                ),
-            },
-            {
-                "id": "d",
-                "text": "Measured service",
-                "correct": False,
-                "rationale": (
-                    "Incorrect. Measured service refers to usage being "
-                    "metered and billed transparently; it does not describe "
-                    "the self-service provisioning workflow in the scenario."
-                ),
-            },
-        ],
-        "explanation": (
-            "The scenario describes a user directly requesting resources with "
-            "no human approval step — the textbook definition of on-demand "
-            "self-service, distinct from resource pooling, elasticity, or "
-            "metering."
-        ),
-    },
-    {
-        "id": "nd3f-004",
-        "domain": 3,
-        "objective": "3.1",
-        "type": "multiple_choice",
-        "difficulty": "hard",
-        "study_topic": "Cloud architecture",
-        "stem": (
-            "A development team deploys its application to a managed "
-            "platform-as-a-service (PaaS) offering, where the cloud provider "
-            "automatically patches the underlying operating system, runtime, "
-            "and container orchestration layer. Under the PaaS shared "
-            "responsibility model, which task remains the CUSTOMER's "
-            "responsibility?"
+            "A smart-manufacturing facility's robotic assembly line must make "
+            "collision-avoidance decisions within 10 milliseconds — far faster "
+            "than a round trip to the company's cloud region would allow — "
+            "while aggregated production metrics can tolerate being sent to the "
+            "cloud for long-term analytics with no strict latency requirement. "
+            "Which architecture BEST addresses the latency-sensitive "
+            "decision-making while still leveraging the cloud for analytics?"
         ),
         "options": [
             {
                 "id": "a",
                 "text": (
-                    "Securing the application code, configuring authentication "
-                    "and authorization logic, and protecting the data the "
-                    "application processes"
+                    "Edge/fog computing, deploying local compute nodes on or "
+                    "near the factory floor for time-critical decisions, while "
+                    "forwarding only aggregated, less time-sensitive data to "
+                    "the cloud"
                 ),
                 "correct": True,
                 "rationale": (
-                    "Correct. In PaaS, the provider manages the platform "
-                    "beneath the application, but the customer always remains "
-                    "responsible for the application layer: code, access "
-                    "control logic, and data."
+                    "Correct. Edge/fog computing places processing physically "
+                    "close to the data source to meet sub-millisecond-scale "
+                    "latency requirements, while still using the cloud for "
+                    "workloads that can tolerate network round-trip delay."
                 ),
             },
             {
                 "id": "b",
-                "text": "Patching the guest operating system kernel",
+                "text": (
+                    "Migrate all processing, including collision-avoidance, to "
+                    "the nearest available cloud region to minimize latency"
+                ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. The scenario explicitly states the provider "
-                    "patches the OS in this PaaS offering; this would only be "
-                    "the customer's job under an IaaS model."
+                    "Incorrect. Even the nearest cloud region's WAN round-trip "
+                    "latency will typically still exceed a strict 10-millisecond "
+                    "budget, which is why edge processing — not merely a "
+                    "closer region — is required."
                 ),
             },
             {
                 "id": "c",
-                "text": "Maintaining the container orchestration control plane",
+                "text": (
+                    "Use a content delivery network (CDN) to cache the "
+                    "collision-avoidance decision logic closer to the factory"
+                ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. The provider manages the orchestration layer "
-                    "in a PaaS offering, per the scenario, so this is not the "
-                    "customer's responsibility here."
+                    "Incorrect. CDNs cache static web content for faster "
+                    "delivery to end users; they are not designed to execute "
+                    "real-time industrial control-loop compute."
                 ),
             },
             {
                 "id": "d",
-                "text": "Replacing failed physical storage hardware",
+                "text": (
+                    "Increase the factory's WAN bandwidth to the cloud to "
+                    "reduce latency"
+                ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. Physical hardware maintenance is always the "
-                    "cloud provider's responsibility in any cloud service "
-                    "model, including PaaS."
+                    "Incorrect. Bandwidth increases throughput, not round-trip "
+                    "latency, which is dominated by physical distance and "
+                    "network hops — more bandwidth would not meet a 10ms "
+                    "decision deadline."
                 ),
             },
         ],
         "explanation": (
-            "PaaS shifts OS, runtime, and orchestration responsibility to the "
-            "provider, but application code, identity/access logic, and data "
-            "protection always remain the customer's responsibility regardless "
-            "of service model."
+            "Edge/fog computing exists specifically to satisfy latency "
+            "requirements that a centralized cloud region cannot meet, while "
+            "still allowing less time-sensitive data to be forwarded to the "
+            "cloud for analytics — a bandwidth increase or closer region "
+            "cannot substitute for local processing."
         ),
     },
     # ------------------------------------------------------------------ #
     # ICS/SCADA and embedded systems (3.1)
     # ------------------------------------------------------------------ #
     {
-        "id": "nd3f-005",
+        "id": "nd3f-003",
         "domain": 3,
         "objective": "3.1",
         "type": "multiple_choice",
-        "difficulty": "hard",
+        "difficulty": "expert",
         "study_topic": "ICS/SCADA and embedded systems",
         "stem": (
-            "A semiconductor fabrication plant's industrial control system "
-            "(ICS) network is air-gapped from the corporate IT network to "
-            "protect fragile, timing-sensitive wafer-processing PLCs. "
-            "Engineers periodically need to load new recipe files onto the "
-            "PLCs using an engineering workstation. Which practice BEST "
-            "maintains the air gap's security benefit while still allowing "
-            "recipe updates?"
+            "A municipal water treatment facility's SCADA historian sits on the "
+            "OT network and must periodically share production data with a "
+            "corporate business-intelligence system on the IT network. Which "
+            "architecture BEST protects the ICS environment from an IT-side "
+            "compromise while still allowing the required data flow?"
         ),
         "options": [
             {
                 "id": "a",
                 "text": (
-                    "Transfer recipe files using a dedicated, single-purpose "
-                    "media-transfer workstation that scans removable media for "
-                    "malware before any file crosses into the ICS network"
+                    "Create a segmented DMZ between the OT and IT networks "
+                    "(consistent with the Purdue model), where the historian "
+                    "replicates data outward to a broker in the DMZ, with no "
+                    "direct IT-to-OT connections permitted"
                 ),
                 "correct": True,
                 "rationale": (
-                    "Correct. A dedicated, scanned transfer station lets "
-                    "necessary data cross the boundary in a controlled, "
-                    "inspected way without creating a persistent network path "
-                    "into the isolated ICS segment."
+                    "Correct. An OT/IT DMZ lets data flow out of the ICS "
+                    "environment to a broker that IT systems can query, "
+                    "without ever opening a direct path from the IT network "
+                    "into the OT network where an IT compromise could reach "
+                    "control systems."
                 ),
             },
             {
                 "id": "b",
                 "text": (
-                    "Install a permanent VPN tunnel between the corporate "
-                    "network and the ICS network so engineers can transfer "
-                    "files directly"
+                    "Directly connect the corporate BI system to the OT "
+                    "historian across a firewall rule that allows only the "
+                    "specific database port"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. A permanent tunnel defeats the entire purpose "
-                    "of the air gap by creating a continuous network path from "
-                    "corporate IT into the sensitive ICS environment."
+                    "Incorrect. Even a narrowly scoped port rule still creates "
+                    "a direct path from the IT network into the OT network, "
+                    "meaning a compromised IT host could reach the historian "
+                    "directly — exactly what the design should prevent."
                 ),
             },
             {
                 "id": "c",
                 "text": (
-                    "Allow engineers to connect personal laptops directly to "
-                    "the PLC network temporarily during update windows"
+                    "Establish a VPN tunnel allowing corporate IT users to "
+                    "connect directly into the OT network for read-only query "
+                    "access"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. Unmanaged personal laptops are an unvetted, "
-                    "high-risk vector for introducing malware directly into "
-                    "the isolated PLC network."
+                    "Incorrect. A VPN into the OT network still extends the IT "
+                    "network's trust and attack surface directly into the "
+                    "control environment, and compromised IT credentials could "
+                    "be used to establish that same tunnel."
                 ),
             },
             {
                 "id": "d",
                 "text": (
-                    "Configure the ICS firewall to allow only outbound "
-                    "connections from the PLC network to corporate file shares"
+                    "Remove network segmentation between OT and IT entirely "
+                    "and rely on host-based antivirus running on the historian"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. Any persistent firewall rule connecting the "
-                    "two networks reintroduces exactly the kind of network "
-                    "path the air gap was designed to eliminate, regardless of "
-                    "directionality."
+                    "Incorrect. Eliminating segmentation removes the primary "
+                    "layer of defense protecting the ICS environment, and "
+                    "antivirus alone cannot compensate for a flat, unsegmented "
+                    "network architecture."
                 ),
             },
         ],
         "explanation": (
-            "A single-purpose, malware-scanning transfer workstation preserves "
-            "an air gap's isolation while still allowing controlled, "
-            "inspected data movement — unlike permanent tunnels, unmanaged "
-            "personal devices, or firewall rules that reconnect the two "
-            "networks."
+            "The Purdue-model DMZ pattern is the standard architecture for "
+            "sharing data between OT and IT networks: it allows necessary data "
+            "to flow outward through a broker while ensuring no direct "
+            "connection ever originates from the IT side into the ICS "
+            "environment."
         ),
     },
     # ------------------------------------------------------------------ #
     # IoT security (3.1)
+    # ------------------------------------------------------------------ #
+    {
+        "id": "nd3f-004",
+        "domain": 3,
+        "objective": "3.1",
+        "type": "multiple_choice",
+        "difficulty": "expert",
+        "study_topic": "IoT security",
+        "stem": (
+            "Security researchers extract the firmware from a single smart "
+            "irrigation valve controller sold by an agritech vendor and find a "
+            "single, shared cloud API key embedded in every unit the vendor has "
+            "ever shipped, used by each device to authenticate to the vendor's "
+            "control-plane API. Because the key is identical across all "
+            "deployed units, extracting it from one device grants control over "
+            "every customer's irrigation valves worldwide. Which design change "
+            "would MOST directly fix this specific flaw?"
+        ),
+        "options": [
+            {
+                "id": "a",
+                "text": (
+                    "Provision each device with its own unique cryptographic "
+                    "identity or credential (such as a per-device certificate "
+                    "or key issued during manufacturing or first boot) instead "
+                    "of a single shared secret embedded in the firmware image"
+                ),
+                "correct": True,
+                "rationale": (
+                    "Correct. Unique per-device credentials mean that "
+                    "extracting the key from one unit only compromises that "
+                    "one device, eliminating the single point of catastrophic, "
+                    "fleet-wide compromise created by a shared secret."
+                ),
+            },
+            {
+                "id": "b",
+                "text": (
+                    "Encrypt the firmware image itself so the embedded key "
+                    "cannot be extracted by researchers"
+                ),
+                "correct": False,
+                "rationale": (
+                    "Incorrect. Firmware encryption raises the bar for "
+                    "extraction but does not fix the underlying architectural "
+                    "flaw — every device would still share the exact same "
+                    "credential, so a single leaked build or extracted key "
+                    "still compromises the entire fleet."
+                ),
+            },
+            {
+                "id": "c",
+                "text": (
+                    "Require customers to change their vendor account password "
+                    "every 90 days"
+                ),
+                "correct": False,
+                "rationale": (
+                    "Incorrect. This addresses customer account passwords, an "
+                    "unrelated credential; the flaw described is a shared "
+                    "device-to-cloud API key, which a customer password policy "
+                    "does not touch."
+                ),
+            },
+            {
+                "id": "d",
+                "text": (
+                    "Rate-limit the number of API calls each device can make "
+                    "per minute"
+                ),
+                "correct": False,
+                "rationale": (
+                    "Incorrect. Rate limiting slows abuse but does not address "
+                    "the root cause: an attacker using the valid shared key "
+                    "would still authenticate successfully and could control "
+                    "devices within the allowed rate."
+                ),
+            },
+        ],
+        "explanation": (
+            "A single credential shared across an entire IoT device fleet is a "
+            "critical design flaw because compromising any one unit "
+            "compromises every unit; unique, per-device identity is the "
+            "standard fix, not obfuscation or usage throttling."
+        ),
+    },
+    # ------------------------------------------------------------------ #
+    # Microservices and containerization (3.1)
+    # ------------------------------------------------------------------ #
+    {
+        "id": "nd3f-005",
+        "domain": 3,
+        "objective": "3.1",
+        "type": "multiple_response",
+        "difficulty": "expert",
+        "study_topic": "Microservices and containerization",
+        "stem": (
+            "A container security review of a CI/CD build cluster finds two "
+            "issues: (1) build containers mount the host's Docker socket "
+            "(/var/run/docker.sock) so builds can create sibling containers, "
+            "giving any process inside a build container root-equivalent "
+            "control over the host's container runtime; and (2) several "
+            "application pods run with hostPID and hostNetwork enabled, "
+            "letting them see and interact with every process and network "
+            "interface on the underlying host node. Which TWO changes would "
+            "MOST directly remediate these two specific findings? (Select "
+            "two.)"
+        ),
+        "options": [
+            {
+                "id": "a",
+                "text": (
+                    "Remove the Docker socket mount from build containers, "
+                    "using a rootless or sandboxed build strategy instead of "
+                    "docker-in-docker via the host socket"
+                ),
+                "correct": True,
+                "rationale": (
+                    "Correct. This directly remediates finding 1 by removing "
+                    "the build container's root-equivalent path to the host's "
+                    "container runtime."
+                ),
+            },
+            {
+                "id": "b",
+                "text": (
+                    "Disable hostPID and hostNetwork on the affected pods so "
+                    "they run in their own isolated namespaces like standard "
+                    "workloads"
+                ),
+                "correct": True,
+                "rationale": (
+                    "Correct. This directly remediates finding 2 by removing "
+                    "the pods' visibility into and interaction with the host's "
+                    "process table and network interfaces."
+                ),
+            },
+            {
+                "id": "c",
+                "text": (
+                    "Increase the CPU and memory resource limits on the build "
+                    "containers to speed up builds"
+                ),
+                "correct": False,
+                "rationale": (
+                    "Incorrect. Resource limits affect performance, not the "
+                    "socket-mount or host-namespace exposure described in "
+                    "either finding."
+                ),
+            },
+            {
+                "id": "d",
+                "text": (
+                    "Enable horizontal pod autoscaling for the application "
+                    "pods"
+                ),
+                "correct": False,
+                "rationale": (
+                    "Incorrect. Autoscaling addresses capacity and "
+                    "availability, not the host-level exposure created by "
+                    "hostPID/hostNetwork or the Docker socket mount."
+                ),
+            },
+            {
+                "id": "e",
+                "text": (
+                    "Add a network policy default-denying all pod-to-pod "
+                    "traffic in the cluster"
+                ),
+                "correct": False,
+                "rationale": (
+                    "Incorrect. A default-deny network policy helps limit "
+                    "lateral movement between pods, but it does nothing about "
+                    "a mounted Docker socket or host-namespace sharing, which "
+                    "are host-level exposures rather than pod-to-pod traffic "
+                    "issues."
+                ),
+            },
+        ],
+        "explanation": (
+            "Removing the Docker socket mount and disabling hostPID/"
+            "hostNetwork each map directly to one of the two findings; "
+            "resource tuning, autoscaling, and pod-to-pod network policy all "
+            "address different concerns and leave both host-level exposures "
+            "in place."
+        ),
+    },
+    # ------------------------------------------------------------------ #
+    # Serverless and cloud architecture (3.1)
     # ------------------------------------------------------------------ #
     {
         "id": "nd3f-006",
@@ -410,681 +471,692 @@ QUESTIONS = [
         "objective": "3.1",
         "type": "multiple_choice",
         "difficulty": "hard",
-        "study_topic": "IoT security",
-        "stem": (
-            "A farming cooperative deploys 500 soil-moisture IoT sensors "
-            "across several fields. An assessment finds that all sensors ship "
-            "with the same hardcoded administrative password, communicate "
-            "over unencrypted Wi-Fi, and cannot receive firmware updates after "
-            "installation. Which limitation is the MOST fundamental barrier to "
-            "remediating this deployment's security long-term?"
-        ),
-        "options": [
-            {
-                "id": "a",
-                "text": (
-                    "The devices lack any firmware-update mechanism, so "
-                    "vulnerabilities discovered after deployment — including "
-                    "the hardcoded password — can never be patched in place "
-                    "and require full hardware replacement"
-                ),
-                "correct": True,
-                "rationale": (
-                    "Correct. Without any update path, no future vulnerability "
-                    "can be remediated in place; this makes the lack of a "
-                    "firmware-update mechanism the root barrier, since it also "
-                    "prevents ever fixing the hardcoded password issue."
-                ),
-            },
-            {
-                "id": "b",
-                "text": (
-                    "The devices use unencrypted Wi-Fi, which can be fixed "
-                    "simply by adding WPA3 support to the existing access "
-                    "points"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. This is a real weakness but is comparatively "
-                    "fixable and does not address the hardcoded password or "
-                    "the total inability to patch the devices going forward."
-                ),
-            },
-            {
-                "id": "c",
-                "text": (
-                    "The devices are physically distributed across open "
-                    "fields, making them susceptible to theft"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. Physical exposure is a real risk but is not "
-                    "the most fundamental barrier to remediating the security "
-                    "issues described; theft risk exists independently of "
-                    "patchability."
-                ),
-            },
-            {
-                "id": "d",
-                "text": (
-                    "The hardcoded password is identical across all units, "
-                    "which increases the blast radius of any single "
-                    "compromised sensor"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. This correctly describes a consequence of the "
-                    "shared password, but it is the lack of an update "
-                    "mechanism that prevents that consequence from ever being "
-                    "fixed."
-                ),
-            },
-        ],
-        "explanation": (
-            "The inability to receive firmware updates is the root cause that "
-            "makes every other finding — the hardcoded password, the shared "
-            "credential blast radius — permanently unfixable without physical "
-            "hardware replacement, a hallmark limitation of many low-cost IoT "
-            "devices."
-        ),
-    },
-    # ------------------------------------------------------------------ #
-    # Microservices and containerization (3.1)
-    # ------------------------------------------------------------------ #
-    {
-        "id": "nd3f-007",
-        "domain": 3,
-        "objective": "3.1",
-        "type": "multiple_choice",
-        "difficulty": "hard",
-        "study_topic": "Microservices and containerization",
-        "stem": (
-            "A platform engineering team runs many mutually untrusted "
-            "customers' containers on shared Kubernetes worker nodes. "
-            "Standard Linux namespaces and cgroups provide isolation, but a "
-            "proof-of-concept shows that a malicious container could exploit "
-            "a kernel vulnerability to affect the host and neighboring "
-            "containers, since all containers on a node share the same "
-            "kernel. Which architectural change would MOST directly address "
-            "this specific risk?"
-        ),
-        "options": [
-            {
-                "id": "a",
-                "text": (
-                    "Replace the default container runtime with a sandboxed "
-                    "runtime, such as gVisor or Kata Containers, that "
-                    "isolates each container from the shared host kernel"
-                ),
-                "correct": True,
-                "rationale": (
-                    "Correct. Sandboxed runtimes intercept syscalls or run "
-                    "each container inside a lightweight VM, directly removing "
-                    "the shared-kernel exposure that the proof-of-concept "
-                    "exploited."
-                ),
-            },
-            {
-                "id": "b",
-                "text": (
-                    "Enforce Kubernetes network policies to restrict "
-                    "pod-to-pod traffic"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. Network policies restrict lateral network "
-                    "traffic between pods; they do nothing to prevent a kernel "
-                    "exploit that bypasses the network entirely by attacking "
-                    "the shared kernel directly."
-                ),
-            },
-            {
-                "id": "c",
-                "text": (
-                    "Require signed container images from a trusted registry "
-                    "before deployment"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. Image signing is a supply-chain integrity "
-                    "control that verifies image provenance; it does not "
-                    "isolate a running container from the host kernel at "
-                    "runtime."
-                ),
-            },
-            {
-                "id": "d",
-                "text": (
-                    "Run vulnerability scans against container images before "
-                    "deployment"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. Pre-deployment scanning catches known CVEs in "
-                    "image contents but does not add runtime isolation between "
-                    "a container and the shared host kernel."
-                ),
-            },
-        ],
-        "explanation": (
-            "A sandboxed/microVM-based container runtime directly removes the "
-            "shared-kernel attack surface, whereas network policies, image "
-            "signing, and vulnerability scanning address different concerns "
-            "(lateral traffic, provenance, and known CVEs) and would not have "
-            "stopped this kernel-level escape."
-        ),
-    },
-    {
-        "id": "nd3f-008",
-        "domain": 3,
-        "objective": "3.1",
-        "type": "multiple_response",
-        "difficulty": "expert",
-        "study_topic": "Microservices and containerization",
-        "stem": (
-            "A container supply-chain review recommends hardening the way "
-            "base images are sourced and consumed. Which THREE practices "
-            "BEST reduce the risk that a compromised or tampered base image "
-            "reaches production? (Select three.)"
-        ),
-        "options": [
-            {
-                "id": "a",
-                "text": (
-                    "Pin base images to a specific, immutable content digest "
-                    "rather than a mutable tag such as \"latest\""
-                ),
-                "correct": True,
-                "rationale": (
-                    "Correct. Pinning to an immutable digest guarantees the "
-                    "exact same, verified image content is used every time, "
-                    "preventing silent substitution of a tampered image behind "
-                    "a mutable tag."
-                ),
-            },
-            {
-                "id": "b",
-                "text": (
-                    "Scan container images for known vulnerabilities as a "
-                    "required gate in the CI/CD pipeline before publishing"
-                ),
-                "correct": True,
-                "rationale": (
-                    "Correct. Mandatory vulnerability scanning before "
-                    "publishing catches known-vulnerable or malicious "
-                    "components before they reach production."
-                ),
-            },
-            {
-                "id": "c",
-                "text": (
-                    "Require cryptographic signing of images and verify "
-                    "signatures before allowing deployment"
-                ),
-                "correct": True,
-                "rationale": (
-                    "Correct. Signature verification at deploy time ensures "
-                    "only images from trusted, verified sources are ever "
-                    "run, blocking tampered or unauthorized images."
-                ),
-            },
-            {
-                "id": "d",
-                "text": (
-                    "Increase the number of running replicas of each "
-                    "container to improve fault tolerance"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. Replica count improves availability and fault "
-                    "tolerance; it has no effect on whether the image content "
-                    "running in those replicas is trustworthy."
-                ),
-            },
-            {
-                "id": "e",
-                "text": "Enable verbose debug logging inside every running container",
-                "correct": False,
-                "rationale": (
-                    "Incorrect. Verbose logging aids troubleshooting and can "
-                    "even risk leaking secrets; it does not verify or protect "
-                    "the integrity of the base image supply chain."
-                ),
-            },
-            {
-                "id": "f",
-                "text": (
-                    "Configure the container orchestrator to auto-restart any "
-                    "container that crashes"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. Auto-restart is a resilience feature for "
-                    "handling crashes; it has no bearing on preventing a "
-                    "tampered image from being deployed in the first place."
-                ),
-            },
-        ],
-        "explanation": (
-            "Digest pinning, mandatory vulnerability scanning, and signature "
-            "verification together close the paths by which a tampered base "
-            "image could silently reach production, while replica counts, "
-            "verbose logging, and auto-restart address availability or "
-            "troubleshooting, not supply-chain integrity."
-        ),
-    },
-    # ------------------------------------------------------------------ #
-    # Serverless and cloud architecture (3.1)
-    # ------------------------------------------------------------------ #
-    {
-        "id": "nd3f-009",
-        "domain": 3,
-        "objective": "3.1",
-        "type": "multiple_choice",
-        "difficulty": "hard",
         "study_topic": "Serverless and cloud architecture",
         "stem": (
-            "A startup's public-facing API is implemented entirely as "
-            "serverless functions that scale automatically and bill per "
-            "invocation. An attacker discovers an unauthenticated endpoint "
-            "and issues a massive volume of requests, driving the company's "
-            "cloud bill up dramatically without ever taking the API offline. "
-            "Which risk is this attack MOST specifically exploiting?"
+            "A photo-processing serverless function automatically triggers "
+            "whenever a new object is uploaded to a cloud storage bucket. The "
+            "bucket's resource policy currently allows uploads from any "
+            "authenticated account in the cloud provider, not just the "
+            "company's own accounts. A researcher demonstrates that a crafted "
+            "object uploaded from an unrelated account triggers the function "
+            "and causes it to throw unhandled errors while processing "
+            "untrusted input. Which change MOST directly reduces the risk "
+            "illustrated here?"
         ),
         "options": [
             {
                 "id": "a",
                 "text": (
-                    "The unlimited automatic scaling of serverless functions "
-                    "economically amplifies a request-flooding attack into a "
-                    "\"denial of wallet\" event even though availability is "
-                    "unaffected"
+                    "Restrict the bucket's resource policy so only the "
+                    "company's own trusted accounts or upload services can "
+                    "write objects that trigger the function, and validate "
+                    "object metadata and content before processing it"
                 ),
                 "correct": True,
                 "rationale": (
-                    "Correct. Because serverless platforms auto-scale and "
-                    "bill per invocation, an attacker can keep the service "
-                    "available while inflating costs enormously — the "
-                    "well-known \"denial of wallet\" risk unique to this "
-                    "billing/scaling model."
+                    "Correct. This closes the actual trust-boundary gap — "
+                    "any authenticated account being able to trigger the "
+                    "function — while input validation adds defense in depth "
+                    "against unexpected or malicious object content."
                 ),
             },
             {
                 "id": "b",
                 "text": (
-                    "A cold-start vulnerability in the function runtime that "
-                    "allows arbitrary code execution"
+                    "Increase the function's concurrency limit so it can "
+                    "handle more simultaneous malicious uploads without "
+                    "throwing errors"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. Cold start refers to the latency of "
-                    "initializing an idle function instance; it is a "
-                    "performance characteristic, not a code-execution "
-                    "vulnerability, and does not explain a billing spike."
+                    "Incorrect. Raising concurrency lets more untrusted "
+                    "invocations run in parallel; it does nothing to restrict "
+                    "who can trigger the function in the first place and "
+                    "could worsen the exposure."
                 ),
             },
             {
                 "id": "c",
                 "text": (
-                    "An insecure direct object reference in the function's "
-                    "business logic"
+                    "Add a scheduled (cron) trigger instead of an "
+                    "event-driven trigger so the function runs independently "
+                    "of uploads"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. IDOR is an authorization flaw that exposes "
-                    "unauthorized data by manipulating object references; "
-                    "nothing in the scenario describes accessing unauthorized "
-                    "data objects, only high-volume flooding."
+                    "Incorrect. Changing to a polling trigger does not "
+                    "address the bucket's overly permissive resource policy "
+                    "that allows untrusted accounts to write triggering "
+                    "objects at all."
                 ),
             },
             {
                 "id": "d",
                 "text": (
-                    "A misconfigured API gateway that fails to terminate TLS "
-                    "correctly"
+                    "Grant the function's execution role full administrative "
+                    "permissions so it can handle any unexpected object type "
+                    "gracefully"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. A TLS termination misconfiguration would "
-                    "affect connection security, not explain a cost-driven "
-                    "flooding attack against an unauthenticated endpoint."
+                    "Incorrect. Broadening permissions increases the blast "
+                    "radius of a successful exploit rather than reducing risk, "
+                    "and does not address the untrusted trigger source."
                 ),
             },
         ],
         "explanation": (
-            "Serverless architectures' automatic, near-unlimited scaling "
-            "combined with per-invocation billing creates a distinct "
-            "\"denial of wallet\" risk: an attacker can flood an endpoint "
-            "without causing an outage, instead inflating operating costs."
+            "The real gap is a trust-boundary failure in the storage "
+            "bucket's resource policy allowing any authenticated account to "
+            "trigger the function; scoping that policy to trusted sources, "
+            "combined with input validation, addresses the root cause rather "
+            "than symptoms."
         ),
     },
     # ------------------------------------------------------------------ #
     # Virtualization and high availability (3.1)
     # ------------------------------------------------------------------ #
     {
-        "id": "nd3f-010",
+        "id": "nd3f-007",
         "domain": 3,
         "objective": "3.1",
         "type": "multiple_choice",
-        "difficulty": "hard",
+        "difficulty": "expert",
         "study_topic": "Virtualization and high availability",
         "stem": (
-            "A cloud hosting provider oversubscribes physical CPU cores "
-            "across many tenant virtual machines on the same hypervisor host "
-            "to maximize utilization. A customer reports that their VM's "
-            "performance degrades unpredictably whenever other tenants on the "
-            "same host run CPU-intensive batch jobs. Which term BEST "
-            "describes the underlying architectural cause of this problem?"
+            "A virtualization host is configured to overcommit memory, "
+            "allowing the sum of all guest VMs' assigned RAM to exceed the "
+            "host's 256 GB of physical RAM, relying on the hypervisor's memory "
+            "ballooning and page-sharing to reclaim space as needed. During a "
+            "period when all guest VMs simultaneously experience high memory "
+            "demand, several VMs begin swapping to disk and become "
+            "unresponsive, taking a customer-facing application offline. "
+            "Which change BEST balances the cost benefit of memory "
+            "overcommitment with high availability for this critical "
+            "workload?"
         ),
         "options": [
             {
                 "id": "a",
                 "text": (
-                    "The \"noisy neighbor\" effect from CPU resource "
-                    "contention in a multi-tenant, oversubscribed hypervisor "
-                    "host"
+                    "Reserve guaranteed, non-overcommitted memory specifically "
+                    "for the critical customer-facing VM, while allowing "
+                    "overcommitment to continue for lower-priority VMs on the "
+                    "same host"
                 ),
                 "correct": True,
                 "rationale": (
-                    "Correct. Oversubscribed, shared physical CPU resources "
-                    "mean one tenant's heavy workload can degrade another "
-                    "co-located tenant's performance — the classic noisy "
-                    "neighbor problem in multi-tenant virtualization."
+                    "Correct. A memory reservation guarantees the critical VM "
+                    "always has real physical RAM available and cannot be "
+                    "forced into swapping, while preserving the cost savings "
+                    "of overcommitment for less critical workloads."
                 ),
             },
             {
                 "id": "b",
                 "text": (
-                    "VM escape, allowing one tenant to access another "
-                    "tenant's resources directly"
+                    "Disable memory overcommitment entirely across the entire "
+                    "host, provisioning 1:1 physical memory for every VM "
+                    "regardless of criticality"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. VM escape describes a security breach where "
-                    "code escapes VM isolation to access the hypervisor or "
-                    "other VMs; the scenario describes performance "
-                    "degradation from resource contention, not a breach."
+                    "Incorrect. This eliminates the cost benefit of "
+                    "overcommitment for every VM on the host, not just the "
+                    "critical one, when a targeted reservation would achieve "
+                    "the same protection more efficiently."
                 ),
             },
             {
                 "id": "c",
                 "text": (
-                    "VM sprawl from uncontrolled provisioning of unused "
-                    "virtual machines"
+                    "Increase the swap file size available to the hypervisor "
+                    "so ballooning has more room to operate"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. VM sprawl refers to the proliferation of "
-                    "unmanaged, forgotten virtual machines over time, not "
-                    "performance contention between actively running tenant "
-                    "workloads."
+                    "Incorrect. Swapping to disk is the actual performance "
+                    "problem causing unresponsiveness; providing more swap "
+                    "space would allow more swapping to occur, not prevent "
+                    "the slowdown."
                 ),
             },
             {
                 "id": "d",
                 "text": (
-                    "The hypervisor is a type 2 (hosted) hypervisor "
-                    "introducing host OS overhead"
+                    "Migrate the critical VM to a Type 2 hosted hypervisor to "
+                    "isolate it from overcommitment"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. Commercial multi-tenant hosting providers "
-                    "almost universally run type 1 (bare-metal) hypervisors, "
-                    "and the described symptom is caused by CPU "
-                    "oversubscription, not hypervisor type."
+                    "Incorrect. A Type 2 hypervisor does not inherently solve "
+                    "memory overcommitment and adds the attack surface of a "
+                    "full underlying host OS, making it an inappropriate fix "
+                    "for this specific problem."
                 ),
             },
         ],
         "explanation": (
-            "CPU oversubscription in a shared, multi-tenant hypervisor "
-            "produces the noisy neighbor effect, a distinct concept from VM "
-            "escape (a security breach), VM sprawl (unmanaged proliferation), "
-            "or hypervisor type overhead."
-        ),
-    },
-    {
-        "id": "nd3f-011",
-        "domain": 3,
-        "objective": "3.1",
-        "type": "multiple_choice",
-        "difficulty": "hard",
-        "study_topic": "Virtualization and high availability",
-        "stem": (
-            "A company's virtualization cluster is configured so that if a "
-            "physical hypervisor host fails, the virtual machines that were "
-            "running on it are automatically detected as down and restarted "
-            "on other healthy hosts in the cluster within a few minutes, "
-            "without administrator intervention. Which capability does this "
-            "describe?"
-        ),
-        "options": [
-            {
-                "id": "a",
-                "text": (
-                    "Host-level high availability (HA) clustering that "
-                    "monitors host heartbeats and automatically restarts "
-                    "affected VMs on other hosts"
-                ),
-                "correct": True,
-                "rationale": (
-                    "Correct. HA clustering is exactly this behavior: "
-                    "detecting a failed host via heartbeat loss and "
-                    "automatically restarting its VMs elsewhere, with a brief "
-                    "restart-driven interruption."
-                ),
-            },
-            {
-                "id": "b",
-                "text": (
-                    "Live migration that moves a running VM between hosts "
-                    "with no service interruption"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. Live migration is a planned, proactive "
-                    "operation that moves a still-running VM with zero "
-                    "downtime; it does not apply after a host has already "
-                    "failed."
-                ),
-            },
-            {
-                "id": "c",
-                "text": (
-                    "Fault tolerance providing a continuously mirrored, "
-                    "zero-downtime shadow VM"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. Fault tolerance keeps a live, lockstep "
-                    "secondary instance running continuously so there is no "
-                    "restart or downtime at all — a stricter guarantee than "
-                    "the few-minutes restart described in the scenario."
-                ),
-            },
-            {
-                "id": "d",
-                "text": (
-                    "Load balancing that distributes new connection requests "
-                    "across multiple active VMs"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. Load balancing distributes traffic among "
-                    "already-running instances; it does not detect a failed "
-                    "host or restart VMs that were running on it."
-                ),
-            },
-        ],
-        "explanation": (
-            "Automatic detection of a failed host followed by restarting its "
-            "VMs elsewhere is host-level HA clustering — distinct from live "
-            "migration (proactive, zero-downtime), fault tolerance (continuous "
-            "lockstep mirroring with no restart), and load balancing "
-            "(distributing traffic among running instances)."
+            "Targeted memory reservations let a critical VM keep its "
+            "high-availability guarantees while the rest of the host still "
+            "benefits from overcommitment's cost savings — a more precise fix "
+            "than disabling overcommitment everywhere or adding more swap."
         ),
     },
     # ------------------------------------------------------------------ #
     # Attack surface reduction (3.2)
     # ------------------------------------------------------------------ #
     {
-        "id": "nd3f-012",
+        "id": "nd3f-008",
         "domain": 3,
         "objective": "3.2",
         "type": "multiple_choice",
         "difficulty": "hard",
         "study_topic": "Attack surface reduction",
         "stem": (
-            "An auditor finds that production servers built from a company's "
-            "VM template have 15 optional operating system features and 6 "
-            "listening services enabled that no application on those servers "
-            "actually uses. Which action BEST reduces the attack surface of "
-            "these servers?"
+            "A vulnerability scan reveals a database server listening on its "
+            "default port 1433, reachable from the entire corporate /16 "
+            "subnet, even though only three specific application servers ever "
+            "need to query it. Which action MOST directly reduces the "
+            "server's attack surface?"
         ),
         "options": [
             {
                 "id": "a",
                 "text": (
-                    "Disable the unused optional features and stop the unused "
-                    "listening services on each server"
+                    "Restrict access with a host-based or network ACL/"
+                    "firewall rule allowing only the three specific "
+                    "application server IPs to reach port 1433"
                 ),
                 "correct": True,
                 "rationale": (
-                    "Correct. Removing unnecessary features and services "
-                    "eliminates code paths and open ports that serve no "
-                    "business function but could otherwise be exploited, "
-                    "directly reducing the attack surface."
+                    "Correct. Narrowing the set of hosts that can reach the "
+                    "database directly reduces the number of exposed entry "
+                    "points to only what is actually required."
                 ),
             },
             {
                 "id": "b",
-                "text": "Deploy additional intrusion detection sensors to monitor the servers",
+                "text": (
+                    "Change the database's listening port to a non-standard "
+                    "value to make it harder to find"
+                ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. Additional monitoring improves detection of "
-                    "an attack after the fact; it does not reduce the number "
-                    "of exploitable services and features actually exposed."
+                    "Incorrect. This is security through obscurity: it does "
+                    "not reduce the number of hosts on the /16 that can still "
+                    "reach the service once its new port is discovered "
+                    "through a scan."
                 ),
             },
             {
                 "id": "c",
-                "text": "Increase logging verbosity on the affected servers",
+                "text": (
+                    "Enable database auditing to log all connection attempts "
+                    "for later review"
+                ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. More verbose logs aid investigation but do "
-                    "not remove any unnecessary running services or features "
-                    "from the attack surface."
+                    "Incorrect. Auditing provides detection and forensic "
+                    "value after the fact, but it does not reduce the number "
+                    "of hosts able to reach the exposed service."
                 ),
             },
             {
                 "id": "d",
                 "text": (
-                    "Implement network segmentation to isolate the servers "
-                    "from the rest of the network"
+                    "Require TLS encryption for all connections to the "
+                    "database"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. Segmentation limits the blast radius if these "
-                    "servers are compromised, but it does not reduce the "
-                    "number of unnecessary services and features exposed on "
-                    "the servers themselves."
+                    "Incorrect. Encrypting the channel protects data in "
+                    "transit but does not reduce how many hosts on the subnet "
+                    "can reach and attempt to authenticate to the database."
                 ),
             },
         ],
         "explanation": (
-            "Attack surface reduction means removing unneeded functionality "
-            "— disabling unused features and services directly shrinks what "
-            "an attacker can target, unlike detection, logging, or "
-            "segmentation controls that address different layers of defense."
+            "Attack surface reduction means limiting exposure to only what "
+            "is necessary; a scoped ACL restricting reachability to the "
+            "specific required hosts achieves this directly, unlike "
+            "obscurity, auditing, or encryption, which address different "
+            "concerns."
         ),
     },
     # ------------------------------------------------------------------ #
     # Change management workflow (3.2)
     # ------------------------------------------------------------------ #
     {
-        "id": "nd3f-013",
+        "id": "nd3f-009",
         "domain": 3,
         "objective": "3.2",
         "type": "multiple_choice",
         "difficulty": "hard",
         "study_topic": "Change management workflow",
         "stem": (
-            "An organization's change management policy defines three "
-            "categories: standard (pre-approved, low-risk, repeatable), "
-            "normal (requires case-by-case change advisory board review), and "
-            "emergency (expedited approval after the fact). A system "
-            "administrator wants to apply a routine, well-tested TLS "
-            "certificate renewal that the organization performs monthly "
-            "using a documented, repeatable procedure. Which change category "
-            "is MOST appropriate?"
+            "An audit finds that a developer who writes a code change is also "
+            "the same person who approves that exact change and pushes it "
+            "directly to production, with no second party ever reviewing it. "
+            "The auditor flags this as a control weakness even though no "
+            "incidents have occurred. Which principle does this practice "
+            "violate?"
         ),
         "options": [
             {
                 "id": "a",
                 "text": (
-                    "Standard change, because it is a low-risk, pre-approved, "
-                    "repeatable procedure that does not need case-by-case "
-                    "board review"
+                    "Separation of duties — the person implementing a change "
+                    "should not also be its sole approver, since independent "
+                    "review of both necessity and risk is what prevents "
+                    "mistakes or malicious changes from reaching production "
+                    "unchecked"
                 ),
                 "correct": True,
                 "rationale": (
-                    "Correct. A routine, well-tested, monthly procedure is "
-                    "exactly the profile of a standard change: pre-approved "
-                    "and repeatable, so it can be executed under the standing "
-                    "authorization rather than re-reviewed every time."
+                    "Correct. Change management requires that approval "
+                    "authority be separate from implementation authority so "
+                    "that an independent party evaluates the change before it "
+                    "reaches production."
                 ),
             },
             {
                 "id": "b",
                 "text": (
-                    "Emergency change, because certificates must be renewed "
-                    "quickly to avoid an outage"
+                    "This is not a genuine control weakness as long as the "
+                    "developer is experienced and the change is small"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. The emergency category is for unplanned, "
-                    "urgent changes needed to resolve an active incident; a "
-                    "scheduled, routine monthly renewal is neither unplanned "
-                    "nor urgent."
+                    "Incorrect. Separation of duties should apply regardless "
+                    "of the developer's experience level or the perceived "
+                    "size of the change; both factors are subjective and "
+                    "don't eliminate the risk of unchecked self-approval."
                 ),
             },
             {
                 "id": "c",
                 "text": (
-                    "Normal change, requiring full change advisory board "
-                    "review each time it recurs"
+                    "The fix is to require the developer to write more "
+                    "detailed commit messages describing the change"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. Requiring full board review for a well-"
-                    "understood, low-risk, repeatable task is unnecessarily "
-                    "inefficient and is exactly what the standard change "
-                    "category exists to avoid."
+                    "Incorrect. Better documentation improves traceability "
+                    "but does not introduce the independent review that "
+                    "separation of duties requires."
                 ),
             },
             {
                 "id": "d",
                 "text": (
-                    "No change record is required because certificate "
-                    "renewal is routine maintenance"
+                    "This risk is fully mitigated as long as the developer "
+                    "tests the change in a staging environment first, since "
+                    "staging testing removes the need for independent "
+                    "approval"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. Even standard, pre-approved changes must "
-                    "still be logged and tracked in the change management "
-                    "system; \"routine\" does not mean undocumented."
+                    "Incorrect. Staging tests verify functionality, not "
+                    "whether the change should be approved by someone other "
+                    "than its author; independent approval remains a "
+                    "distinct, necessary control."
                 ),
             },
         ],
         "explanation": (
-            "Standard changes exist precisely for low-risk, repeatable, "
-            "pre-approved procedures like a routine certificate renewal, "
-            "avoiding both the inefficiency of full board review and the "
-            "mischaracterization of a scheduled task as an emergency, while "
-            "still requiring documentation."
+            "Separation of duties in change management ensures that no "
+            "single individual can both implement and approve a production "
+            "change unchecked; documentation quality and pre-deployment "
+            "testing are valuable but do not substitute for independent "
+            "review."
         ),
     },
     # ------------------------------------------------------------------ #
     # Failure modes (3.2)
+    # ------------------------------------------------------------------ #
+    {
+        "id": "nd3f-010",
+        "domain": 3,
+        "objective": "3.2",
+        "type": "multiple_choice",
+        "difficulty": "hard",
+        "study_topic": "Failure modes",
+        "stem": (
+            "A freight logistics company's inline email security gateway "
+            "scans all outbound attachments for malware before messages leave "
+            "the network. Leadership has determined that a multi-hour halt in "
+            "outbound email during peak shipping season would cause far "
+            "greater financial harm than the small residual risk of a brief "
+            "window of unscanned outbound mail during a gateway failure. How "
+            "should the gateway's failure behavior be configured, and what is "
+            "the accepted trade-off?"
+        ),
+        "options": [
+            {
+                "id": "a",
+                "text": (
+                    "Fail-open, allowing outbound mail to continue flowing "
+                    "unscanned if the gateway fails, accepting a temporary "
+                    "increase in the risk of unscanned attachments leaving "
+                    "the network in exchange for preserving mail availability"
+                ),
+                "correct": True,
+                "rationale": (
+                    "Correct. This matches the stated priority: continued "
+                    "mail flow during peak season outweighs the brief "
+                    "increased risk of an unscanned outbound message during a "
+                    "device failure."
+                ),
+            },
+            {
+                "id": "b",
+                "text": (
+                    "Fail-closed, blocking all outbound mail if the gateway "
+                    "fails, guaranteeing no unscanned attachment ever leaves "
+                    "the network"
+                ),
+                "correct": False,
+                "rationale": (
+                    "Incorrect. Fail-closed would halt outbound email during "
+                    "peak shipping season on any gateway failure, directly "
+                    "contradicting the stated priority of preserving mail "
+                    "availability."
+                ),
+            },
+            {
+                "id": "c",
+                "text": (
+                    "Configure active-active clustering for the gateway, "
+                    "which by itself removes the need to define a failure "
+                    "mode"
+                ),
+                "correct": False,
+                "rationale": (
+                    "Incorrect. Clustering reduces the likelihood of a total "
+                    "failure but each node still needs a defined failure "
+                    "behavior; it does not eliminate the need to choose "
+                    "fail-open or fail-closed."
+                ),
+            },
+            {
+                "id": "d",
+                "text": (
+                    "Configure the gateway in passive tap mode, which "
+                    "continues scanning without ever blocking mail flow"
+                ),
+                "correct": False,
+                "rationale": (
+                    "Incorrect. Passive tap mode means the device is not "
+                    "actually inline and cannot block anything even during "
+                    "normal operation, which contradicts the scenario's "
+                    "description of an inline gateway that scans before mail "
+                    "leaves the network."
+                ),
+            },
+        ],
+        "explanation": (
+            "When continued business operation is explicitly prioritized "
+            "over a temporary security gap, an inline security appliance "
+            "should be configured to fail-open rather than fail-closed."
+        ),
+    },
+    # ------------------------------------------------------------------ #
+    # Firewalls (3.2)
+    # ------------------------------------------------------------------ #
+    {
+        "id": "nd3f-011",
+        "domain": 3,
+        "objective": "3.2",
+        "type": "multiple_choice",
+        "difficulty": "hard",
+        "study_topic": "Firewalls",
+        "stem": (
+            "A US-only regional credit union has no customers, employees, or "
+            "business operations outside North America, yet its perimeter "
+            "firewall logs show credential-stuffing login attempts against its "
+            "online banking portal originating from IP ranges in several "
+            "countries where it has zero legitimate business. Which firewall "
+            "capability would MOST efficiently reduce this specific class of "
+            "attack traffic without requiring per-IP rule maintenance?"
+        ),
+        "options": [
+            {
+                "id": "a",
+                "text": (
+                    "Geo-IP/geolocation-based filtering, blocking inbound "
+                    "traffic from entire countries or regions outside the "
+                    "credit union's legitimate customer base, updated "
+                    "automatically via a maintained geo-IP database"
+                ),
+                "correct": True,
+                "rationale": (
+                    "Correct. Geo-IP filtering blocks broad swaths of "
+                    "irrelevant geographic traffic at the firewall without "
+                    "requiring the ongoing maintenance of individual IP rules "
+                    "as attackers rotate addresses."
+                ),
+            },
+            {
+                "id": "b",
+                "text": (
+                    "Increase the account lockout threshold after failed "
+                    "login attempts"
+                ),
+                "correct": False,
+                "rationale": (
+                    "Incorrect. This is an application-layer control that "
+                    "does not reduce the volume of attack traffic reaching "
+                    "the firewall, and a looser threshold could even increase "
+                    "successful credential-stuffing attempts."
+                ),
+            },
+            {
+                "id": "c",
+                "text": (
+                    "Implement NAT to hide the true internal IP addresses of "
+                    "the banking application servers"
+                ),
+                "correct": False,
+                "rationale": (
+                    "Incorrect. NAT does not filter inbound traffic by "
+                    "geographic origin, and the servers must remain publicly "
+                    "reachable for legitimate customers regardless of NAT."
+                ),
+            },
+            {
+                "id": "d",
+                "text": (
+                    "Add individual firewall deny rules for each specific "
+                    "attacking IP address as they're identified in the logs"
+                ),
+                "correct": False,
+                "rationale": (
+                    "Incorrect. This is reactive, does not scale, and "
+                    "directly conflicts with the requirement to avoid "
+                    "per-IP rule maintenance, since attackers can trivially "
+                    "rotate to new source addresses."
+                ),
+            },
+        ],
+        "explanation": (
+            "Geo-IP filtering is the standard firewall capability for "
+            "efficiently blocking traffic from entire regions with no "
+            "legitimate business relationship, avoiding the unscalable "
+            "burden of maintaining individual IP-based rules."
+        ),
+    },
+    # ------------------------------------------------------------------ #
+    # Network appliances (3.2)
+    # ------------------------------------------------------------------ #
+    {
+        "id": "nd3f-012",
+        "domain": 3,
+        "objective": "3.2",
+        "type": "multiple_choice",
+        "difficulty": "expert",
+        "study_topic": "Network appliances",
+        "stem": (
+            "A security operations center wants to feed copies of all network "
+            "traffic crossing a core switch to three separate monitoring "
+            "tools — an IDS, a packet-capture appliance, and a NetFlow "
+            "collector — simultaneously, without adding latency to production "
+            "traffic and without configuring a separate SPAN port on the "
+            "switch for each individual tool. Which appliance BEST fulfills "
+            "this need?"
+        ),
+        "options": [
+            {
+                "id": "a",
+                "text": (
+                    "A network packet broker (TAP aggregator) that receives "
+                    "one copied traffic feed and replicates/distributes it to "
+                    "multiple monitoring tools"
+                ),
+                "correct": True,
+                "rationale": (
+                    "Correct. A packet broker is purpose-built to take a "
+                    "single aggregated traffic feed and fan it out to "
+                    "multiple analysis tools, removing the need for a "
+                    "dedicated SPAN port per tool."
+                ),
+            },
+            {
+                "id": "b",
+                "text": (
+                    "A forward proxy, configured to relay traffic to each "
+                    "monitoring tool in sequence"
+                ),
+                "correct": False,
+                "rationale": (
+                    "Incorrect. A forward proxy mediates outbound client "
+                    "requests to the internet; it is not designed to "
+                    "replicate and distribute copied network traffic to "
+                    "monitoring tools."
+                ),
+            },
+            {
+                "id": "c",
+                "text": (
+                    "A reverse proxy placed in front of the monitoring tools"
+                ),
+                "correct": False,
+                "rationale": (
+                    "Incorrect. A reverse proxy fronts and load-balances "
+                    "requests to backend servers; it has no role in "
+                    "replicating a copy of network traffic to multiple "
+                    "passive monitoring tools."
+                ),
+            },
+            {
+                "id": "d",
+                "text": (
+                    "Additional SPAN ports on the switch, one dedicated to "
+                    "each of the three tools"
+                ),
+                "correct": False,
+                "rationale": (
+                    "Incorrect. This is exactly the per-tool SPAN port "
+                    "approach the requirement explicitly seeks to avoid, and "
+                    "it adds switch CPU/backplane overhead as more mirrored "
+                    "sessions are configured."
+                ),
+            },
+        ],
+        "explanation": (
+            "A network packet broker (TAP aggregator) is the appliance "
+            "purpose-built to replicate one traffic feed to many monitoring "
+            "tools simultaneously, distinct from proxies and from simply "
+            "adding more SPAN ports."
+        ),
+    },
+    # ------------------------------------------------------------------ #
+    # Port security and 802.1X (3.2)
+    # ------------------------------------------------------------------ #
+    {
+        "id": "nd3f-013",
+        "domain": 3,
+        "objective": "3.2",
+        "type": "multiple_choice",
+        "difficulty": "expert",
+        "study_topic": "Port security and 802.1X",
+        "stem": (
+            "An attacker on a compromised workstation sends forged ARP "
+            "replies claiming to own the default gateway's IP address, "
+            "causing other hosts on the same VLAN to send their traffic to "
+            "the attacker's machine instead (an on-path attack). 802.1X is "
+            "already deployed and successfully authenticating all connected "
+            "devices. Which additional switch-level control specifically "
+            "prevents this ARP-spoofing attack?"
+        ),
+        "options": [
+            {
+                "id": "a",
+                "text": (
+                    "Dynamic ARP Inspection (DAI), which validates ARP "
+                    "packets against a trusted binding table built from DHCP "
+                    "snooping and drops ARP replies that don't match a "
+                    "legitimate IP-to-MAC binding"
+                ),
+                "correct": True,
+                "rationale": (
+                    "Correct. DAI specifically inspects and validates ARP "
+                    "traffic against known-good IP-to-MAC bindings, dropping "
+                    "forged ARP replies like the one described."
+                ),
+            },
+            {
+                "id": "b",
+                "text": (
+                    "Increasing the 802.1X re-authentication interval so "
+                    "devices are checked more frequently"
+                ),
+                "correct": False,
+                "rationale": (
+                    "Incorrect. 802.1X authenticates device/port access; it "
+                    "does not validate the content of ARP traffic already "
+                    "flowing on a port after authentication succeeds."
+                ),
+            },
+            {
+                "id": "c",
+                "text": (
+                    "Enabling port security to limit the number of MAC "
+                    "addresses allowed per port"
+                ),
+                "correct": False,
+                "rationale": (
+                    "Incorrect. The attacker's own device is already "
+                    "legitimately authenticated on its own port; limiting "
+                    "MAC counts per port does not validate ARP packet "
+                    "content or prevent it from claiming another IP's MAC "
+                    "binding."
+                ),
+            },
+            {
+                "id": "d",
+                "text": (
+                    "Configuring 802.1X to use MAC Authentication Bypass "
+                    "(MAB) as the primary authentication method"
+                ),
+                "correct": False,
+                "rationale": (
+                    "Incorrect. MAB is a fallback authentication method for "
+                    "devices that cannot run an 802.1X supplicant; it has no "
+                    "bearing on ARP spoofing occurring after a device is "
+                    "already authenticated."
+                ),
+            },
+        ],
+        "explanation": (
+            "Dynamic ARP Inspection is the switch-level control specifically "
+            "designed to detect and drop forged ARP traffic, addressing a "
+            "risk that port-based authentication controls like 802.1X and "
+            "MAB do not cover."
+        ),
+    },
+    # ------------------------------------------------------------------ #
+    # SDN and logical segmentation (3.2)
     # ------------------------------------------------------------------ #
     {
         "id": "nd3f-014",
@@ -1092,2496 +1164,1160 @@ QUESTIONS = [
         "objective": "3.2",
         "type": "multiple_choice",
         "difficulty": "hard",
-        "study_topic": "Failure modes",
-        "stem": (
-            "An e-commerce checkout service calls a third-party fraud-scoring "
-            "API before approving each transaction. During a scoring-API "
-            "outage, transactions cannot be scored. The security team must "
-            "decide whether the checkout service should fail open (approve "
-            "transactions without a fraud score) or fail closed (decline all "
-            "transactions) during the outage. For a retailer whose primary "
-            "business risk is large-scale payment fraud losses rather than "
-            "lost sales during brief outages, which configuration is MOST "
-            "appropriate?"
-        ),
-        "options": [
-            {
-                "id": "a",
-                "text": (
-                    "Fail closed — decline transactions during the outage, "
-                    "because it prioritizes minimizing fraud losses over "
-                    "transaction availability"
-                ),
-                "correct": True,
-                "rationale": (
-                    "Correct. Given the stated priority of minimizing fraud "
-                    "losses over short-term sales availability, failing "
-                    "closed prevents unscored, potentially fraudulent "
-                    "transactions from being approved during the outage."
-                ),
-            },
-            {
-                "id": "b",
-                "text": (
-                    "Fail open — approve transactions during the outage, "
-                    "because maintaining sales availability is always the "
-                    "higher priority for e-commerce"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. This directly contradicts the retailer's "
-                    "stated risk priority, which is minimizing fraud losses, "
-                    "not maximizing short-term transaction availability."
-                ),
-            },
-            {
-                "id": "c",
-                "text": (
-                    "Fail open, but only for repeat customers with a prior "
-                    "successful purchase history"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. This still exposes the retailer to fraud "
-                    "risk, since a repeat-customer account can itself be "
-                    "compromised, and it does not actually resolve the "
-                    "fail-open/fail-closed decision required during the "
-                    "outage."
-                ),
-            },
-            {
-                "id": "d",
-                "text": (
-                    "Load balance transactions across two independent "
-                    "instances of the same third-party fraud-scoring API to "
-                    "avoid a single point of failure"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. This is a redundancy improvement for the "
-                    "future, but it does not address the immediate decision "
-                    "of how the checkout service should behave right now "
-                    "during the current outage."
-                ),
-            },
-        ],
-        "explanation": (
-            "Fail-open versus fail-closed is a direct trade-off between "
-            "availability and security; when fraud losses are the dominant "
-            "business risk, failing closed during a scoring outage is the "
-            "appropriate choice, not fail-open, a conditional fail-open "
-            "workaround, or an unrelated redundancy fix."
-        ),
-    },
-    {
-        "id": "nd3f-015",
-        "domain": 3,
-        "objective": "3.2",
-        "type": "multiple_choice",
-        "difficulty": "hard",
-        "study_topic": "Failure modes",
-        "stem": (
-            "A company's public-facing domain resolves through a single "
-            "third-party DNS hosting provider. When that provider suffered a "
-            "regional outage, the company's website, API, and email became "
-            "completely unreachable even though the company's own servers "
-            "remained fully operational. Which architectural change BEST "
-            "eliminates this single point of failure?"
-        ),
-        "options": [
-            {
-                "id": "a",
-                "text": (
-                    "Configure secondary, redundant authoritative DNS hosting "
-                    "with a second, independent DNS provider so records "
-                    "remain resolvable if one provider fails"
-                ),
-                "correct": True,
-                "rationale": (
-                    "Correct. Using two independent authoritative DNS "
-                    "providers directly eliminates the single point of "
-                    "failure that caused the outage, since queries can still "
-                    "be resolved by the surviving provider."
-                ),
-            },
-            {
-                "id": "b",
-                "text": (
-                    "Increase the TTL (time to live) value on all DNS "
-                    "records so cached responses last longer during an outage"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. Longer TTLs only delay impact for clients "
-                    "that already have a cached response; new lookups and "
-                    "expired caches still fail entirely during the outage, "
-                    "so this does not fix the underlying single point of "
-                    "failure."
-                ),
-            },
-            {
-                "id": "c",
-                "text": (
-                    "Add more application servers behind the existing load "
-                    "balancer"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. The outage was caused by DNS resolution "
-                    "failing, not by insufficient application server "
-                    "capacity, so adding servers does not address the actual "
-                    "cause."
-                ),
-            },
-            {
-                "id": "d",
-                "text": "Purchase a wildcard TLS certificate for all subdomains",
-                "correct": False,
-                "rationale": (
-                    "Incorrect. A wildcard certificate addresses TLS "
-                    "coverage for subdomains and has no relationship to DNS "
-                    "resolution availability."
-                ),
-            },
-        ],
-        "explanation": (
-            "Relying on a single DNS provider is a classic single point of "
-            "failure; secondary DNS with an independent provider eliminates "
-            "it, while longer TTLs, more application servers, and TLS "
-            "certificates all fail to address the root cause."
-        ),
-    },
-    # ------------------------------------------------------------------ #
-    # Firewalls (3.2)
-    # ------------------------------------------------------------------ #
-    {
-        "id": "nd3f-016",
-        "domain": 3,
-        "objective": "3.2",
-        "type": "multiple_choice",
-        "difficulty": "hard",
-        "study_topic": "Firewalls",
-        "stem": (
-            "A security architect notices that a traditional stateful "
-            "firewall permits all outbound TCP/443 traffic, which "
-            "unintentionally allows employees to use unsanctioned peer-to-"
-            "peer file-sharing and remote-access tools that tunnel over "
-            "HTTPS on port 443, indistinguishable from legitimate web "
-            "browsing at the port/protocol level. Which firewall capability "
-            "would MOST directly allow the organization to block the "
-            "unwanted applications specifically while still permitting "
-            "normal HTTPS web browsing?"
-        ),
-        "options": [
-            {
-                "id": "a",
-                "text": (
-                    "A next-generation firewall (NGFW) with application-layer "
-                    "identification and control that classifies and blocks "
-                    "traffic by application signature, independent of port "
-                    "number"
-                ),
-                "correct": True,
-                "rationale": (
-                    "Correct. NGFW application identification inspects "
-                    "traffic content to determine the actual application in "
-                    "use, allowing the firewall to distinguish and block the "
-                    "unwanted tools even though they share port 443 with "
-                    "legitimate browsing."
-                ),
-            },
-            {
-                "id": "b",
-                "text": (
-                    "A stateless packet-filtering firewall with additional "
-                    "TCP/443 deny rules"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. Blocking TCP/443 outright would also block "
-                    "all legitimate HTTPS web browsing, since a port-based "
-                    "rule cannot distinguish between the two types of traffic "
-                    "sharing that port."
-                ),
-            },
-            {
-                "id": "c",
-                "text": "A circuit-level gateway proxy",
-                "correct": False,
-                "rationale": (
-                    "Incorrect. A circuit-level gateway validates session "
-                    "handshake legitimacy at a lower layer; it does not "
-                    "inspect application-layer content to identify the "
-                    "specific application generating the traffic."
-                ),
-            },
-            {
-                "id": "d",
-                "text": (
-                    "Increasing the stateful firewall's connection timeout "
-                    "values"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. Connection timeout settings control how long "
-                    "idle sessions remain open; they have no bearing on "
-                    "identifying or blocking specific applications."
-                ),
-            },
-        ],
-        "explanation": (
-            "Only application-layer identification, a hallmark NGFW "
-            "capability, can distinguish applications tunneling over the "
-            "same port and protocol — port-based rules, circuit-level "
-            "gateways, and timeout settings cannot make that distinction."
-        ),
-    },
-    {
-        "id": "nd3f-017",
-        "domain": 3,
-        "objective": "3.2",
-        "type": "multiple_choice",
-        "difficulty": "hard",
-        "study_topic": "Firewalls",
-        "stem": (
-            "After a phishing-compromised laptop was used to move laterally "
-            "and infect a dozen other internal workstations on the same flat "
-            "network, the incident review finds the organization relies "
-            "exclusively on a single perimeter next-generation firewall "
-            "(NGFW) at the internet edge, with no filtering between internal "
-            "workstations. Which control would BEST have limited the lateral "
-            "spread of this specific incident?"
-        ),
-        "options": [
-            {
-                "id": "a",
-                "text": (
-                    "Host-based firewalls on each workstation combined with "
-                    "internal network segmentation to restrict east-west "
-                    "traffic between peer endpoints"
-                ),
-                "correct": True,
-                "rationale": (
-                    "Correct. Because the compromise spread through internal, "
-                    "east-west traffic between workstations, only "
-                    "host-based firewalls and internal segmentation that "
-                    "restrict peer-to-peer traffic could have contained the "
-                    "spread."
-                ),
-            },
-            {
-                "id": "b",
-                "text": "Upgrading the perimeter NGFW to a higher-throughput model",
-                "correct": False,
-                "rationale": (
-                    "Incorrect. A perimeter firewall inspects north-south "
-                    "traffic entering and leaving the network; a "
-                    "higher-throughput model does nothing to filter traffic "
-                    "moving between internal workstations."
-                ),
-            },
-            {
-                "id": "c",
-                "text": (
-                    "Adding additional deny rules for outbound internet "
-                    "traffic on the perimeter firewall"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. The lateral spread occurred entirely inside "
-                    "the network between workstations; outbound internet "
-                    "rules at the perimeter have no effect on that internal "
-                    "traffic."
-                ),
-            },
-            {
-                "id": "d",
-                "text": (
-                    "Enabling TLS decryption and inspection on the perimeter "
-                    "firewall for outbound HTTPS traffic"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. TLS inspection at the perimeter examines "
-                    "traffic leaving the network to the internet, not "
-                    "traffic that stays entirely inside the network between "
-                    "workstations."
-                ),
-            },
-        ],
-        "explanation": (
-            "A single perimeter firewall provides no visibility into "
-            "east-west traffic between internal hosts; only host-based "
-            "firewalls plus internal segmentation address lateral movement "
-            "like the incident described, unlike upgrades or rule changes "
-            "made only at the perimeter."
-        ),
-    },
-    # ------------------------------------------------------------------ #
-    # Network appliances (3.2)
-    # ------------------------------------------------------------------ #
-    {
-        "id": "nd3f-018",
-        "domain": 3,
-        "objective": "3.2",
-        "type": "multiple_choice",
-        "difficulty": "hard",
-        "study_topic": "Network appliances",
-        "stem": (
-            "A media company's video-on-demand website experiences a "
-            "massive volumetric DDoS attack that saturates its single data "
-            "center's internet uplink, making the site completely "
-            "unreachable even though the origin web servers themselves never "
-            "became overloaded. Which network appliance/service deployment "
-            "would MOST effectively prevent a recurrence of this specific "
-            "failure?"
-        ),
-        "options": [
-            {
-                "id": "a",
-                "text": (
-                    "A cloud-based content delivery network (CDN) with "
-                    "distributed points of presence and built-in DDoS "
-                    "scrubbing that absorbs volumetric traffic before it "
-                    "reaches the single uplink"
-                ),
-                "correct": True,
-                "rationale": (
-                    "Correct. A distributed CDN with DDoS scrubbing absorbs "
-                    "volumetric traffic across many points of presence, "
-                    "preventing the flood from ever concentrating on the "
-                    "single saturated uplink."
-                ),
-            },
-            {
-                "id": "b",
-                "text": (
-                    "An additional internal load balancer distributing "
-                    "traffic across more origin web servers"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. The origin servers were never overloaded; "
-                    "the failure was the uplink itself being saturated, "
-                    "which an internal load balancer does nothing to "
-                    "address."
-                ),
-            },
-            {
-                "id": "c",
-                "text": (
-                    "A host-based intrusion detection system (HIDS) on each "
-                    "origin web server"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. HIDS detects host-level intrusions on "
-                    "individual servers; it has no capability to mitigate a "
-                    "network-layer volumetric flood saturating the uplink."
-                ),
-            },
-            {
-                "id": "d",
-                "text": (
-                    "A higher-throughput stateful firewall at the data "
-                    "center edge"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. A single stateful firewall at the same data "
-                    "center still shares the same saturated uplink and can "
-                    "itself become an additional bottleneck under a massive "
-                    "volumetric flood."
-                ),
-            },
-        ],
-        "explanation": (
-            "Only a geographically distributed CDN with dedicated DDoS "
-            "scrubbing capacity addresses volumetric uplink saturation; "
-            "internal load balancers, host-based IDS, and a single "
-            "on-premises firewall all remain limited by the same saturated "
-            "single-site uplink."
-        ),
-    },
-    {
-        "id": "nd3f-019",
-        "domain": 3,
-        "objective": "3.2",
-        "type": "multiple_choice",
-        "difficulty": "hard",
-        "study_topic": "Network appliances",
-        "stem": (
-            "A company has dozens of internal microservices that each "
-            "independently implement their own authentication, rate "
-            "limiting, and request logging, leading to inconsistent security "
-            "enforcement across the environment. Which network appliance "
-            "deployment would MOST effectively centralize and standardize "
-            "these cross-cutting security functions for all north-south API "
-            "traffic entering the environment?"
-        ),
-        "options": [
-            {
-                "id": "a",
-                "text": (
-                    "An API gateway placed in front of all microservices to "
-                    "centrally enforce authentication, rate limiting, and "
-                    "logging policies"
-                ),
-                "correct": True,
-                "rationale": (
-                    "Correct. An API gateway is purpose-built to centralize "
-                    "these cross-cutting concerns for incoming API traffic, "
-                    "enforcing consistent policy in one place rather than in "
-                    "each individual microservice."
-                ),
-            },
-            {
-                "id": "b",
-                "text": "A host-based firewall on each microservice's container",
-                "correct": False,
-                "rationale": (
-                    "Incorrect. A per-container host-based firewall still "
-                    "requires separate configuration on each service and "
-                    "does not centralize or standardize authentication, rate "
-                    "limiting, or logging."
-                ),
-            },
-            {
-                "id": "c",
-                "text": "A network tap mirroring traffic to a monitoring appliance",
-                "correct": False,
-                "rationale": (
-                    "Incorrect. A network tap only provides passive traffic "
-                    "visibility for monitoring; it cannot enforce "
-                    "authentication or rate-limiting policy on live "
-                    "requests."
-                ),
-            },
-            {
-                "id": "d",
-                "text": "A layer 2 switch with port security enabled",
-                "correct": False,
-                "rationale": (
-                    "Incorrect. A layer 2 switch operates far below the "
-                    "application layer and has no capability to perform "
-                    "API-level authentication, rate limiting, or logging."
-                ),
-            },
-        ],
-        "explanation": (
-            "An API gateway is the network appliance designed to centralize "
-            "cross-cutting API security functions, unlike per-container "
-            "firewalls, passive taps, or layer 2 switches, none of which can "
-            "enforce application-layer policy consistently."
-        ),
-    },
-    # ------------------------------------------------------------------ #
-    # Port security and 802.1X (3.2)
-    # ------------------------------------------------------------------ #
-    {
-        "id": "nd3f-020",
-        "domain": 3,
-        "objective": "3.2",
-        "type": "multiple_choice",
-        "difficulty": "hard",
-        "study_topic": "Port security and 802.1X",
-        "stem": (
-            "A company enforces 802.1X on every access-layer switchport, but "
-            "a fleet of older network printers cannot run an 802.1X "
-            "supplicant and therefore fail authentication and lose network "
-            "connectivity when the policy is enabled. Which approach BEST "
-            "allows these specific devices to connect securely without "
-            "disabling 802.1X for the rest of the network?"
-        ),
-        "options": [
-            {
-                "id": "a",
-                "text": (
-                    "Configure MAC authentication bypass (MAB) on the "
-                    "printer ports as a fallback so devices without an "
-                    "802.1X supplicant can still authenticate using their "
-                    "known MAC address"
-                ),
-                "correct": True,
-                "rationale": (
-                    "Correct. MAB lets non-802.1X-capable devices "
-                    "authenticate via a known MAC address through the same "
-                    "RADIUS infrastructure, preserving centralized "
-                    "authentication without disabling 802.1X elsewhere."
-                ),
-            },
-            {
-                "id": "b",
-                "text": "Disable 802.1X enforcement globally across all access switchports",
-                "correct": False,
-                "rationale": (
-                    "Incorrect. This removes port-based authentication "
-                    "protection for the entire network to accommodate a "
-                    "small number of devices, rather than targeting the fix "
-                    "to only the affected printer ports."
-                ),
-            },
-            {
-                "id": "c",
-                "text": (
-                    "Place the printers on the guest VLAN with restricted "
-                    "internet-only access"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. Printers typically need access to internal "
-                    "print servers and users, not just the internet, and "
-                    "this does not solve the underlying requirement for "
-                    "authenticated network access."
-                ),
-            },
-            {
-                "id": "d",
-                "text": (
-                    "Configure sticky port security with a static MAC "
-                    "address allow-list on the printer ports instead of "
-                    "802.1X"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. Static sticky port security learns and "
-                    "limits MAC addresses locally on the switch but lacks "
-                    "the centralized, dynamic authentication and policy "
-                    "assignment that MAB provides through the existing "
-                    "RADIUS/802.1X infrastructure."
-                ),
-            },
-        ],
-        "explanation": (
-            "MAC authentication bypass is the standard fallback for devices "
-            "that cannot run an 802.1X supplicant, preserving centralized "
-            "authentication for those ports rather than disabling 802.1X "
-            "network-wide, isolating devices onto a mismatched VLAN, or "
-            "relying on standalone static port security."
-        ),
-    },
-    # ------------------------------------------------------------------ #
-    # SDN and logical segmentation (3.2)
-    # ------------------------------------------------------------------ #
-    {
-        "id": "nd3f-021",
-        "domain": 3,
-        "objective": "3.2",
-        "type": "multiple_choice",
-        "difficulty": "hard",
         "study_topic": "SDN and logical segmentation",
         "stem": (
-            "In a software-defined networking (SDN) deployment, the "
-            "centralized SDN controller communicates with switches using a "
-            "southbound API (such as OpenFlow) to push forwarding rules, and "
-            "with orchestration and management tools using a northbound "
-            "API. A security review is MOST concerned about which risk that "
-            "is unique to this centralized control-plane architecture?"
+            "A company hosts a public-facing web server that must be "
+            "reachable from the internet and also needs to query an internal "
+            "database server that must never be directly reachable from the "
+            "internet. Which network design BEST achieves this?"
         ),
         "options": [
             {
                 "id": "a",
                 "text": (
-                    "Compromise of the SDN controller itself would give an "
-                    "attacker the ability to reprogram forwarding behavior "
-                    "across the entire network it manages, making the "
-                    "controller a high-value, centralized target"
+                    "Place the web server in a screened subnet (DMZ) bounded "
+                    "by firewalls, allowing only the specific necessary "
+                    "traffic from the DMZ to the internal database segment, "
+                    "with the internal network never directly exposed to the "
+                    "internet"
                 ),
                 "correct": True,
                 "rationale": (
-                    "Correct. Because the controller centrally directs "
-                    "forwarding behavior for all managed switches, "
-                    "compromising it gives an attacker sweeping control over "
-                    "the network — the defining centralized-control-plane "
-                    "risk in SDN."
+                    "Correct. A screened subnet isolates the internet-facing "
+                    "server in its own segment, allowing tightly controlled "
+                    "traffic to the internal database while keeping the "
+                    "internal network itself unreachable from the internet."
                 ),
             },
             {
                 "id": "b",
                 "text": (
-                    "SDN inherently encrypts all data-plane traffic between "
-                    "switches by default, so the primary remaining risk is "
-                    "physical cable tapping"
+                    "Place both the web server and the database on the same "
+                    "internal VLAN as user workstations for simplicity"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. SDN does not automatically encrypt "
-                    "data-plane traffic between switches by default; this "
-                    "misstates SDN's properties and understates the "
-                    "controller compromise risk."
+                    "Incorrect. This directly exposes the internal network "
+                    "and database to compromise if the internet-facing web "
+                    "server is breached, with no segmentation between them."
                 ),
             },
             {
                 "id": "c",
                 "text": (
-                    "Southbound APIs are used only for network monitoring "
-                    "and cannot modify forwarding behavior"
+                    "Give the web server a direct route to the internal "
+                    "database VLAN with no firewall between them, since both "
+                    "are company-owned assets"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. Southbound APIs like OpenFlow are precisely "
-                    "how the controller pushes and modifies forwarding rules "
-                    "to switches; they are not limited to passive "
-                    "monitoring."
+                    "Incorrect. Common ownership does not eliminate risk; "
+                    "with no boundary control, a compromised internet-facing "
+                    "web server would have unrestricted access to the "
+                    "internal database segment."
                 ),
             },
             {
                 "id": "d",
                 "text": (
-                    "Because control and data planes are separated, a "
-                    "compromised switch can independently reprogram the "
-                    "entire network's forwarding rules"
+                    "Host the web server directly in the internal network "
+                    "and open only port 443 inbound on the perimeter firewall"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. This reverses SDN's architecture: switches "
-                    "in SDN are relatively simple forwarders that follow "
-                    "controller instructions, so a compromised switch cannot "
-                    "independently reprogram the network the way a "
-                    "compromised controller could."
+                    "Incorrect. This still places an internet-facing server "
+                    "inside the internal network itself, exposing the "
+                    "internal segment directly rather than isolating the "
+                    "public-facing component in its own DMZ layer."
                 ),
             },
         ],
         "explanation": (
-            "SDN's centralized control plane concentrates network-wide "
-            "control in the controller, making its compromise the most "
-            "consequential risk — unlike the other options, which either "
-            "misstate SDN's encryption defaults, southbound API function, or "
-            "reverse the controller/switch relationship."
-        ),
-    },
-    {
-        "id": "nd3f-022",
-        "domain": 3,
-        "objective": "3.2",
-        "type": "multiple_choice",
-        "difficulty": "hard",
-        "study_topic": "SDN and logical segmentation",
-        "stem": (
-            "A retailer's cardholder-data workloads run as virtual machines "
-            "that are frequently migrated between hosts by the orchestration "
-            "platform, which assigns them new IP addresses after each "
-            "migration. Traditional VLAN-based segmentation, which enforces "
-            "policy based on static IP address ranges, breaks every time a "
-            "workload migrates. Which approach BEST solves this specific "
-            "problem?"
-        ),
-        "options": [
-            {
-                "id": "a",
-                "text": (
-                    "Software-defined micro-segmentation that enforces "
-                    "policy based on workload identity or tags rather than "
-                    "static IP addresses, so rules follow the workload "
-                    "automatically after migration"
-                ),
-                "correct": True,
-                "rationale": (
-                    "Correct. Identity- or tag-based micro-segmentation ties "
-                    "policy to the workload itself rather than a static IP "
-                    "range, so protection follows the workload across "
-                    "migrations without manual reconfiguration."
-                ),
-            },
-            {
-                "id": "b",
-                "text": (
-                    "Assign a larger, single flat VLAN to all cardholder-"
-                    "data workloads so IP changes never cross a VLAN "
-                    "boundary"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. This eliminates meaningful segmentation "
-                    "entirely, worsening the security posture and violating "
-                    "least privilege for cardholder data, rather than "
-                    "solving the migration problem."
-                ),
-            },
-            {
-                "id": "c",
-                "text": (
-                    "Disable dynamic migration for cardholder-data workloads "
-                    "so IP addresses never change"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. This sacrifices operational flexibility and "
-                    "may not be feasible for maintenance or load balancing; "
-                    "it works around the problem rather than solving policy "
-                    "enforcement for a dynamic environment."
-                ),
-            },
-            {
-                "id": "d",
-                "text": (
-                    "Configure static NAT mappings that translate every "
-                    "workload back to the same fixed IP regardless of which "
-                    "host it runs on"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. This is operationally fragile and does not "
-                    "scale to frequent migrations, and it still does not "
-                    "address policy enforcement directly tied to workload "
-                    "identity."
-                ),
-            },
-        ],
-        "explanation": (
-            "Identity-based micro-segmentation decouples policy from "
-            "static IP addressing, directly solving the problem of policy "
-            "breaking on migration — unlike flattening the VLAN, freezing "
-            "migrations, or fragile static NAT workarounds."
+            "A screened subnet (DMZ) is the standard logical segmentation "
+            "pattern for isolating an internet-facing server from an "
+            "internal network that must never be directly reachable from the "
+            "internet."
         ),
     },
     # ------------------------------------------------------------------ #
     # Secure communication (VPN/TLS/IPSec) (3.2)
     # ------------------------------------------------------------------ #
     {
-        "id": "nd3f-023",
+        "id": "nd3f-015",
         "domain": 3,
         "objective": "3.2",
         "type": "multiple_choice",
-        "difficulty": "hard",
+        "difficulty": "expert",
         "study_topic": "Secure communication (VPN/TLS/IPSec)",
         "stem": (
-            "Two servers within the same data center need to encrypt "
-            "traffic exchanged directly between each other using IPSec, "
-            "without needing to encapsulate and route traffic through a "
-            "gateway, since both endpoints are the actual communicating "
-            "hosts. Which IPSec mode is MOST appropriate for this "
-            "host-to-host scenario, and why?"
+            "A financial services web application still accepts TLS 1.0 and "
+            "TLS 1.1 connections alongside TLS 1.3 for backward compatibility "
+            "with a small number of legacy client devices. A security "
+            "assessment demonstrates that an on-path attacker can force a "
+            "negotiation down to TLS 1.0, which uses weaker cipher suites "
+            "vulnerable to known exploits. Which change eliminates this "
+            "downgrade risk while retaining strong TLS support?"
         ),
         "options": [
             {
                 "id": "a",
                 "text": (
-                    "Transport mode, because it encrypts only the payload of "
-                    "each IP packet while leaving the original IP header "
-                    "intact, which is efficient for direct host-to-host "
-                    "communication"
+                    "Disable support for TLS 1.0 and TLS 1.1 entirely on the "
+                    "server, allowing only TLS 1.2 and TLS 1.3, so there is "
+                    "no weaker protocol version left for an attacker to "
+                    "negotiate down to"
                 ),
                 "correct": True,
                 "rationale": (
-                    "Correct. Transport mode is designed for direct "
-                    "end-to-end communication between the actual "
-                    "communicating hosts, encrypting only the payload rather "
-                    "than adding gateway encapsulation overhead."
+                    "Correct. Removing support for the weaker protocol "
+                    "versions entirely closes the downgrade path, since an "
+                    "attacker cannot force negotiation to a version the "
+                    "server no longer offers."
                 ),
             },
             {
                 "id": "b",
                 "text": (
-                    "Tunnel mode, because it encrypts the entire original IP "
-                    "packet and encapsulates it inside a new packet, which "
-                    "is designed for gateway-to-gateway site-to-site "
+                    "Configure the server to prefer TLS 1.3 while still "
+                    "allowing TLS 1.0/1.1 as a fallback"
+                ),
+                "correct": False,
+                "rationale": (
+                    "Incorrect. Merely preferring the strongest version does "
+                    "not prevent an on-path attacker from actively "
+                    "interfering with negotiation to force the still-enabled "
+                    "weaker versions."
+                ),
+            },
+            {
+                "id": "c",
+                "text": (
+                    "Increase the TLS session cache timeout so fewer "
+                    "renegotiations occur"
+                ),
+                "correct": False,
+                "rationale": (
+                    "Incorrect. Session cache timeout is unrelated to which "
+                    "protocol versions are permitted during the initial "
+                    "handshake and does not close the downgrade path."
+                ),
+            },
+            {
+                "id": "d",
+                "text": (
+                    "Require client-certificate authentication for all TLS "
                     "connections"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. Tunnel mode is a real IPSec mode, but it is "
-                    "purpose-built for gateway-to-gateway site-to-site VPNs, "
-                    "not for direct host-to-host traffic where the "
-                    "communicating hosts are the endpoints themselves."
-                ),
-            },
-            {
-                "id": "c",
-                "text": (
-                    "IKEv1 aggressive mode, because it completes the key "
-                    "exchange in fewer round trips"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. Aggressive mode is a key-exchange "
-                    "negotiation option, not a data-encapsulation mode, and "
-                    "it is also considered less secure because it exposes "
-                    "identity information during negotiation."
-                ),
-            },
-            {
-                "id": "d",
-                "text": (
-                    "ESP in null-encryption mode, because authentication "
-                    "alone is sufficient for internal data center traffic"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. Null encryption provides authentication and "
-                    "integrity but no confidentiality, leaving the traffic "
-                    "exposed, which does not meet the implied requirement to "
-                    "encrypt the traffic."
+                    "Incorrect. Mutual TLS authenticates client identity but "
+                    "does not prevent negotiation down to a weaker, still-"
+                    "enabled protocol version."
                 ),
             },
         ],
         "explanation": (
-            "IPSec transport mode is designed for direct host-to-host "
-            "encryption between the actual communicating endpoints, while "
-            "tunnel mode fits gateway-to-gateway VPNs, aggressive mode is a "
-            "key-exchange option rather than a data mode, and null "
-            "encryption provides no confidentiality."
-        ),
-    },
-    {
-        "id": "nd3f-024",
-        "domain": 3,
-        "objective": "3.2",
-        "type": "multiple_choice",
-        "difficulty": "hard",
-        "study_topic": "Secure communication (VPN/TLS/IPSec)",
-        "stem": (
-            "A mobile banking app's engineering team wants to ensure that "
-            "even if an attacker installs a rogue root certificate authority "
-            "(CA) on a customer's compromised or jailbroken device and "
-            "performs a machine-in-the-middle proxy, the app will still "
-            "refuse to trust the attacker's forged TLS certificate for the "
-            "bank's API domain. Which technique BEST achieves this?"
-        ),
-        "options": [
-            {
-                "id": "a",
-                "text": (
-                    "Certificate pinning, which hardcodes the expected "
-                    "certificate or public key in the app so it rejects any "
-                    "certificate not matching the pin, even one issued by a "
-                    "trusted root CA"
-                ),
-                "correct": True,
-                "rationale": (
-                    "Correct. Certificate pinning validates the server "
-                    "certificate against a pinned value baked into the app, "
-                    "so it will reject a forged certificate even if that "
-                    "certificate chains to a rogue CA the device has been "
-                    "tricked into trusting."
-                ),
-            },
-            {
-                "id": "b",
-                "text": "Enabling TLS 1.3 instead of TLS 1.2 for all API connections",
-                "correct": False,
-                "rationale": (
-                    "Incorrect. A newer TLS version improves cipher strength "
-                    "and handshake privacy, but it does not prevent a device "
-                    "from trusting an attacker-installed rogue root CA."
-                ),
-            },
-            {
-                "id": "c",
-                "text": (
-                    "Using OCSP stapling to check the certificate's "
-                    "revocation status"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. OCSP stapling checks whether an otherwise-"
-                    "trusted certificate has been revoked; it does not stop "
-                    "a device from trusting a rogue root CA in the first "
-                    "place."
-                ),
-            },
-            {
-                "id": "d",
-                "text": (
-                    "Enforcing mutual TLS so the server also authenticates "
-                    "the client's certificate"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. Mutual TLS protects the server from "
-                    "unauthorized clients, but it does not stop the client "
-                    "app from trusting a forged server certificate signed by "
-                    "a rogue installed CA."
-                ),
-            },
-        ],
-        "explanation": (
-            "Certificate pinning is the technique specifically designed to "
-            "defeat rogue-CA-based interception by validating against a "
-            "known-good certificate or key rather than trusting any "
-            "certificate the device's trust store accepts — TLS version, "
-            "OCSP stapling, and mutual TLS all address different threats."
+            "The only way to eliminate a protocol-downgrade attack is to "
+            "remove support for the vulnerable protocol versions entirely; "
+            "preference ordering, session caching, and client authentication "
+            "do not close the downgrade path."
         ),
     },
     # ------------------------------------------------------------------ #
     # Zero Trust / SASE (3.2)
     # ------------------------------------------------------------------ #
     {
-        "id": "nd3f-025",
-        "domain": 3,
-        "objective": "3.2",
-        "type": "multiple_choice",
-        "difficulty": "hard",
-        "study_topic": "Zero Trust / SASE",
-        "stem": (
-            "A company's Zero Trust architecture continuously evaluates "
-            "device posture signals — patch level, disk encryption status, "
-            "and EDR agent health — even after a user has been granted "
-            "access to a resource. Thirty minutes into an authenticated "
-            "session, a user's laptop reports that its disk encryption was "
-            "disabled. The policy engine immediately terminates the user's "
-            "active session to the sensitive file share. Which Zero Trust "
-            "principle does this behavior MOST directly demonstrate?"
-        ),
-        "options": [
-            {
-                "id": "a",
-                "text": (
-                    "Continuous, adaptive evaluation of trust rather than a "
-                    "one-time authentication decision, allowing access to be "
-                    "revoked in real time when risk posture changes "
-                    "mid-session"
-                ),
-                "correct": True,
-                "rationale": (
-                    "Correct. Zero Trust treats trust as continuously "
-                    "re-evaluated rather than granted once at login; the "
-                    "scenario shows exactly this — a posture change during "
-                    "an active session triggers immediate revocation."
-                ),
-            },
-            {
-                "id": "b",
-                "text": (
-                    "The principle of least privilege, which limits a "
-                    "user's access to only the minimum resources needed for "
-                    "their role"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. Least privilege concerns the scope of access "
-                    "granted, not the ongoing, real-time re-evaluation of an "
-                    "already-granted session that the scenario describes."
-                ),
-            },
-            {
-                "id": "c",
-                "text": (
-                    "Micro-segmentation, which restricts lateral movement "
-                    "between network segments"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. Micro-segmentation is a network-layer "
-                    "isolation control; it does not explain the policy "
-                    "engine's real-time reaction to a posture-signal change "
-                    "mid-session."
-                ),
-            },
-            {
-                "id": "d",
-                "text": (
-                    "Multi-factor authentication, which requires more than "
-                    "one credential type at login"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. MFA strengthens the initial authentication "
-                    "event; it does not by itself explain a mid-session "
-                    "revocation triggered by a later change in device "
-                    "posture."
-                ),
-            },
-        ],
-        "explanation": (
-            "Continuous, adaptive trust evaluation — not a one-time login "
-            "decision — is what allows a Zero Trust policy engine to revoke "
-            "an active session the moment risk posture changes, distinct "
-            "from least privilege, micro-segmentation, or MFA."
-        ),
-    },
-    {
-        "id": "nd3f-026",
+        "id": "nd3f-016",
         "domain": 3,
         "objective": "3.2",
         "type": "multiple_response",
-        "difficulty": "expert",
+        "difficulty": "hard",
         "study_topic": "Zero Trust / SASE",
         "stem": (
-            "A security architect is designing a SASE (Secure Access "
-            "Service Edge) rollout to replace branch office MPLS circuits "
-            "and site-to-site VPNs. Which THREE capabilities are core, "
-            "cloud-delivered components that SASE converges into a single "
-            "platform? (Select three.)"
+            "A company's security team is rewriting its access-control "
+            "philosophy around Zero Trust principles as defined in NIST SP "
+            "800-207. Which TWO statements correctly describe core Zero "
+            "Trust principles? (Select two.)"
         ),
         "options": [
             {
                 "id": "a",
                 "text": (
-                    "SD-WAN for intelligent, application-aware routing of "
-                    "branch traffic"
+                    "No user, device, or network location is trusted by "
+                    "default — including traffic that originates from inside "
+                    "the corporate network perimeter — every access request "
+                    "must be explicitly verified"
                 ),
                 "correct": True,
                 "rationale": (
-                    "Correct. SD-WAN is one of the core networking "
-                    "components SASE converges to intelligently route branch "
-                    "traffic, often replacing costly dedicated circuits."
+                    "Correct. Zero Trust explicitly rejects implicit trust "
+                    "based on network location, treating internal traffic "
+                    "with the same scrutiny as external traffic."
                 ),
             },
             {
                 "id": "b",
                 "text": (
-                    "A cloud-delivered secure web gateway (SWG) for "
-                    "inspecting and filtering web traffic"
+                    "Access decisions should be made per-session or "
+                    "per-request based on the minimum privilege necessary for "
+                    "that specific resource, evaluated continuously rather "
+                    "than granted permanently at initial login"
                 ),
                 "correct": True,
                 "rationale": (
-                    "Correct. A cloud-delivered SWG is a core SASE security "
-                    "component that inspects and filters web traffic from "
-                    "any location without requiring on-premises hardware."
+                    "Correct. Continuous, least-privilege, per-request "
+                    "evaluation — rather than a one-time login granting "
+                    "persistent trust — is a core Zero Trust tenet."
                 ),
             },
             {
                 "id": "c",
                 "text": (
-                    "Zero Trust Network Access (ZTNA) for identity- and "
-                    "context-based access to applications"
+                    "Once a device successfully authenticates and joins the "
+                    "internal network, it should be implicitly trusted for "
+                    "the remainder of its connection to reduce authentication "
+                    "overhead"
                 ),
-                "correct": True,
+                "correct": False,
                 "rationale": (
-                    "Correct. ZTNA is a core SASE component that grants "
-                    "application access based on identity and context "
-                    "rather than network location, replacing traditional "
-                    "VPN access."
+                    "Incorrect. Granting persistent implicit trust after "
+                    "initial authentication directly contradicts Zero "
+                    "Trust's requirement for continuous verification."
                 ),
             },
             {
                 "id": "d",
                 "text": (
-                    "A dedicated MPLS circuit purchased from a telecom "
-                    "carrier for each branch"
+                    "A strong perimeter firewall is sufficient on its own to "
+                    "achieve Zero Trust, since all internal traffic behind it "
+                    "can be considered secure"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. SASE is specifically positioned to reduce or "
-                    "replace dependency on costly dedicated MPLS circuits, "
-                    "not to converge them as a core component."
+                    "Incorrect. This describes the traditional perimeter-"
+                    "based trust model that Zero Trust was specifically "
+                    "designed to replace."
                 ),
             },
             {
                 "id": "e",
                 "text": (
-                    "A physical firewall appliance shipped to and racked at "
-                    "every branch office"
+                    "Zero Trust applies only to remote or external users; "
+                    "internal on-premises users connecting from the corporate "
+                    "LAN are exempt from continuous verification"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. SASE shifts security enforcement to the "
-                    "cloud edge rather than requiring dedicated hardware "
-                    "appliances at every branch location."
-                ),
-            },
-            {
-                "id": "f",
-                "text": (
-                    "A locally hosted RADIUS server at each branch for "
-                    "Wi-Fi authentication"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. SASE centralizes and cloud-delivers policy "
-                    "enforcement rather than requiring standalone local "
-                    "infrastructure at each branch."
+                    "Incorrect. This contradicts the core tenet that no "
+                    "location — including the internal LAN — is implicitly "
+                    "trusted."
                 ),
             },
         ],
         "explanation": (
-            "SASE converges SD-WAN, a cloud-delivered SWG, and ZTNA into a "
-            "single cloud platform, specifically to reduce dependence on "
-            "dedicated circuits and per-branch hardware, not to converge "
-            "those legacy components themselves."
+            "Zero Trust is defined by the elimination of implicit, "
+            "location-based trust and by continuous, least-privilege "
+            "evaluation of every access request; perimeter-only defenses and "
+            "persistent post-login trust are exactly what it replaces."
         ),
     },
     # ------------------------------------------------------------------ #
     # Data classification (3.3)
     # ------------------------------------------------------------------ #
     {
-        "id": "nd3f-027",
+        "id": "nd3f-017",
         "domain": 3,
         "objective": "3.3",
         "type": "multiple_choice",
         "difficulty": "hard",
         "study_topic": "Data classification",
         "stem": (
-            "A company deploys an automated data classification tool that "
-            "scans documents and emails, then applies sensitivity labels "
-            "(Public, Internal, Confidential, Restricted) based on detected "
-            "content patterns such as national ID numbers and financial "
-            "account numbers. Once the \"Restricted\" label is applied to a "
-            "file, it automatically triggers encryption, disables external "
-            "sharing, and restricts printing. Which statement BEST describes "
-            "the security value of this labeling scheme?"
+            "A university maintains two datasets: (1) anonymized aggregate "
+            "survey results intended for public academic publication, with no "
+            "way to re-identify individual respondents, and (2) an unredacted "
+            "roster containing students' names and Social Security numbers "
+            "used for financial aid processing. Which classification pairing "
+            "is MOST appropriate?"
         ),
         "options": [
             {
                 "id": "a",
                 "text": (
-                    "The classification label acts as metadata that drives "
-                    "automated enforcement of handling controls proportional "
-                    "to the data's sensitivity, without relying on manual "
-                    "user judgment for every file"
+                    "Dataset 1 should be classified Public, since it carries "
+                    "no re-identification risk and is intended for public "
+                    "release; Dataset 2 should be classified Confidential or "
+                    "Restricted, since it contains regulated PII whose "
+                    "disclosure could enable identity theft"
                 ),
                 "correct": True,
                 "rationale": (
-                    "Correct. This is exactly the value shown: the label "
-                    "itself is metadata that automatically triggers "
-                    "appropriate technical controls, removing dependence on "
-                    "each user consistently applying the right protection "
-                    "manually."
+                    "Correct. Classification should reflect actual "
+                    "disclosure impact: the anonymized dataset has none, "
+                    "warranting Public, while the SSN roster carries severe "
+                    "harm potential, warranting the organization's highest "
+                    "sensitivity tier."
                 ),
             },
             {
                 "id": "b",
                 "text": (
-                    "The label alone provides confidentiality protection "
-                    "equivalent to encryption, so no additional controls are "
-                    "required once a file is labeled \"Restricted\""
+                    "Both datasets should be classified Internal, since both "
+                    "originate from the same university system"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. The label is just metadata; it is the "
-                    "controls the label triggers, such as encryption, that "
-                    "actually provide protection — an unlabeled or "
-                    "mislabeled file would have none of that protection."
+                    "Incorrect. A single blanket classification based on "
+                    "origin ignores the very different actual sensitivity and "
+                    "disclosure impact of each dataset."
                 ),
             },
             {
                 "id": "c",
                 "text": (
-                    "Classification labels are useful only for regulatory "
-                    "audit reporting and have no effect on the technical "
-                    "controls applied to a file"
+                    "Dataset 1 should be classified Confidential because it "
+                    "involves survey participants; Dataset 2 should be "
+                    "classified Public because financial aid records are "
+                    "administrative rather than academic"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. This contradicts the scenario, which "
-                    "explicitly shows the label triggering encryption and "
-                    "sharing restrictions, not merely serving a reporting "
-                    "function."
+                    "Incorrect. This reverses the correct assignments — the "
+                    "anonymized dataset has no re-identification risk, while "
+                    "unredacted SSNs are precisely the kind of regulated data "
+                    "that should never be classified Public."
                 ),
             },
             {
                 "id": "d",
                 "text": (
-                    "Because the tool applies labels automatically, manual "
-                    "review of classification decisions is no longer "
-                    "necessary for any file"
+                    "Data classification only applies to data stored "
+                    "electronically, so a printed roster used by financial "
+                    "aid staff does not require a classification label"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. Automated classification tools can "
-                    "misclassify content, so a manual review or override "
-                    "process is still generally needed for edge cases; "
-                    "treating automation as infallible is a flawed "
-                    "assumption."
+                    "Incorrect. Classification requirements apply to data "
+                    "based on its sensitivity, regardless of the medium or "
+                    "format in which it is stored or handled."
                 ),
             },
         ],
         "explanation": (
-            "The genuine security value of classification labels is that "
-            "they drive automatic, proportional enforcement of handling "
-            "controls — the label is not protection by itself, is not "
-            "purely for reporting, and does not eliminate the need for "
-            "occasional manual review."
+            "Classification decisions must be driven by actual disclosure "
+            "impact for each specific dataset, not by its source system or "
+            "storage medium; regulated PII like unredacted SSNs warrants the "
+            "highest sensitivity tier while genuinely anonymized data can be "
+            "public."
         ),
     },
     # ------------------------------------------------------------------ #
     # Data protection methods (3.3)
     # ------------------------------------------------------------------ #
     {
-        "id": "nd3f-028",
+        "id": "nd3f-018",
         "domain": 3,
         "objective": "3.3",
         "type": "multiple_choice",
         "difficulty": "hard",
         "study_topic": "Data protection methods",
         "stem": (
-            "A streaming media company holds licensing agreements that only "
-            "permit certain movies to be streamed to users physically "
-            "located within the United States. Which data protection method "
-            "should the company implement to enforce this legal requirement "
-            "at the platform level?"
+            "A ride-share company encrypts its entire database volume "
+            "containing driver background-check results using full-disk/"
+            "volume-level encryption at rest. An internal audit finds that "
+            "any application service account with basic database read access "
+            "can query the plaintext background-check fields once the volume "
+            "is mounted and the database is running. Which additional control "
+            "gap does this reveal?"
         ),
         "options": [
             {
                 "id": "a",
                 "text": (
-                    "Geographic restrictions (geofencing/geolocation-based "
-                    "access control) that block or allow content delivery "
-                    "based on the requesting device's detected location"
+                    "Volume-level encryption alone doesn't restrict who can "
+                    "read decrypted data once the database is online; "
+                    "granular access controls, column-level protection, or "
+                    "masking on the specific sensitive fields are also needed"
                 ),
                 "correct": True,
                 "rationale": (
-                    "Correct. Geographic restrictions are the data "
-                    "protection method purpose-built to allow or block "
-                    "access based on a requester's physical location, "
-                    "directly matching the licensing requirement described."
-                ),
-            },
-            {
-                "id": "b",
-                "text": "Field-level tokenization of the video content metadata",
-                "correct": False,
-                "rationale": (
-                    "Incorrect. Tokenization replaces sensitive data values "
-                    "with non-sensitive tokens; it does not control where "
-                    "content can be streamed based on physical location."
-                ),
-            },
-            {
-                "id": "c",
-                "text": "Data masking of user account records",
-                "correct": False,
-                "rationale": (
-                    "Incorrect. Masking obscures displayed data values for "
-                    "privacy purposes; it does not address media licensing "
-                    "or location-based streaming enforcement."
-                ),
-            },
-            {
-                "id": "d",
-                "text": "At-rest encryption of the video file library",
-                "correct": False,
-                "rationale": (
-                    "Incorrect. Encryption at rest protects stored files "
-                    "from unauthorized access if the storage is breached, "
-                    "but it does not restrict streaming based on a viewer's "
-                    "geographic location."
-                ),
-            },
-        ],
-        "explanation": (
-            "Geographic restrictions are the correct control for enforcing "
-            "location-based licensing terms; tokenization, masking, and "
-            "at-rest encryption all protect data confidentiality but do not "
-            "enforce location-based access."
-        ),
-    },
-    {
-        "id": "nd3f-029",
-        "domain": 3,
-        "objective": "3.3",
-        "type": "multiple_response",
-        "difficulty": "expert",
-        "study_topic": "Data protection methods",
-        "stem": (
-            "A cloud security team is hardening a cloud object storage "
-            "bucket that holds sensitive customer PII. Which THREE controls "
-            "together provide the MOST effective defense-in-depth "
-            "protection for this data at rest? (Select three.)"
-        ),
-        "options": [
-            {
-                "id": "a",
-                "text": "Enable server-side encryption using customer-managed encryption keys",
-                "correct": True,
-                "rationale": (
-                    "Correct. Encryption at rest with customer-managed keys "
-                    "protects the confidentiality of the stored PII and "
-                    "gives the organization control over key lifecycle and "
-                    "revocation."
+                    "Correct. At-rest encryption protects data if the "
+                    "physical volume or backup is stolen, but once the "
+                    "database is mounted and running, additional "
+                    "least-privilege access controls on the sensitive fields "
+                    "are required to limit who can read them."
                 ),
             },
             {
                 "id": "b",
                 "text": (
-                    "Apply a least-privilege bucket policy that blocks "
-                    "public access and grants access only to specific "
-                    "authorized roles"
+                    "The database should be re-encrypted using a stronger "
+                    "algorithm, since the current algorithm is inadequate"
                 ),
-                "correct": True,
+                "correct": False,
                 "rationale": (
-                    "Correct. A least-privilege access policy that blocks "
-                    "public access directly prevents unauthorized parties "
-                    "from reaching the bucket in the first place."
+                    "Incorrect. Nothing in the finding suggests the "
+                    "encryption algorithm itself is weak; the gap is that "
+                    "access to the decrypted, running data isn't restricted "
+                    "by field-level permissions."
                 ),
             },
             {
                 "id": "c",
                 "text": (
-                    "Enable detailed access logging and alerting on the "
-                    "bucket to detect unauthorized or anomalous access "
-                    "attempts"
+                    "Full-disk encryption is unnecessary once the OS itself "
+                    "enforces file permissions"
                 ),
-                "correct": True,
+                "correct": False,
                 "rationale": (
-                    "Correct. Access logging and alerting provide detection "
-                    "capability, completing a defense-in-depth approach "
-                    "alongside prevention (access policy) and confidentiality "
-                    "(encryption) controls."
+                    "Incorrect. At-rest encryption remains valuable for "
+                    "scenarios like physical theft of drives or stolen "
+                    "backups, independent of OS file permissions; this "
+                    "finding doesn't make it unnecessary."
                 ),
             },
             {
                 "id": "d",
                 "text": (
-                    "Enable static website hosting on the bucket so the "
-                    "data can be served directly to end users"
+                    "This finding indicates the encryption keys must be "
+                    "rotated immediately"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. Enabling static website hosting increases "
-                    "exposure by making the bucket a public web endpoint, "
-                    "the opposite of protecting sensitive PII."
-                ),
-            },
-            {
-                "id": "e",
-                "text": (
-                    "Enable object versioning solely to reduce long-term "
-                    "storage costs"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. Versioning helps with recovery from "
-                    "accidental deletion or overwrite, but this option "
-                    "misstates its purpose and is not itself a "
-                    "confidentiality or access-control protection for the "
-                    "PII."
-                ),
-            },
-            {
-                "id": "f",
-                "text": (
-                    "Configure the bucket as a caching origin for a public "
-                    "content delivery network (CDN)"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. This would further distribute and expose "
-                    "the sensitive data to a wide public content delivery "
-                    "network, the opposite of protecting sensitive PII."
+                    "Incorrect. Key rotation addresses a different concern "
+                    "(potential key compromise) and does not address the "
+                    "access-control gap that lets any service account read "
+                    "the plaintext once the database is running."
                 ),
             },
         ],
         "explanation": (
-            "Encryption, least-privilege access policy, and access logging "
-            "together provide confidentiality, prevention, and detection — "
-            "the pillars of defense-in-depth — while static hosting, "
-            "cost-motivated versioning, and public CDN caching all increase "
-            "exposure or fail to protect the data."
+            "Encryption at rest and access control address different "
+            "layers of protection: at-rest encryption protects stored, "
+            "unmounted data, while granular, least-privilege access controls "
+            "are required to limit exposure once the data is decrypted and "
+            "the database is actively running."
         ),
     },
     # ------------------------------------------------------------------ #
     # Data states (3.3)
     # ------------------------------------------------------------------ #
     {
-        "id": "nd3f-030",
+        "id": "nd3f-019",
         "domain": 3,
         "objective": "3.3",
         "type": "multiple_choice",
-        "difficulty": "hard",
+        "difficulty": "expert",
         "study_topic": "Data states",
         "stem": (
-            "A genomics research consortium wants a cloud partner to run "
-            "proprietary analysis algorithms against sensitive patient "
-            "genomic data, but contractual terms prohibit the cloud "
-            "partner's own administrators from ever being able to view the "
-            "unencrypted data, even while the computation is actively "
-            "running in memory. Which technology BEST protects data in this "
-            "specific state (data in use)?"
+            "A real-time fraud-scoring platform decrypts customer transaction "
+            "data in server memory to run its scoring model, then re-encrypts "
+            "the results before writing them back to disk. A security review "
+            "is concerned that an attacker with root access to the underlying "
+            "host — or a malicious cloud administrator — could scrape "
+            "plaintext data directly from the process's memory while scoring "
+            "is in progress. Which control specifically protects data in this "
+            "state (data in use)?"
         ),
         "options": [
             {
                 "id": "a",
                 "text": (
-                    "A hardware-based trusted execution environment (TEE), "
-                    "or confidential computing enclave, that keeps data "
-                    "encrypted in memory and isolated from the hypervisor "
-                    "and cloud administrator access during active processing"
+                    "Confidential computing using a hardware-based trusted "
+                    "execution environment (TEE)/secure enclave, which keeps "
+                    "data encrypted even while being actively processed in "
+                    "memory, so it is never exposed in plaintext to the host "
+                    "OS or a privileged administrator"
                 ),
                 "correct": True,
                 "rationale": (
-                    "Correct. Confidential computing enclaves are "
-                    "specifically designed to protect data while it is "
-                    "actively being processed in memory, isolating it from "
-                    "even privileged administrators of the host system."
+                    "Correct. Confidential computing is specifically "
+                    "designed to protect data in use, ensuring plaintext is "
+                    "never exposed even to someone with root or "
+                    "administrator-level access to the underlying host."
                 ),
             },
             {
                 "id": "b",
                 "text": (
-                    "Transport Layer Security (TLS) for all data transferred "
-                    "to and from the cloud partner"
+                    "TLS 1.3 encrypting all API traffic into and out of the "
+                    "platform"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. TLS protects data in transit only; it does "
-                    "nothing to protect data while it is being actively "
-                    "processed in memory during the computation."
+                    "Incorrect. TLS protects data in transit across the "
+                    "network; it has no effect on plaintext exposure while "
+                    "data is actively being processed in the server's memory."
                 ),
             },
             {
                 "id": "c",
                 "text": (
-                    "AES-256 encryption of the data at rest in cloud storage"
+                    "AES-256 encryption of the database volume where results "
+                    "are ultimately stored"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. Encryption at rest protects stored data, but "
-                    "the values must be decrypted to run the analysis, which "
-                    "is exactly the exposure window the requirement is "
-                    "trying to close."
+                    "Incorrect. This protects data at rest on disk; it does "
+                    "nothing to prevent plaintext exposure in memory while "
+                    "the data is actively being scored."
                 ),
             },
             {
                 "id": "d",
                 "text": (
-                    "Database column-level encryption applied before the "
-                    "data is uploaded"
+                    "Role-based access control (RBAC) restricting which "
+                    "employees can query the database"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. This protects the stored representation of "
-                    "the data, but the values must still be decrypted in "
-                    "memory to run the analysis, defeating the requirement "
-                    "that administrators never see unencrypted data during "
-                    "processing."
+                    "Incorrect. RBAC governs authorized access to stored "
+                    "data, not memory-level exposure during active "
+                    "processing, and it would not stop a privileged "
+                    "administrator or root-level attacker as described."
                 ),
             },
         ],
         "explanation": (
-            "Only a hardware-based TEE/confidential computing enclave "
-            "protects data in use, the state in which it is actively being "
-            "processed; TLS and at-rest/column-level encryption protect "
-            "different data states (in transit and at rest) but leave data "
-            "exposed once it must be decrypted for computation."
+            "Each data state requires a distinct control: TLS protects data "
+            "in transit, disk encryption protects data at rest, and "
+            "confidential computing/TEEs are the control specifically "
+            "designed to protect data in use from exposure even to "
+            "privileged host access."
         ),
     },
     # ------------------------------------------------------------------ #
     # Tokenization and masking (3.3)
     # ------------------------------------------------------------------ #
     {
-        "id": "nd3f-031",
+        "id": "nd3f-020",
         "domain": 3,
         "objective": "3.3",
         "type": "multiple_choice",
-        "difficulty": "hard",
+        "difficulty": "expert",
         "study_topic": "Tokenization and masking",
         "stem": (
-            "A retailer's legacy point-of-sale software validates that a "
-            "16-digit card number field passes a Luhn checksum before "
-            "accepting a transaction record, and the software cannot be "
-            "modified. The retailer wants to replace real card numbers with "
-            "tokens throughout its systems, but the tokens must still pass "
-            "the legacy software's Luhn validation. Which tokenization "
-            "approach BEST satisfies this constraint?"
+            "A payment processor needs a technique that replaces credit card "
+            "primary account numbers (PANs) in its transaction database with "
+            "a non-sensitive substitute value that can later be reversed back "
+            "to the original PAN by an authorized lookup against a secure "
+            "vault, so that recurring billing can still function. Which "
+            "technique fits this requirement, as opposed to a technique that "
+            "simply displays only the last four digits and cannot be "
+            "reversed?"
         ),
         "options": [
             {
                 "id": "a",
                 "text": (
-                    "Format-preserving tokenization that generates tokens "
-                    "matching the original data's length, character set, and "
-                    "Luhn-valid structure so legacy systems continue to "
-                    "function without modification"
+                    "Tokenization — replaces the PAN with a token mapped in a "
+                    "secure vault, reversible by authorized lookup, unlike "
+                    "masking, which only obscures the displayed digits and is "
+                    "not designed to be reversed"
                 ),
                 "correct": True,
                 "rationale": (
-                    "Correct. Format-preserving tokenization is specifically "
-                    "designed to generate substitute values that pass the "
-                    "same format and checksum validation as the original "
-                    "data, letting unmodifiable legacy systems keep working."
+                    "Correct. Tokenization is specifically designed to be "
+                    "reversible through an authorized vault lookup, "
+                    "supporting a legitimate future need like recurring "
+                    "billing, unlike masking."
                 ),
             },
             {
                 "id": "b",
                 "text": (
-                    "Non-format-preserving tokenization using randomly "
-                    "generated alphanumeric strings of arbitrary length"
+                    "Data masking, because it permanently and irreversibly "
+                    "protects the data from any future reconstruction"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. Tokens of arbitrary length and character set "
-                    "would fail the legacy software's fixed-format and Luhn "
-                    "checksum validation, breaking compatibility."
+                    "Incorrect. This accurately describes masking, but "
+                    "irreversibility is the opposite of what's needed — "
+                    "masking cannot support recurring billing, which requires "
+                    "recovering the original PAN."
                 ),
             },
             {
                 "id": "c",
                 "text": (
-                    "Static data masking that permanently overwrites the "
-                    "card number field with asterisks in a copy of the "
-                    "database"
+                    "Hashing with a fixed salt, because hash values can "
+                    "always be reversed back to the original PAN using the "
+                    "same salt"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. Static masking is used to de-identify data "
-                    "in non-production copies; it does not generate usable "
-                    "substitute values that can flow through a live "
-                    "production transaction process."
-                ),
-            },
-            {
-                "id": "d",
-                "text": "Hashing the card number with SHA-256 before storage",
-                "correct": False,
-                "rationale": (
-                    "Incorrect. A hash is a fixed-length digest that does "
-                    "not preserve the original numeric format or pass a "
-                    "Luhn checksum, and hashing is also not reversible to "
-                    "retrieve the original value when needed."
-                ),
-            },
-        ],
-        "explanation": (
-            "Format-preserving tokenization is the only option that "
-            "produces substitute values compatible with a legacy system's "
-            "fixed format and checksum validation, unlike arbitrary tokens, "
-            "static masking of a database copy, or a non-reversible hash."
-        ),
-    },
-    {
-        "id": "nd3f-032",
-        "domain": 3,
-        "objective": "3.3",
-        "type": "multiple_choice",
-        "difficulty": "hard",
-        "study_topic": "Tokenization and masking",
-        "stem": (
-            "A hospital's electronic health record system is queried "
-            "directly by many different roles — physicians, billing clerks, "
-            "and researchers — through the same underlying patient "
-            "database. The hospital wants physicians to see full patient "
-            "records, billing clerks to see only fields relevant to billing "
-            "with diagnosis codes hidden, and researchers to see de-"
-            "identified records, all without maintaining three separate "
-            "copies of the database. Which approach BEST achieves this?"
-        ),
-        "options": [
-            {
-                "id": "a",
-                "text": (
-                    "Dynamic data masking applied at query time that returns "
-                    "different masked or unmasked views of the same "
-                    "underlying data based on the requesting user's role"
-                ),
-                "correct": True,
-                "rationale": (
-                    "Correct. Dynamic data masking evaluates the requesting "
-                    "user's role at query time and returns an appropriately "
-                    "masked or unmasked view from the single live database, "
-                    "exactly matching the three-role requirement."
-                ),
-            },
-            {
-                "id": "b",
-                "text": (
-                    "Static data masking applied once to create a "
-                    "permanently de-identified copy of the database for all "
-                    "three roles to share"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. A single, permanently de-identified static "
-                    "copy cannot simultaneously give physicians full access "
-                    "and researchers de-identified access; static masking "
-                    "produces one fixed view, not three different role-based "
-                    "views."
-                ),
-            },
-            {
-                "id": "c",
-                "text": (
-                    "Full-database encryption at rest with a single shared "
-                    "decryption key"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. A single shared decryption key would give "
-                    "all three roles either full access or no access, not "
-                    "the differentiated, role-based views the hospital "
-                    "needs."
+                    "Incorrect. This is factually wrong — hashing is a "
+                    "one-way function and cannot be reversed back to the "
+                    "original value regardless of salt, making it unsuitable "
+                    "for a requirement that needs later recovery."
                 ),
             },
             {
                 "id": "d",
                 "text": (
-                    "Tokenization of all patient identifiers with a single "
-                    "global token vault"
+                    "Symmetric encryption of the entire database column "
+                    "using AES-256 in ECB mode"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. Tokenization substitutes identifiers "
-                    "uniformly for all consumers; it does not by itself "
-                    "provide three different role-based views of the "
-                    "remaining clinical and billing fields within the same "
-                    "live database."
+                    "Incorrect. ECB mode is a known-poor choice for "
+                    "structured data like card numbers because identical "
+                    "plaintext blocks produce identical ciphertext, leaking "
+                    "patterns; this also doesn't match the vault-lookup "
+                    "substitute-value pattern the requirement describes."
                 ),
             },
         ],
         "explanation": (
-            "Dynamic data masking is uniquely suited to producing multiple, "
-            "simultaneous role-based views from one live database, unlike "
-            "static masking (one fixed copy), uniform full-database "
-            "encryption, or uniform tokenization."
+            "Tokenization is purpose-built for cases requiring authorized, "
+            "reversible recovery of an original sensitive value through a "
+            "secure vault, distinguishing it from masking (irreversible), "
+            "hashing (one-way), and poorly chosen encryption modes."
         ),
     },
     # ------------------------------------------------------------------ #
     # Backups and replication (3.4)
     # ------------------------------------------------------------------ #
     {
-        "id": "nd3f-033",
+        "id": "nd3f-021",
         "domain": 3,
         "objective": "3.4",
         "type": "multiple_choice",
         "difficulty": "hard",
         "study_topic": "Backups and replication",
         "stem": (
-            "A trading firm's compliance requirement mandates a recovery "
-            "point objective (RPO) of no more than 30 seconds for its "
-            "order-matching database, meaning at most 30 seconds of "
-            "transactions can ever be lost in a failure. Which backup or "
-            "replication approach BEST meets this RPO?"
+            "A company replicates nightly backups from its primary data "
+            "center to a DR site connected only by a low-bandwidth satellite "
+            "link. Transferring a full 2 TB backup image each night "
+            "consistently fails to complete before the link's daily "
+            "maintenance window closes. Which replication approach would "
+            "MOST reduce the data volume transferred each night while still "
+            "keeping the DR copy current?"
         ),
         "options": [
             {
                 "id": "a",
                 "text": (
-                    "Continuous data protection (CDP) that journals every "
-                    "write in near real time, allowing recovery to almost "
-                    "any point in time within seconds of a failure"
+                    "Block-level (change-block) incremental replication, "
+                    "transferring only the disk blocks that changed since the "
+                    "last replication cycle rather than the full image each "
+                    "time"
                 ),
                 "correct": True,
                 "rationale": (
-                    "Correct. CDP's near-real-time, continuous journaling is "
-                    "the only approach listed capable of limiting potential "
-                    "data loss to a matter of seconds, satisfying the "
-                    "30-second RPO."
+                    "Correct. Block-level incremental replication only "
+                    "sends the changed blocks, dramatically reducing the "
+                    "nightly transfer volume compared to shipping a full 2 TB "
+                    "image every time."
                 ),
             },
             {
                 "id": "b",
                 "text": (
-                    "Nightly full backups scheduled during a low-traffic "
-                    "maintenance window"
+                    "Switch to full backups twice per day to catch up on the "
+                    "transfer backlog"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. Nightly backups could lose up to nearly 24 "
-                    "hours of transactions, far exceeding a 30-second RPO."
+                    "Incorrect. This doubles the bandwidth demand on an "
+                    "already-constrained link, making the problem worse "
+                    "rather than better."
                 ),
             },
             {
                 "id": "c",
                 "text": (
-                    "Weekly full backups with daily incremental backups"
+                    "Compress the backup images using a lossy compression "
+                    "algorithm before transfer"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. Daily incremental granularity still allows "
-                    "up to a full day of potential data loss, far exceeding "
-                    "the 30-second requirement."
+                    "Incorrect. Lossy compression discards data, which is "
+                    "unacceptable for backups that must be restorable "
+                    "exactly; only lossless compression could be considered, "
+                    "and even that alone doesn't match the reduction "
+                    "block-level replication provides for mostly-unchanged "
+                    "data."
                 ),
             },
             {
                 "id": "d",
                 "text": (
-                    "Asynchronous replication to a secondary site with a "
-                    "typical replication lag of several minutes"
+                    "Increase the backup retention period from 30 to 90 days"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. Asynchronous replication's inherent lag of "
-                    "several minutes still exceeds the 30-second RPO "
-                    "requirement; synchronous or CDP-level replication would "
-                    "be needed."
+                    "Incorrect. Retention period affects how long backups "
+                    "are stored, not how much data is transferred nightly; "
+                    "it would increase storage needs without addressing the "
+                    "transfer bottleneck."
                 ),
             },
         ],
         "explanation": (
-            "Only continuous data protection can realistically limit "
-            "potential data loss to seconds, meeting a 30-second RPO; "
-            "nightly backups, weekly/daily backup schedules, and "
-            "asynchronous replication all leave gaps of minutes to a full "
-            "day."
-        ),
-    },
-    {
-        "id": "nd3f-034",
-        "domain": 3,
-        "objective": "3.4",
-        "type": "multiple_choice",
-        "difficulty": "hard",
-        "study_topic": "Backups and replication",
-        "stem": (
-            "A small manufacturing firm stores two backup copies of its ERP "
-            "database: one on a second internal disk array in the same "
-            "server rack, and one on a NAS device in the same building. "
-            "During an electrical fire in the server room, both backup "
-            "copies were destroyed along with the production system. Which "
-            "principle of the 3-2-1 backup rule did this design violate?"
-        ),
-        "options": [
-            {
-                "id": "a",
-                "text": (
-                    "The requirement to keep at least one copy offsite, in a "
-                    "physically separate location from the primary site"
-                ),
-                "correct": True,
-                "rationale": (
-                    "Correct. Both backup copies were in the same building "
-                    "as production, so a single localized disaster destroyed "
-                    "everything — exactly the failure the offsite-copy "
-                    "requirement is meant to prevent."
-                ),
-            },
-            {
-                "id": "b",
-                "text": "The requirement to keep at least three total copies of the data",
-                "correct": False,
-                "rationale": (
-                    "Incorrect. The firm had three total copies — "
-                    "production plus two backups — which satisfies the "
-                    "\"3\" count; the failure was about location, not the "
-                    "number of copies."
-                ),
-            },
-            {
-                "id": "c",
-                "text": (
-                    "The requirement to use at least two different backup "
-                    "software vendors"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. The 3-2-1 rule specifies two different "
-                    "storage media types, not two different software "
-                    "vendors, so this misstates the rule."
-                ),
-            },
-            {
-                "id": "d",
-                "text": (
-                    "The requirement to test restores at least twice per "
-                    "year"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. Restore testing is a separate resilience-"
-                    "testing best practice, not part of the 3-2-1 rule "
-                    "itself, and it was not the described cause of the "
-                    "total loss."
-                ),
-            },
-        ],
-        "explanation": (
-            "The 3-2-1 rule requires 3 total copies, on 2 different media "
-            "types, with 1 copy offsite; the firm satisfied the copy count "
-            "but kept both backups in the same building as production, "
-            "violating the offsite requirement and losing everything in one "
-            "localized event."
+            "Block-level incremental replication is specifically designed "
+            "to minimize data transferred over constrained links by sending "
+            "only changed blocks, unlike more frequent full backups, lossy "
+            "compression, or retention policy changes, none of which reduce "
+            "nightly transfer volume correctly."
         ),
     },
     # ------------------------------------------------------------------ #
     # High availability (3.4)
     # ------------------------------------------------------------------ #
     {
-        "id": "nd3f-035",
+        "id": "nd3f-022",
         "domain": 3,
         "objective": "3.4",
         "type": "multiple_choice",
-        "difficulty": "hard",
-        "study_topic": "High availability",
-        "stem": (
-            "A company's SLA with a cloud provider guarantees 99.99% "
-            "(\"four nines\") availability for a critical API. Over the "
-            "past 12 months, the API was unavailable for a cumulative total "
-            "of 1 hour and 45 minutes. Which conclusion is accurate?"
-        ),
-        "options": [
-            {
-                "id": "a",
-                "text": (
-                    "The provider violated the SLA, because 99.99% "
-                    "availability permits only about 52 minutes of downtime "
-                    "per year, and the actual downtime far exceeded that"
-                ),
-                "correct": True,
-                "rationale": (
-                    "Correct. 99.99% ('four nines') annual availability "
-                    "corresponds to roughly 52 minutes of allowable downtime "
-                    "per year; 1 hour 45 minutes is more than double that "
-                    "budget, so the SLA was violated."
-                ),
-            },
-            {
-                "id": "b",
-                "text": (
-                    "The provider met the SLA, because 1 hour and 45 "
-                    "minutes of downtime in a year is well within typical "
-                    "enterprise availability expectations"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. \"Typical expectations\" is vague and does "
-                    "not reflect the specific numeric 99.99% commitment, "
-                    "which permits far less downtime than what actually "
-                    "occurred."
-                ),
-            },
-            {
-                "id": "c",
-                "text": (
-                    "The provider met the SLA, because 99.99% availability "
-                    "corresponds to roughly 8.7 hours of allowable downtime "
-                    "per year"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. This misstates the math; approximately 8.7 "
-                    "hours of allowable annual downtime corresponds to "
-                    "99.9% ('three nines'), not 99.99%."
-                ),
-            },
-            {
-                "id": "d",
-                "text": (
-                    "SLA availability percentages apply only to planned "
-                    "maintenance windows, so unplanned outages like this one "
-                    "do not count against the guarantee"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. SLA uptime commitments generally measure "
-                    "total unavailability, and unplanned outages are "
-                    "precisely what such SLAs are designed to bound, unless "
-                    "specific maintenance exclusions are separately "
-                    "negotiated."
-                ),
-            },
-        ],
-        "explanation": (
-            "99.99% annual availability allows only about 52 minutes of "
-            "downtime per year; 1 hour 45 minutes of actual downtime is a "
-            "clear SLA violation, while the other options misapply the "
-            "'nines' math or mischaracterize what the SLA covers."
-        ),
-    },
-    {
-        "id": "nd3f-036",
-        "domain": 3,
-        "objective": "3.4",
-        "type": "multiple_response",
         "difficulty": "expert",
         "study_topic": "High availability",
         "stem": (
-            "A security architect is redesigning a critical web "
-            "application's infrastructure to maximize availability. Which "
-            "THREE design choices would MOST effectively increase the "
-            "application's availability? (Select three.)"
+            "An application's high-availability design directs all read "
+            "queries to a pool of asynchronously replicated read-replica "
+            "database nodes to reduce load on the primary write node. Users "
+            "report that immediately after updating their profile, the "
+            "change is not reflected when the page reloads a split second "
+            "later, though it appears correctly moments after. Which "
+            "characteristic of this HA design explains the behavior, and is "
+            "it a defect?"
         ),
         "options": [
             {
                 "id": "a",
                 "text": (
-                    "Deploy redundant application and database instances "
-                    "across multiple availability zones so no single zone "
-                    "failure takes down the service"
+                    "This is expected read-after-write inconsistency caused "
+                    "by asynchronous replication lag between the primary and "
+                    "its read replicas — not a system defect, but an "
+                    "accepted trade-off of this scaling design; if "
+                    "unacceptable, sensitive read-after-write paths would "
+                    "need to be routed to the primary node instead"
                 ),
                 "correct": True,
                 "rationale": (
-                    "Correct. Distributing redundant instances across "
-                    "multiple availability zones ensures a single zone "
-                    "failure does not take the entire service down."
+                    "Correct. Asynchronous replication introduces a brief "
+                    "propagation delay by design; this behavior is an "
+                    "expected trade-off of using async read replicas, not a "
+                    "malfunction, and the fix is routing sensitive reads to "
+                    "the primary rather than assuming failure."
                 ),
             },
             {
                 "id": "b",
                 "text": (
-                    "Implement automated health checks and failover so "
-                    "traffic is redirected away from failed instances within "
-                    "seconds, without waiting for a human to notice"
+                    "This indicates the read replicas have failed and should "
+                    "immediately be removed from the load-balancing pool"
                 ),
-                "correct": True,
+                "correct": False,
                 "rationale": (
-                    "Correct. Automated detection and failover minimizes "
-                    "downtime by responding to failures far faster than a "
-                    "human could, directly increasing availability."
+                    "Incorrect. The replicas are functioning normally; "
+                    "asynchronous replication lag is not the same as a "
+                    "replica failure, and removing healthy replicas would "
+                    "needlessly reduce read capacity."
                 ),
             },
             {
                 "id": "c",
                 "text": (
-                    "Eliminate identified single points of failure, such as "
-                    "a single load balancer or single network path, by "
-                    "adding redundant instances of each"
+                    "This indicates a split-brain condition between the "
+                    "primary and replica nodes"
                 ),
-                "correct": True,
+                "correct": False,
                 "rationale": (
-                    "Correct. Removing single points of failure at every "
-                    "layer, including load balancers and network paths, is "
-                    "fundamental to a highly available design."
+                    "Incorrect. Split-brain describes multiple nodes "
+                    "independently believing they are primary and accepting "
+                    "conflicting writes; this scenario is a one-directional "
+                    "replication lag on reads, a different phenomenon "
+                    "entirely."
                 ),
             },
             {
                 "id": "d",
                 "text": (
-                    "Consolidate the entire application onto one large, "
-                    "powerful physical server to simplify management"
+                    "Synchronous replication is already in use, so this "
+                    "behavior is unexpected and indicates data corruption"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. Consolidating onto a single server creates a "
-                    "single point of failure; vertical scaling on one host "
-                    "does not improve availability and may worsen it."
-                ),
-            },
-            {
-                "id": "e",
-                "text": (
-                    "Require an on-call engineer to manually detect outages "
-                    "by watching a dashboard and manually restart failed "
-                    "instances"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. Manual detection and response is slower and "
-                    "less reliable than automated failover, increasing "
-                    "downtime rather than reducing it."
-                ),
-            },
-            {
-                "id": "f",
-                "text": (
-                    "Store the only backup copy of the database on the same "
-                    "physical host as the production database for faster "
-                    "restores"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. A co-located single backup copy is destroyed "
-                    "along with production in a host-level failure, "
-                    "reducing rather than improving resilience."
+                    "Incorrect. The scenario explicitly states the "
+                    "replication is asynchronous, and nothing described "
+                    "suggests any data was actually corrupted or lost — only "
+                    "briefly delayed in propagation."
                 ),
             },
         ],
         "explanation": (
-            "Multi-zone redundancy, automated failover, and eliminating "
-            "single points of failure are the core pillars of high "
-            "availability design, while consolidating onto one server, "
-            "relying on manual detection, and co-locating the only backup "
-            "copy all undermine availability."
-        ),
-    },
-    # ------------------------------------------------------------------ #
-    # Multi-cloud and platform diversity (3.4)
-    # ------------------------------------------------------------------ #
-    {
-        "id": "nd3f-037",
-        "domain": 3,
-        "objective": "3.4",
-        "type": "multiple_choice",
-        "difficulty": "hard",
-        "study_topic": "Multi-cloud and platform diversity",
-        "stem": (
-            "A security architect recommends that critical DNS resolution "
-            "services be split across two different DNS software vendors on "
-            "different underlying platforms, rather than running every DNS "
-            "server on the same vendor's software. Which risk does this "
-            "platform diversity specifically mitigate?"
-        ),
-        "options": [
-            {
-                "id": "a",
-                "text": (
-                    "A single vendor-specific zero-day vulnerability or "
-                    "software defect simultaneously compromising or "
-                    "crashing every DNS server in the environment at once"
-                ),
-                "correct": True,
-                "rationale": (
-                    "Correct. Platform diversity specifically defends "
-                    "against correlated, common-mode failures: a single "
-                    "vendor's zero-day cannot take down servers running a "
-                    "different vendor's software."
-                ),
-            },
-            {
-                "id": "b",
-                "text": (
-                    "The financial cost of licensing DNS software from a "
-                    "single vendor"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. This describes a cost or vendor-lock-in "
-                    "concern, not the technical, correlated-failure risk "
-                    "that platform diversity is specifically intended to "
-                    "mitigate in this scenario."
-                ),
-            },
-            {
-                "id": "c",
-                "text": (
-                    "The need to negotiate more favorable contract terms "
-                    "with a single vendor"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. This is a procurement or business "
-                    "consideration, not the resilience risk that running two "
-                    "different software platforms addresses."
-                ),
-            },
-            {
-                "id": "d",
-                "text": (
-                    "The risk that a single vendor will discontinue product "
-                    "support in the future"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. This is a legitimate long-term planning "
-                    "concern, but it is not the specific failure/"
-                    "vulnerability risk that platform diversity is being "
-                    "used to mitigate in this scenario."
-                ),
-            },
-        ],
-        "explanation": (
-            "Platform diversity primarily defends against a single "
-            "vendor-specific defect or zero-day causing a correlated, "
-            "simultaneous outage across all instances — a distinct benefit "
-            "from cost, negotiating leverage, or long-term support "
-            "concerns."
+            "Asynchronous read-replica architectures trade strict "
+            "consistency for read scalability; the resulting brief "
+            "read-after-write lag is an expected characteristic of the "
+            "design, distinct from replica failure, split-brain, or data "
+            "corruption."
         ),
     },
     # ------------------------------------------------------------------ #
     # Power resilience (3.4)
     # ------------------------------------------------------------------ #
     {
-        "id": "nd3f-038",
+        "id": "nd3f-023",
         "domain": 3,
         "objective": "3.4",
         "type": "multiple_choice",
         "difficulty": "hard",
         "study_topic": "Power resilience",
         "stem": (
-            "A data center evaluates two UPS technologies to bridge the gap "
-            "between a utility power failure and generator startup: a "
-            "battery-based UPS that can sustain full load for about 15 "
-            "minutes, and a flywheel-based UPS that can sustain full load "
-            "for only about 30 seconds but requires far less maintenance and "
-            "has no chemical battery to degrade or dispose of. The "
-            "facility's diesel generators reliably reach full output within "
-            "20 seconds of a power failure. Which UPS choice is MOST "
-            "appropriate for this facility?"
+            "A rack audit finds that a critical database server has dual "
+            "redundant power supplies as designed, but both power cords are "
+            "plugged into the same power distribution unit (PDU), which is "
+            "fed by a single upstream circuit. When that circuit's breaker "
+            "trips during a maintenance error, the server loses power "
+            "completely despite having two power supplies. Which change "
+            "corrects this design flaw?"
         ),
         "options": [
             {
                 "id": "a",
                 "text": (
-                    "The flywheel UPS, because it comfortably bridges the "
-                    "20-second gap until generator startup while avoiding "
-                    "the maintenance burden and disposal concerns of battery "
-                    "chemistry"
+                    "Connect each of the server's two power supplies to a "
+                    "separate PDU, each fed by an independent upstream "
+                    "circuit, so that a single circuit or PDU failure cannot "
+                    "take down both supplies simultaneously"
                 ),
                 "correct": True,
                 "rationale": (
-                    "Correct. Since the generator reliably reaches full "
-                    "output within 20 seconds, the flywheel's roughly "
-                    "30-second capacity is sufficient, making it the more "
-                    "efficient choice given its lower maintenance burden."
+                    "Correct. Dual power supplies only provide real "
+                    "redundancy if each is fed from an independent power "
+                    "path; connecting both cords to the same PDU/circuit "
+                    "defeats that redundancy entirely, as this incident "
+                    "demonstrated."
                 ),
             },
             {
                 "id": "b",
                 "text": (
-                    "The battery UPS, because 15 minutes of runtime is "
-                    "always safer than 30 seconds regardless of how quickly "
-                    "the generator starts"
+                    "Add a third redundant power supply to the server for "
+                    "additional protection"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. This ignores the stated 20-second generator "
-                    "startup time; the flywheel's shorter runtime is already "
-                    "sufficient, so the extra battery runtime mainly adds "
-                    "unnecessary cost and maintenance in this specific "
-                    "scenario."
+                    "Incorrect. Adding another power supply does not fix the "
+                    "root cause if all three cords remain plugged into the "
+                    "same PDU and circuit — the single point of failure "
+                    "persists."
                 ),
             },
             {
                 "id": "c",
                 "text": (
-                    "Neither UPS is necessary since the diesel generator "
-                    "alone can respond within 20 seconds"
+                    "Replace the PDU with a higher-amperage model to prevent "
+                    "the breaker from tripping"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. A UPS is still required to bridge the power "
-                    "gap during the 20 seconds before the generator reaches "
-                    "full output; without one, there would be a power "
-                    "interruption during that window."
+                    "Incorrect. This may reduce the chance of this specific "
+                    "trip, but the design flaw remains: any future failure "
+                    "upstream of that single PDU or circuit would still take "
+                    "down both supplies at once."
                 ),
             },
             {
                 "id": "d",
                 "text": (
-                    "The battery UPS, because flywheel UPS systems cannot "
-                    "supply enough instantaneous power to support an entire "
-                    "data center's full load"
+                    "Schedule maintenance work only during off-peak hours to "
+                    "reduce the chance of accidental breaker trips"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. Flywheel UPS systems are a proven technology "
-                    "commonly used at full data center load capacity for "
-                    "short bridge durations; the limiting factor is "
-                    "duration, not instantaneous power capacity."
+                    "Incorrect. This reduces the odds of this particular "
+                    "type of incident but does not eliminate the underlying "
+                    "single point of failure created by sharing one PDU and "
+                    "circuit."
                 ),
             },
         ],
         "explanation": (
-            "Given a reliable 20-second generator startup, a flywheel UPS's "
-            "roughly 30-second runtime is sufficient and avoids battery "
-            "maintenance and disposal overhead, making it the more "
-            "appropriate choice over an oversized battery UPS or forgoing a "
-            "UPS entirely."
+            "Redundant power supplies only deliver true resilience when "
+            "each is fed from an independent PDU and upstream circuit; "
+            "sharing a single power path — regardless of PDU capacity or "
+            "maintenance timing — reintroduces the single point of failure "
+            "the redundant supplies were meant to eliminate."
         ),
     },
     # ------------------------------------------------------------------ #
     # Recovery sites (3.4)
     # ------------------------------------------------------------------ #
     {
-        "id": "nd3f-039",
+        "id": "nd3f-024",
         "domain": 3,
         "objective": "3.4",
         "type": "multiple_choice",
-        "difficulty": "hard",
+        "difficulty": "expert",
         "study_topic": "Recovery sites",
         "stem": (
-            "A manufacturer's business continuity plan sets a recovery time "
-            "objective (RTO) of 6 hours for its ERP system, and management "
-            "wants to avoid the very high ongoing cost of maintaining a "
-            "fully mirrored, always-on hot site. Which recovery site "
-            "strategy BEST balances this RTO requirement against cost?"
+            "A company's primary production environment runs in a single "
+            "public cloud provider's us-east region. As its disaster recovery "
+            "strategy, it provisions a warm site in the same provider's "
+            "us-west region, reasoning that the geographic distance satisfies "
+            "disaster-recovery requirements. During a global outage of that "
+            "provider's identity and authentication control plane — which "
+            "affects all of the provider's regions simultaneously — the "
+            "company finds it cannot manage or fail over to either region. "
+            "What flaw does this reveal in the recovery site strategy?"
         ),
         "options": [
             {
                 "id": "a",
                 "text": (
-                    "A warm site with pre-installed hardware and "
-                    "periodically updated data that can be brought fully "
-                    "online within a few hours, without the continuous "
-                    "full-time replication cost of a hot site"
+                    "The DR site depended on the same cloud provider's "
+                    "shared global control-plane services as the primary, so "
+                    "a provider-wide outage affected both sites "
+                    "simultaneously; true resilience against provider-wide "
+                    "failures requires diversifying providers, not just "
+                    "regions"
                 ),
                 "correct": True,
                 "rationale": (
-                    "Correct. A warm site's few-hour activation time "
-                    "comfortably meets a 6-hour RTO while avoiding the "
-                    "continuous, high ongoing cost of a fully mirrored hot "
-                    "site."
+                    "Correct. Regional separation only protects against "
+                    "regional disasters; a shared global control plane (such "
+                    "as identity/authentication services) can fail across "
+                    "every region of a single provider at once, which region "
+                    "diversity alone does not address."
                 ),
             },
             {
                 "id": "b",
                 "text": (
-                    "A cold site with empty floor space, power, and "
-                    "connectivity, where hardware and data must be procured "
-                    "and restored from backups after a disruption occurs"
+                    "The warm site should have been located in the same "
+                    "region as the primary to reduce replication latency"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. Cold sites typically take days to weeks to "
-                    "become operational, which would likely miss a 6-hour "
-                    "RTO."
+                    "Incorrect. Placing the DR site in the same region "
+                    "eliminates geographic disaster protection entirely and "
+                    "contradicts the basic purpose of a recovery site; this "
+                    "does not address the control-plane dependency issue "
+                    "either."
                 ),
             },
             {
                 "id": "c",
                 "text": (
-                    "A hot site with real-time data mirroring and fully "
-                    "redundant, immediately available production capacity"
+                    "This flaw only affects hot sites, not warm sites, so "
+                    "switching to a warm-site model would have prevented it"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. A hot site easily meets the RTO but is the "
-                    "highest-cost option, which contradicts the stated goal "
-                    "of avoiding that ongoing cost when it is not strictly "
-                    "required."
+                    "Incorrect. The scenario already describes a warm site; "
+                    "the control-plane dependency issue is unrelated to "
+                    "whether the site is hot, warm, or cold — it stems from "
+                    "using the same provider for both sites."
                 ),
             },
             {
                 "id": "d",
                 "text": (
-                    "A reciprocal agreement with a business partner to use "
-                    "each other's data centers in an emergency, with no "
-                    "dedicated equipment reserved in advance"
+                    "Regulatory data sovereignty rules were violated by "
+                    "using two regions of the same provider"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. Reciprocal agreements carry significant "
-                    "uncertainty around available capacity and readiness at "
-                    "the time of an actual disaster, making a reliable "
-                    "6-hour RTO commitment unlikely."
+                    "Incorrect. Nothing in the scenario describes a data "
+                    "sovereignty or regulatory violation; the failure "
+                    "described is an availability issue caused by a shared "
+                    "provider-wide control plane, not a compliance issue."
                 ),
             },
         ],
         "explanation": (
-            "A warm site meets a moderate 6-hour RTO without the continuous "
-            "high cost of a hot site, while a cold site is typically too "
-            "slow, a hot site is unnecessarily expensive, and a reciprocal "
-            "agreement is too uncertain to reliably guarantee the RTO."
-        ),
-    },
-    {
-        "id": "nd3f-040",
-        "domain": 3,
-        "objective": "3.4",
-        "type": "multiple_choice",
-        "difficulty": "hard",
-        "study_topic": "Recovery sites",
-        "stem": (
-            "A cloud-native company wants a disaster recovery strategy where "
-            "only the most critical core components — a minimal database "
-            "replica and networking configuration — run continuously in a "
-            "secondary cloud region, while the remaining application servers "
-            "are defined as infrastructure-as-code templates that can be "
-            "rapidly launched and scaled up only when a disaster is "
-            "declared. Which DR architecture pattern does this describe?"
-        ),
-        "options": [
-            {
-                "id": "a",
-                "text": (
-                    "Pilot light, where a minimal core set of systems runs "
-                    "continuously and the rest of the environment is "
-                    "scripted to launch on demand during a declared disaster"
-                ),
-                "correct": True,
-                "rationale": (
-                    "Correct. This matches the pilot light pattern exactly: "
-                    "a small always-on core (database replica and "
-                    "networking) with the remaining infrastructure launched "
-                    "from templates only when needed."
-                ),
-            },
-            {
-                "id": "b",
-                "text": (
-                    "Hot site / multi-site active-active, where full "
-                    "production capacity runs simultaneously in both regions "
-                    "at all times"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. This describes a fully running duplicate "
-                    "environment at all times, not a minimal always-on core "
-                    "with the rest launched on demand as described."
-                ),
-            },
-            {
-                "id": "c",
-                "text": (
-                    "Cold site, where no infrastructure exists in the "
-                    "secondary region until a disaster occurs"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. This contradicts the scenario, which "
-                    "explicitly keeps a minimal database replica and "
-                    "networking running continuously in the secondary "
-                    "region."
-                ),
-            },
-            {
-                "id": "d",
-                "text": (
-                    "Reciprocal agreement, where two organizations agree to "
-                    "host each other's workloads during a disaster"
-                ),
-                "correct": False,
-                "rationale": (
-                    "Incorrect. This describes an arrangement between two "
-                    "separate organizations, not a single company's own "
-                    "multi-region cloud architecture."
-                ),
-            },
-        ],
-        "explanation": (
-            "Pilot light keeps a minimal, always-on core running while the "
-            "rest of the environment is defined as code and launched on "
-            "demand — distinct from a fully active hot site, an entirely "
-            "empty cold site, or a cross-organization reciprocal "
-            "agreement."
+            "Choosing a DR site in a different region of the same cloud "
+            "provider only protects against regional disasters, not against "
+            "failures in services the provider operates globally across all "
+            "regions; guarding against provider-wide outages requires true "
+            "platform/provider diversity for the recovery site."
         ),
     },
     # ------------------------------------------------------------------ #
     # Resilience testing (3.4)
     # ------------------------------------------------------------------ #
     {
-        "id": "nd3f-041",
+        "id": "nd3f-025",
         "domain": 3,
         "objective": "3.4",
-        "type": "multiple_choice",
+        "type": "multiple_response",
         "difficulty": "hard",
         "study_topic": "Resilience testing",
         "stem": (
-            "An airline's disaster recovery team wants to verify that its "
-            "secondary data center can actually take over live production "
-            "reservation processing, not just that the runbook reads "
-            "correctly on paper. However, actually failing over the real "
-            "production system carries a risk of a nationwide booking "
-            "outage if the test does not go as planned. Which test type "
-            "lets the team validate real failover mechanics while "
-            "minimizing the risk of disrupting live production ticket "
-            "sales?"
+            "A compliance auditor wants to distinguish resilience-testing "
+            "methods that are purely discussion- or document-based and never "
+            "involve technically exercising any system, from methods that "
+            "involve actually executing technical recovery actions against "
+            "systems, even if not in full production. Which TWO of the "
+            "following are purely discussion/document-based and do NOT "
+            "involve technically exercising any system? (Select two.)"
         ),
         "options": [
             {
                 "id": "a",
                 "text": (
-                    "A parallel test, in which the secondary site processes "
-                    "a copy of live transactions simultaneously alongside "
-                    "production, without production traffic actually being "
-                    "cut over"
+                    "Tabletop exercise — a verbal walkthrough of roles and "
+                    "decisions during a hypothetical incident, with no "
+                    "systems touched"
                 ),
                 "correct": True,
                 "rationale": (
-                    "Correct. A parallel test exercises the actual technical "
-                    "failover mechanics against real transaction data while "
-                    "leaving live production traffic untouched, minimizing "
-                    "risk to real ticket sales."
+                    "Correct. A tabletop exercise is discussion-based only; "
+                    "participants talk through their response without "
+                    "interacting with any live or test system."
                 ),
             },
             {
                 "id": "b",
                 "text": (
-                    "A full interruption test, in which production traffic "
-                    "is completely cut over to the secondary site"
+                    "Checklist/document review — confirming the DR plan's "
+                    "documentation is current and complete, with no systems "
+                    "touched"
                 ),
-                "correct": False,
+                "correct": True,
                 "rationale": (
-                    "Incorrect. This is the higher-risk approach the team is "
-                    "specifically trying to avoid, since a failed cutover "
-                    "could cause the very nationwide outage they want to "
-                    "prevent."
+                    "Correct. A checklist review is a passive document "
+                    "verification activity that never involves technically "
+                    "exercising any system."
                 ),
             },
             {
                 "id": "c",
                 "text": (
-                    "A tabletop exercise, in which the team discusses the "
-                    "runbook steps in a conference room without touching any "
-                    "systems"
+                    "Simulation test — technically injecting a mock incident "
+                    "into an isolated, non-production copy of the "
+                    "environment and exercising real recovery actions"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. A tabletop exercise validates the plan's "
-                    "logic and communication, but does not exercise the "
-                    "actual technical failover mechanics, which is what the "
-                    "team needs to verify."
+                    "Incorrect. A simulation test involves genuine technical "
+                    "actions against an isolated environment, which is not "
+                    "purely discussion/document-based."
                 ),
             },
             {
                 "id": "d",
                 "text": (
-                    "A checklist review, in which the DR documentation is "
-                    "read and updated for accuracy"
+                    "Parallel test — the DR site actually processes "
+                    "production data alongside the primary without cutting "
+                    "over"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. This is a paper-only review that does not "
-                    "test whether the failover mechanics actually work in "
-                    "practice."
+                    "Incorrect. A parallel test technically exercises the DR "
+                    "environment by having it actively process real data, "
+                    "which goes beyond discussion or document review."
+                ),
+            },
+            {
+                "id": "e",
+                "text": (
+                    "Full interruption (live) failover test — actually "
+                    "cutting production traffic over to the DR site"
+                ),
+                "correct": False,
+                "rationale": (
+                    "Incorrect. A full interruption test is the most "
+                    "technically hands-on form of resilience testing, "
+                    "actually shifting live traffic — the opposite of a "
+                    "discussion-only activity."
                 ),
             },
         ],
         "explanation": (
-            "A parallel test is the resilience test type that exercises "
-            "genuine failover mechanics against real data without cutting "
-            "over live production, unlike a full interruption test (highest "
-            "risk), a tabletop exercise, or a paper checklist review "
-            "(neither of which touches real systems)."
+            "Tabletop exercises and checklist reviews are both discussion/"
+            "document-based activities that never touch a live or test "
+            "system, distinguishing them from simulation, parallel, and full "
+            "interruption tests, all of which involve genuine technical "
+            "recovery actions."
         ),
     },
     # ------------------------------------------------------------------ #
     # Third-party agreement types (3.4)
     # ------------------------------------------------------------------ #
     {
-        "id": "nd3f-042",
+        "id": "nd3f-026",
         "domain": 3,
         "objective": "3.4",
         "type": "multiple_choice",
         "difficulty": "hard",
         "study_topic": "Third-party agreement types",
         "stem": (
-            "A company has a signed master service agreement (MSA) with an "
-            "IT consulting firm that establishes general legal terms, "
-            "payment terms, and confidentiality obligations governing their "
-            "overall business relationship. The company now wants to engage "
-            "the firm for a specific six-week network redesign project with "
-            "a defined scope, deliverables, timeline, and price. Which "
-            "additional document is MOST appropriate for this specific "
-            "engagement?"
+            "Two companies are beginning preliminary discussions about a "
+            "potential future partnership. Before either side is willing to "
+            "share proprietary technical specifications and pricing models "
+            "during these early talks, they want a legal agreement obligating "
+            "both parties not to disclose or use each other's shared "
+            "information outside the discussions — without yet committing "
+            "either company to any service, purchase, or partnership terms. "
+            "Which agreement type BEST fits this specific need?"
         ),
         "options": [
             {
                 "id": "a",
-                "text": (
-                    "A statement of work (SOW) that defines the specific "
-                    "scope, deliverables, timeline, and cost for this "
-                    "particular project under the existing MSA"
-                ),
+                "text": "Non-disclosure agreement (NDA)",
                 "correct": True,
                 "rationale": (
-                    "Correct. An SOW is the document specifically designed "
-                    "to define the scope, deliverables, timeline, and price "
-                    "of an individual project or engagement conducted under "
-                    "an existing MSA's general terms."
+                    "Correct. An NDA is the agreement purpose-built to "
+                    "create a legally binding confidentiality obligation for "
+                    "information exchanged during preliminary discussions, "
+                    "without committing either party to any service, "
+                    "purchase, or partnership terms."
                 ),
             },
             {
                 "id": "b",
                 "text": (
-                    "A new master service agreement replacing the existing "
-                    "one for this project"
+                    "Memorandum of understanding (MOU), since it is the "
+                    "standard first document exchanged before any formal "
+                    "agreement"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. The existing MSA already establishes the "
-                    "overarching legal terms; renegotiating an entirely new "
-                    "MSA for a single project is unnecessary and "
-                    "inefficient."
+                    "Incorrect. An MOU documents mutual intent and general "
+                    "goals between parties, but its purpose is different "
+                    "from creating a legally binding confidentiality "
+                    "obligation, which is what's explicitly required here."
                 ),
             },
             {
                 "id": "c",
                 "text": (
-                    "A memorandum of understanding (MOU) outlining the "
-                    "general intent to collaborate"
+                    "Service level agreement (SLA), establishing measurable "
+                    "performance commitments before either party commits to "
+                    "a service"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. An MOU is a non-binding, high-level "
-                    "statement of intent typically used in early "
-                    "discussions, not a binding document defining specific "
-                    "deliverables and cost for an active engagement already "
-                    "governed by an MSA."
+                    "Incorrect. No service has been defined yet at this "
+                    "preliminary stage, and SLAs address performance metrics "
+                    "and uptime commitments, not confidentiality of shared "
+                    "information."
                 ),
             },
             {
                 "id": "d",
                 "text": (
-                    "A business partnership agreement (BPA) defining joint "
-                    "ownership of the resulting network infrastructure"
+                    "Business partnership agreement (BPA), formally defining "
+                    "ownership and financial responsibilities of the "
+                    "still-hypothetical partnership"
                 ),
                 "correct": False,
                 "rationale": (
-                    "Incorrect. A BPA defines joint ownership and financial "
-                    "responsibility in a business partnership or joint "
-                    "venture; this is a standard vendor engagement, not a "
-                    "joint venture, and ownership is not the issue "
-                    "described."
+                    "Incorrect. This is premature — the companies have not "
+                    "committed to a partnership yet, only to preliminary "
+                    "confidential discussions, so defining ownership and "
+                    "financial responsibilities does not fit this stage."
                 ),
             },
         ],
         "explanation": (
-            "A statement of work is the correct instrument for defining a "
-            "specific project's scope, deliverables, and cost under an "
-            "existing MSA, unlike renegotiating the MSA itself, a "
-            "non-binding MOU, or a BPA meant for joint-venture ownership "
-            "arrangements."
+            "An NDA is the specific agreement type for protecting "
+            "confidential information exchanged during early, non-binding "
+            "discussions, distinct from an MOU's statement of intent, an "
+            "SLA's performance commitments, or a BPA's formal partnership "
+            "terms."
         ),
     },
 ]
