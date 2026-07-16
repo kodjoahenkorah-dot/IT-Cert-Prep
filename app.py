@@ -43,6 +43,7 @@ from exam.diagnostic import analyze_diagnostic, build_diagnostic
 from exam.models import is_pbq
 from exam.notes_loader import load_notes, notes_by_domain
 from exam.study import build_attempt_guide
+from exam.traps import CATEGORIES, build_traps_session, category_counts, get_category
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
@@ -203,6 +204,78 @@ def study_grade():
     entry = _EXAMS.get(session.get("study_id"))
     if not entry:
         return jsonify({"error": "no active study session"}), 400
+    data = request.get_json(force=True)
+    qid = data.get("id")
+    answer = data.get("answer")
+    question = next((q for q in entry["questions"] if q["id"] == qid), None)
+    if question is None:
+        return jsonify({"error": "unknown question"}), 400
+    return jsonify(grade_one(question, answer))
+
+
+# --------------------------------------------------------------------------- #
+# Exam Traps: curated hands-on practice categories with instant feedback and   #
+# optional visual aids (ports reference, risk calculator, network-zone diagram)#
+# --------------------------------------------------------------------------- #
+@app.route("/traps")
+@app.route("/traps/<exam_key>")
+def traps_setup(exam_key: str | None = None):
+    """Pick a hands-on practice category. Traps are Security+ only for now."""
+    profile = get_exam("secplus")
+    bank = _bank_for(profile)
+    counts = category_counts(bank)
+    cats = [dict(c, count=counts.get(c["key"], 0)) for c in CATEGORIES]
+    return render_template("traps_setup.html", profile=profile, categories=cats)
+
+
+@app.route("/traps/start", methods=["POST"])
+def traps_start():
+    profile = get_exam("secplus")
+    bank = _bank_for(profile)
+    cat = get_category(request.form.get("category", ""))
+    if cat is None:
+        return redirect(url_for("traps_setup"))
+    num = int(request.form.get("num_questions", 15))
+    session_qs = build_traps_session(cat, bank, num_questions=num)
+    if not session_qs:
+        return redirect(url_for("traps_setup"))
+
+    sid = secrets.token_hex(8)
+    _EXAMS[sid] = {
+        "profile_key": profile.key,
+        "questions": session_qs,
+        "mode": "traps",
+        "category": cat["key"],
+    }
+    session["traps_id"] = sid
+    return redirect(url_for("traps_session"))
+
+
+@app.route("/traps/session")
+def traps_session():
+    entry = _EXAMS.get(session.get("traps_id"))
+    if not entry:
+        return redirect(url_for("traps_setup"))
+    profile = get_exam(entry["profile_key"])
+    cat = get_category(entry.get("category", ""))
+    questions = [
+        _public_question(profile, q, i, study_hints=True)
+        for i, q in enumerate(entry["questions"])
+    ]
+    return render_template(
+        "traps_session.html",
+        questions=questions,
+        exam_name=profile.name,
+        category=cat,
+    )
+
+
+@app.route("/traps/grade", methods=["POST"])
+def traps_grade():
+    """Grade ONE question for immediate Exam-Traps feedback."""
+    entry = _EXAMS.get(session.get("traps_id"))
+    if not entry:
+        return jsonify({"error": "no active traps session"}), 400
     data = request.get_json(force=True)
     qid = data.get("id")
     answer = data.get("answer")

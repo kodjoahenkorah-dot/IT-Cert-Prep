@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Exam traps · {{ profile.name }}{% endblock %}
+{% block content %}
+
+<section class="notes-head">
+  <h1>🪤 Exam traps &amp; hands-on practice</h1>
+  <p class="lede">Targeted, hands-on drills on the topics people miss most — <strong>read a log, order the incident-response steps, build a firewall rule, calculate the risk</strong>. Every question grades <strong>instantly</strong> with a full explanation, and several categories include a <strong>visual aid</strong> (a ports reference, a risk calculator, or a network-zone diagram).</p>
+  <p class="notes-meta">{{ profile.name }} · {{ categories | sum(attribute='count') }} questions across {{ categories | length }} categories</p>
+</section>
+
+<div class="traps-grid">
+  {% for c in categories %}
+  <form method="post" action="{{ url_for('traps_start') }}" class="trap-card">
+    <input type="hidden" name="category" value="{{ c.key }}">
+    <div class="trap-head">
+      <h3>{{ c.name }}</h3>
+      <div class="trap-badges">
+        {% if c.visual == 'ports' %}<span class="trap-badge vis">🔌 ports table</span>{% endif %}
+        {% if c.visual == 'risk' %}<span class="trap-badge vis">🧮 risk calculator</span>{% endif %}
+        {% if c.visual == 'zones' %}<span class="trap-badge vis">🗺️ zone diagram</span>{% endif %}
+        {% if c.pbq_only %}<span class="trap-badge pbq">PBQ</span>{% endif %}
+        {% if c.mono %}<span class="trap-badge mono">log/console</span>{% endif %}
+      </div>
+    </div>
+    <p class="trap-blurb">{{ c.blurb }}</p>
+    <div class="trap-foot">
+      <span class="trap-count">{{ c.count }} questions</span>
+      <label class="trap-num">
+        <select name="num_questions">
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="15" selected>15</option>
+          <option value="20">20</option>
+          <option value="25">25</option>
+        </select>
+      </label>
+      <button type="submit" class="btn primary" {{ 'disabled' if c.count == 0 }}>Practice →</button>
+    </div>
+  </form>
+  {% endfor %}
+</div>
+{% endblock %}

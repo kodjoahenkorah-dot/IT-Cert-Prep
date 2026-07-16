@@ -4,6 +4,11 @@
 const QUESTIONS = JSON.parse(document.getElementById("study-data").textContent);
 const root = document.getElementById("study-root");
 
+// Endpoints are configurable so the same renderer powers Study Mode and the
+// Exam Traps section. Defaults preserve the original Study-Mode behaviour.
+const GRADE_URL = root.dataset.gradeUrl || "/study/grade";
+const DONE_URL = root.dataset.doneUrl || "/study";
+
 // Per-question state: { answer, graded:bool, correct:bool }
 const state = QUESTIONS.map(() => ({ answer: undefined, graded: false, correct: false }));
 let current = 0;
@@ -182,7 +187,7 @@ function hasAnswer(st) {
 // Grade one question, cache its feedback node so re-renders don't refetch.
 async function checkAnswerCached(q, st) {
   if (!hasAnswer(st)) { alert("Choose an answer first (or skip with Next)."); return; }
-  const res = await fetch("/study/grade", {
+  const res = await fetch(GRADE_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ id: q.id, answer: st.answer }),
@@ -230,7 +235,7 @@ document.getElementById("prev-btn").addEventListener("click", () => {
 });
 document.getElementById("next-btn").addEventListener("click", () => {
   if (current < QUESTIONS.length - 1) { current += 1; renderQ(); }
-  else window.location = "/study";
+  else window.location = DONE_URL;
 });
 
 renderQ();

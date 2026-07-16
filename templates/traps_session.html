@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% block title %}Traps · {{ category.name if category else exam_name }}{% endblock %}
+{% block headerextra %}
+  <div class="exam-hud">
+    <span class="hud-item exam-label">{{ category.name if category else 'Exam traps' }}</span>
+    <span id="progress" class="hud-item">1 / {{ questions|length }}</span>
+    <span id="score" class="hud-item">0 correct</span>
+  </div>
+{% endblock %}
+{% block content %}
+
+{% if category and category.visual %}
+<details class="trap-tool" open>
+  <summary>{% if category.visual == 'ports' %}🔌 Common ports quick-reference{% elif category.visual == 'risk' %}🧮 Risk formula calculator{% elif category.visual == 'zones' %}🗺️ Network security-zone diagram{% endif %}</summary>
+
+  {% if category.visual == 'ports' %}
+  <table class="ports-table">
+    <tr><th>Port</th><th>Protocol / service</th><th>Secure?</th><th>Secure alternative</th></tr>
+    <tr><td>20/21</td><td>FTP (file transfer)</td><td class="no">Cleartext</td><td>FTPS (990) / SFTP (22)</td></tr>
+    <tr><td>22</td><td>SSH / SFTP / SCP</td><td class="ok">Encrypted</td><td>—</td></tr>
+    <tr><td>23</td><td>Telnet</td><td class="no">Cleartext</td><td>SSH (22)</td></tr>
+    <tr><td>25</td><td>SMTP (mail relay)</td><td class="no">Cleartext</td><td>SMTPS (465) / STARTTLS (587)</td></tr>
+    <tr><td>53</td><td>DNS</td><td class="warn">Plain</td><td>DoT (853) / DoH (443)</td></tr>
+    <tr><td>67/68</td><td>DHCP</td><td class="warn">Plain</td><td>—</td></tr>
+    <tr><td>69</td><td>TFTP</td><td class="no">Cleartext</td><td>SFTP (22)</td></tr>
+    <tr><td>80</td><td>HTTP</td><td class="no">Cleartext</td><td>HTTPS (443)</td></tr>
+    <tr><td>88</td><td>Kerberos</td><td class="ok">Encrypted</td><td>—</td></tr>
+    <tr><td>110</td><td>POP3</td><td class="no">Cleartext</td><td>POP3S (995)</td></tr>
+    <tr><td>123</td><td>NTP (time)</td><td class="warn">Plain</td><td>—</td></tr>
+    <tr><td>143</td><td>IMAP</td><td class="no">Cleartext</td><td>IMAPS (993)</td></tr>
+    <tr><td>161/162</td><td>SNMP / SNMP trap</td><td class="no">v1/v2 cleartext</td><td>SNMPv3</td></tr>
+    <tr><td>389</td><td>LDAP</td><td class="no">Cleartext</td><td>LDAPS (636)</td></tr>
+    <tr><td>443</td><td>HTTPS / TLS</td><td class="ok">Encrypted</td><td>—</td></tr>
+    <tr><td>445</td><td>SMB (file sharing)</td><td class="warn">Sign/encrypt</td><td>SMB3 encryption</td></tr>
+    <tr><td>636</td><td>LDAPS</td><td class="ok">Encrypted</td><td>—</td></tr>
+    <tr><td>993</td><td>IMAPS</td><td class="ok">Encrypted</td><td>—</td></tr>
+    <tr><td>995</td><td>POP3S</td><td class="ok">Encrypted</td><td>—</td></tr>
+    <tr><td>1433</td><td>Microsoft SQL Server</td><td class="warn">TLS optional</td><td>Force TLS</td></tr>
+    <tr><td>3306</td><td>MySQL</td><td class="warn">TLS optional</td><td>Force TLS</td></tr>
+    <tr><td>3389</td><td>RDP (remote desktop)</td><td class="warn">Encrypted, exposed-risk</td><td>VPN + NLA</td></tr>
+    <tr><td>514</td><td>Syslog</td><td class="no">Cleartext (UDP)</td><td>Syslog over TLS (6514)</td></tr>
+    <tr><td>5060/5061</td><td>SIP / SIP-TLS (VoIP)</td><td class="warn">5061 encrypted</td><td>SIP-TLS (5061)</td></tr>
+  </table>
+  <p class="tool-note">Green = encrypted by default · amber = depends on config/exposure · red = cleartext, prefer the secure alternative.</p>
+
+  {% elif category.visual == 'risk' %}
+  <div class="risk-calc">
+    <div class="risk-inputs">
+      <label>Asset value (AV) $<input type="number" id="av" value="400000" min="0" step="1000"></label>
+      <label>Exposure factor (EF) %<input type="number" id="ef" value="25" min="0" max="100" step="1"></label>
+      <label>Annualized rate of occurrence (ARO)<input type="number" id="aro" value="0.05" min="0" step="0.01"></label>
+      <label>Annual cost of control $<input type="number" id="ctrl" value="3000" min="0" step="100"></label>
+    </div>
+    <div class="risk-outputs">
+      <div class="risk-out"><span class="risk-formula">SLE = AV &times; EF</span><strong id="sle">—</strong></div>
+      <div class="risk-out"><span class="risk-formula">ALE = SLE &times; ARO</span><strong id="ale">—</strong></div>
+      <div class="risk-out"><span class="risk-formula">Control worth it?</span><strong id="verdict">—</strong></div>
+    </div>
+    <p class="tool-note" id="risk-note"></p>
+  </div>
+  <script>
+    (function () {
+      const $ = (id) => document.getElementById(id);
+      const money = (n) => '$' + Math.round(n).toLocaleString();
+      function recompute() {
+        const av = +$('av').value || 0, ef = (+$('ef').value || 0) / 100, aro = +$('aro').value || 0, ctrl = +$('ctrl').value || 0;
+        const sle = av * ef, ale = sle * aro;
+        $('sle').textContent = money(sle) + '  (' + money(av) + ' × ' + ($('ef').value || 0) + '%)';
+        $('ale').textContent = money(ale) + '  (' + money(sle) + ' × ' + aro + ')';
+        const save = ale - ctrl;
+        if (ctrl <= 0) { $('verdict').textContent = '—'; $('risk-note').textContent = ''; return; }
+        if (save > 0) { $('verdict').textContent = 'Yes — saves ' + money(save) + '/yr'; $('verdict').className = 'ok'; }
+        else { $('verdict').textContent = 'No — costs ' + money(-save) + '/yr more than the risk'; $('verdict').className = 'no'; }
+        $('risk-note').textContent = 'A control is cost-justified when its annual cost is less than the ALE it removes.';
+      }
+      ['av', 'ef', 'aro', 'ctrl'].forEach((id) => $(id).addEventListener('input', recompute));
+      recompute();
+    })();
+  </script>
+
+  {% elif category.visual == 'zones' %}
+  <div class="zone-diagram">
+    <div class="zone internet"><span class="zone-title">🌐 Internet</span><span class="zone-sub">Untrusted</span></div>
+    <div class="zone-arrow">→</div>
+    <div class="zone fw"><span class="zone-title">🧱 Perimeter firewall</span><span class="zone-sub">Screens inbound</span></div>
+    <div class="zone-arrow">→</div>
+    <div class="zone dmz"><span class="zone-title">🛰️ DMZ / screened subnet</span><span class="zone-sub">Public-facing: web, mail, reverse proxy, WAF</span></div>
+    <div class="zone-arrow">→</div>
+    <div class="zone fw"><span class="zone-title">🧱 Internal firewall</span><span class="zone-sub">Segments DMZ from LAN</span></div>
+    <div class="zone-arrow">→</div>
+    <div class="zone internal"><span class="zone-title">🏢 Internal LAN</span><span class="zone-sub">Trusted: users, DBs, AD</span></div>
+  </div>
+  <ul class="tool-note zone-key">
+    <li><strong>Firewall</strong> — allows/blocks by IP, port, protocol (and app, if NGFW). The control that enforces the zones above.</li>
+    <li><strong>WAF</strong> — inspects HTTP(S) for app attacks (SQLi, XSS); sits in front of web servers in the DMZ.</li>
+    <li><strong>IDS</strong> — <em>detects</em> and alerts on suspicious traffic (out-of-band, a copy of traffic).</li>
+    <li><strong>IPS</strong> — <em>detects and blocks</em> inline, dropping malicious packets in real time.</li>
+    <li><strong>TLS</strong> — encrypts data in transit; a confidentiality/integrity control, not a traffic-filtering appliance.</li>
+  </ul>
+  {% endif %}
+</details>
+{% endif %}
+
+<div id="study-root" data-grade-url="{{ url_for('traps_grade') }}" data-done-url="{{ url_for('traps_setup') }}"></div>
+
+<div class="study-nav">
+  <button id="prev-btn" class="btn ghost">← Previous</button>
+  <button id="next-btn" class="btn primary">Next →</button>
+  <a href="{{ url_for('traps_setup') }}" class="btn ghost">Done</a>
+</div>
+
+<script id="study-data" type="application/json">{{ questions|tojson }}</script>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='study.js') }}"></script>
+{% endblock %}

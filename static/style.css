@@ -282,3 +282,62 @@ select {
 .diag-tag.weak { background: rgba(248,81,73,.2); color: var(--bad); }
 .diag-behavior { padding: 14px 16px; border-left: 3px solid var(--accent); background: var(--panel-2); border-radius: 8px; margin: 8px 0; }
 @media (max-width: 640px) { .diag-grid { grid-template-columns: 1fr; } }
+
+/* --------------------------------------------------------------------- */
+/* Exam Traps: category picker, visual aids (ports / risk / zones)        */
+/* --------------------------------------------------------------------- */
+.traps-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 18px 0; }
+.trap-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; display: flex; flex-direction: column; }
+.trap-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+.trap-head h3 { margin: 0 0 6px; font-size: 1.05rem; }
+.trap-badges { display: flex; flex-wrap: wrap; gap: 5px; justify-content: flex-end; }
+.trap-badge { font-size: .68rem; font-weight: 700; padding: 2px 7px; border-radius: 999px; white-space: nowrap; }
+.trap-badge.vis { background: rgba(47,129,247,.18); color: var(--accent); }
+.trap-badge.pbq { background: rgba(210,153,34,.2); color: var(--warn); }
+.trap-badge.mono { background: var(--panel-2); color: var(--muted); }
+.trap-blurb { color: var(--muted); font-size: .9rem; line-height: 1.45; flex: 1; margin: 4px 0 12px; }
+.trap-foot { display: flex; align-items: center; gap: 10px; }
+.trap-count { color: var(--muted); font-size: .82rem; margin-right: auto; }
+.trap-num select { padding: 6px 8px; }
+.trap-card button[disabled] { opacity: .4; cursor: not-allowed; }
+@media (max-width: 640px) { .traps-grid { grid-template-columns: 1fr; } }
+
+/* collapsible visual-aid panel above the questions */
+.trap-tool { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 6px 16px; margin: 0 0 18px; }
+.trap-tool > summary { cursor: pointer; font-weight: 700; padding: 8px 0; }
+.tool-note { color: var(--muted); font-size: .84rem; line-height: 1.5; margin: 8px 0 4px; }
+
+/* ports reference table */
+.ports-table { width: 100%; border-collapse: collapse; font-size: .86rem; margin-top: 8px; }
+.ports-table th, .ports-table td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--line); }
+.ports-table th { color: var(--muted); font-weight: 700; }
+.ports-table td.ok { color: var(--good); font-weight: 600; }
+.ports-table td.no { color: var(--bad); font-weight: 600; }
+.ports-table td.warn { color: var(--warn); font-weight: 600; }
+
+/* risk calculator */
+.risk-calc { margin-top: 10px; }
+.risk-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.risk-inputs label { display: flex; flex-direction: column; gap: 4px; font-size: .85rem; color: var(--muted); }
+.risk-inputs input { padding: 8px 10px; background: var(--panel-2); border: 1px solid var(--line); border-radius: 8px; color: var(--ink); }
+.risk-outputs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 14px 0 4px; }
+.risk-out { background: var(--panel-2); border-radius: 8px; padding: 10px 12px; }
+.risk-out .risk-formula { display: block; color: var(--muted); font-size: .78rem; margin-bottom: 4px; }
+.risk-out strong { font-size: 1rem; }
+.risk-out strong.ok { color: var(--good); }
+.risk-out strong.no { color: var(--bad); }
+@media (max-width: 640px) { .risk-inputs, .risk-outputs { grid-template-columns: 1fr; } }
+
+/* network-zone diagram */
+.zone-diagram { display: flex; flex-wrap: wrap; align-items: stretch; gap: 6px; margin: 12px 0; }
+.zone { flex: 1; min-width: 120px; background: var(--panel-2); border: 1px solid var(--line); border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 3px; }
+.zone-title { font-weight: 700; font-size: .86rem; }
+.zone-sub { color: var(--muted); font-size: .74rem; }
+.zone.internet { border-color: var(--bad); }
+.zone.dmz { border-color: var(--warn); }
+.zone.internal { border-color: var(--good); }
+.zone.fw { border-color: var(--accent); }
+.zone-arrow { align-self: center; color: var(--muted); font-weight: 700; }
+.zone-key { list-style: none; padding: 0; }
+.zone-key li { margin: 5px 0; }
+@media (max-width: 640px) { .zone-arrow { transform: rotate(90deg); } }
