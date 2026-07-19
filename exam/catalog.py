@@ -158,11 +158,44 @@ CCNA = ExamProfile(
 )
 
 
+# --------------------------------------------------------------------------- #
+# Microsoft Azure Fundamentals (AZ-900)                                        #
+# --------------------------------------------------------------------------- #
+AZ900 = ExamProfile(
+    key="az900",
+    name="Microsoft Azure Fundamentals (AZ-900)",
+    short_name="AZ-900",
+    questions_package="exam.questions.az900",
+    domains={
+        1: {"name": "Describe cloud concepts", "weight": 0.275},
+        2: {"name": "Describe Azure architecture and services", "weight": 0.375},
+        3: {"name": "Describe Azure management and governance", "weight": 0.35},
+    },
+    # Scored 100-1000 with a 700 pass mark (~70%).
+    pass_percent=70.0,
+    default_num_questions=40,
+    default_pbqs=2,
+    time_limit_min=45,
+    blurb="Azure fundamentals: cloud concepts, core Azure services, and management & governance.",
+    ai_system_prompt=(
+        "You are an item writer for the Microsoft AZ-900 Azure Fundamentals exam. "
+        "Write questions that mirror the REAL exam's style and difficulty — do NOT make "
+        "them harder. Real AZ-900 items are short, direct, single-concept questions "
+        "('Which Azure service should you use to...', 'What does X provide?', "
+        "statement-completion, and yes/no statement sets). Distractors are related Azure "
+        "services or concepts, plausible but fairly distinguishable — not trick wording. "
+        "The three domains are: 1 Describe cloud concepts; 2 Describe Azure architecture "
+        "and services; 3 Describe Azure management and governance."
+    ),
+)
+
+
 EXAMS: dict[str, ExamProfile] = {
     SECPLUS.key: SECPLUS,
     APLUS_CORE1.key: APLUS_CORE1,
     APLUS_CORE2.key: APLUS_CORE2,
     CCNA.key: CCNA,
+    AZ900.key: AZ900,
 }
 
 DEFAULT_EXAM = SECPLUS.key

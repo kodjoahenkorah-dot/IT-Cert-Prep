@@ -1,0 +1,36 @@
+{
+  "1": [
+    "Cloud computing and shared responsibility",
+    "Cloud deployment models (public/private/hybrid)",
+    "Consumption model and CapEx vs OpEx",
+    "Cloud benefits (HA, scalability, elasticity, DR)",
+    "Cloud service types (IaaS/PaaS/SaaS)"
+  ],
+  "2": [
+    "Regions, availability zones, and region pairs",
+    "Subscriptions, resource groups, and management groups",
+    "Azure compute (VMs, App Service, containers, Functions)",
+    "Azure networking (VNet, peering, VPN, ExpressRoute, DNS)",
+    "Azure storage services and redundancy",
+    "Migration and file movement (Azure Migrate, Data Box, AzCopy)",
+    "Microsoft Entra ID and authentication (SSO, MFA, passwordless)",
+    "Conditional Access and external identities",
+    "Azure RBAC",
+    "Zero Trust and defense in depth",
+    "Microsoft Defender for Cloud"
+  ],
+  "3": [
+    "Cost factors and pricing/TCO calculators",
+    "Cost Management and tags",
+    "Azure Policy",
+    "Resource locks",
+    "Microsoft Purview",
+    "Azure Arc",
+    "Infrastructure as code and ARM templates",
+    "Azure portal, CLI, PowerShell, and Cloud Shell",
+    "Azure Advisor",
+    "Azure Service Health",
+    "Azure Monitor (Log Analytics, alerts, Application Insights)",
+    "SLAs and service lifecycle"
+  ]
+}
