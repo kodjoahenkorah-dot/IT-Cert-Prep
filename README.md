@@ -5,10 +5,12 @@ A full-featured web application for studying five IT certifications — **CompTI
 Built with Python and Flask. Runs locally, no account required.
 
 <p>
+  <img alt="CI" src="https://github.com/kodjoahenkorah-dot/security-practice-exams/actions/workflows/ci.yml/badge.svg">
   <img alt="Python" src="https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white">
   <img alt="Flask" src="https://img.shields.io/badge/Flask-web%20app-000000?logo=flask&logoColor=white">
   <img alt="Questions" src="https://img.shields.io/badge/Questions-4%2C574-2ea043">
   <img alt="Exams" src="https://img.shields.io/badge/Exams-5-2f81f7">
+  <img alt="License" src="https://img.shields.io/badge/License-MIT-blue">
 </p>
 
 ![Home page](docs/screenshots/home.png)
@@ -63,6 +65,15 @@ python app.py
 On Windows you can instead double-click **`Start Practice Exams.bat`**, which starts the server and opens your browser automatically.
 
 > **Optional AI mode:** set an `ANTHROPIC_API_KEY` environment variable and install `anthropic` to generate unlimited brand-new questions on the fly. The app works fully offline without it.
+
+## Testing
+
+A `pytest` suite guards both the engine and the content — schema-valid questions, globally unique IDs, blueprint-accurate assembly, the no-repeat rotation guarantee, grading correctness across all question types, and 100% study-note coverage. It runs on every push via GitHub Actions (Python 3.10–3.12).
+
+```bash
+pip install pytest
+pytest -q
+```
 
 ## How it's built
 

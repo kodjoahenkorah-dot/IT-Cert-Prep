@@ -2,3 +2,6 @@ Flask>=3.0
 # Optional: only needed for AI mode (unlimited brand-new questions).
 # Install separately or uncomment:
 # anthropic>=0.40
+
+# Testing (dev only):
+# pip install pytest
