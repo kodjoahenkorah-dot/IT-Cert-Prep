@@ -1,13 +1,37 @@
 {% extends "base.html" %}
 {% block content %}
+{% set total_q = cards | sum(attribute='stats.total') %}
+
 <section class="hero">
-  <h1>CompTIA practice exams</h1>
+  <div class="hero-badge">Certification study platform</div>
+  <h1>Practice like it's exam day.</h1>
   <p class="lede">
-    Scenario-based questions written to be <strong>as hard or harder</strong> than the live exam,
-    including performance-based questions (PBQs). Every exam pulls a different mix, so you can keep
-    retesting. After grading you get a full explanation of every miss — including
-    <em>why each wrong answer is wrong</em> — plus a personalised study plan.
+    Full-length, blueprint-weighted practice exams for five industry certifications — with
+    performance-based questions, instant per-option explanations, a readiness diagnostic, and
+    linked study notes. Every exam pulls a fresh mix, and every miss is explained.
   </p>
+  <div class="hero-stats">
+    <div class="stat"><span class="stat-num">{{ cards|length }}</span><span class="stat-label">certifications</span></div>
+    <div class="stat"><span class="stat-num">{{ '{:,}'.format(total_q) }}</span><span class="stat-label">practice questions</span></div>
+    <div class="stat"><span class="stat-num">7</span><span class="stat-label">study modes</span></div>
+  </div>
+</section>
+
+<section class="modes">
+  <h2 class="section-title">Ways to study</h2>
+  <div class="mode-grid">
+    <a class="mode-card" href="#exams"><span class="mode-ic">📝</span><span class="mode-name">Practice exams</span><span class="mode-desc">Timed, full-length, blueprint-weighted</span></a>
+    <a class="mode-card" href="{{ url_for('diagnostic_setup') }}"><span class="mode-ic">🩺</span><span class="mode-name">Diagnostic</span><span class="mode-desc">Estimate your pass readiness</span></a>
+    <a class="mode-card" href="{{ url_for('study_setup') }}"><span class="mode-ic">📘</span><span class="mode-name">Study mode</span><span class="mode-desc">Untimed, instant feedback</span></a>
+    <a class="mode-card" href="{{ url_for('traps_setup') }}"><span class="mode-ic">🪤</span><span class="mode-name">Exam traps</span><span class="mode-desc">Hands-on drills + visual aids</span></a>
+    <a class="mode-card" href="{{ url_for('flashcards_setup') }}"><span class="mode-ic">🎴</span><span class="mode-name">Flashcards</span><span class="mode-desc">Fast term recall</span></a>
+    <a class="mode-card" href="{{ url_for('acronyms_setup') }}"><span class="mode-ic">🔤</span><span class="mode-name">Acronyms</span><span class="mode-desc">Drill the alphabet soup</span></a>
+    <a class="mode-card" href="{{ url_for('notes') }}"><span class="mode-ic">📖</span><span class="mode-name">Study notes</span><span class="mode-desc">Topic notes, linked to questions</span></a>
+  </div>
+</section>
+
+<section id="exams" class="exams">
+  <h2 class="section-title">Choose an exam</h2>
 
   {% if not ai_on %}
   <p class="hint">💡 AI mode is off. Set <code>ANTHROPIC_API_KEY</code> and <code>pip install anthropic</code>
@@ -16,18 +40,26 @@
 
   {% for card in cards %}
   {% set p = card.profile %}
-  <div class="exam-pick">
+  <div class="exam-pick" data-exam="{{ p.key }}">
     <div class="exam-pick-head">
-      <h2>{{ p.name }}</h2>
-      <span class="exam-bank">{{ card.stats.total }} questions in bank</span>
+      <div class="exam-title">
+        <span class="exam-badge">{{ {'secplus':'🛡️','aplus_core1':'🔧','aplus_core2':'💻','ccna_200_301':'🌐','az900':'☁️'}.get(p.key, '📚') }}</span>
+        <div>
+          <h2>{{ p.name }}</h2>
+          <p class="exam-blurb">{{ p.blurb }}</p>
+        </div>
+      </div>
+      <span class="exam-bank"><strong>{{ '{:,}'.format(card.stats.total) }}</strong> questions</span>
     </div>
-    <p class="exam-blurb">{{ p.blurb }}</p>
 
     <ul class="domain-bars">
       {% for d, info in p.domains.items() %}
       <li>
-        <span class="dlabel">Domain {{ d }} · {{ info.name }}</span>
-        <span class="dcount">{{ card.stats.by_domain.get(d, 0) }} items · {{ (info.weight*100)|round|int }}% of exam</span>
+        <div class="dbar-head">
+          <span class="dlabel">{{ info.name }}</span>
+          <span class="dcount">{{ (info.weight*100)|round|int }}%</span>
+        </div>
+        <div class="dbar-track"><div class="dbar-fill" style="width: {{ (info.weight*100)|round|int }}%"></div></div>
       </li>
       {% endfor %}
     </ul>
@@ -63,13 +95,13 @@
       </div>
       <div class="start-actions">
         <button type="submit" class="btn primary">Start {{ p.short_name }} exam →</button>
-        <span class="pass-note">Pass line ≈ {{ p.pass_percent }}% · {{ p.time_limit_min }} min</span>
+        <span class="pass-note">Pass ≈ {{ p.pass_percent }}% · {{ p.time_limit_min }} min</span>
       </div>
     </form>
 
     <form method="post" action="{{ url_for('fresh_start') }}" class="fresh">
       <input type="hidden" name="exam" value="{{ p.key }}">
-      <button type="submit" class="btn ghost" title="Forget which questions you've already seen so the whole bank is reusable">↺ Reset seen-question history</button>
+      <button type="submit" class="btn ghost small" title="Forget which questions you've already seen so the whole bank is reusable">↺ Reset seen-question history</button>
     </form>
   </div>
   {% endfor %}

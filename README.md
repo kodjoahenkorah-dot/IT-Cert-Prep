@@ -11,6 +11,8 @@ Built with Python and Flask. Runs locally, no account required.
   <img alt="Exams" src="https://img.shields.io/badge/Exams-5-2f81f7">
 </p>
 
+![Home page](docs/screenshots/home.png)
+
 ---
 
 ## What it does
@@ -37,6 +39,10 @@ Each exam is calibrated to match its real-world counterpart. The CompTIA and Cis
 - **🪤 Exam traps** — hands-on drills on the topics people miss most (log reading, firewall rules, IAM flows, risk math…), with visual aids: a ports reference, an interactive SLE/ALE/ARO calculator, and a network security-zone diagram.
 - **🎴 Flashcards** and **🔤 acronym drills** — quick daily reinforcement in multiple-choice or typed modes.
 - **📖 Study notes** — structured, exam-aligned notes for every topic, linked to the question bank so a missed question points you straight to the relevant note.
+
+| Exam traps & hands-on drills | Linked study notes |
+|---|---|
+| ![Exam traps](docs/screenshots/exam-traps.png) | ![Study notes](docs/screenshots/study-notes.png) |
 
 ## Why the questions are good
 
