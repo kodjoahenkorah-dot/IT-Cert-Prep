@@ -1,32 +1,50 @@
-# CompTIA Practice Exam Generator
+# Certification Practice Exam Platform
 
-A web app that generates full-length CompTIA practice exams written to be **as hard or harder than
-the live exam** — scenario-based "best answer" questions where you can't reverse-engineer the answer
-just by reading the options, plus interactive **performance-based questions (PBQs)**.
+A full-featured web application for studying five IT certifications — **CompTIA Security+, A+ Core 1, A+ Core 2, Cisco CCNA, and Microsoft Azure Fundamentals (AZ-900)** — backed by a hand-authored bank of **4,500+ questions** with per-option explanations, performance-based questions, a diagnostic engine, and study notes.
 
-**Three exams are included** (pick one on the home page):
+Built with Python and Flask. Runs locally, no account required.
 
-- **CompTIA Security+ (SY0-701)** — 5 domains, pass line ≈ 83%
-- **CompTIA A+ Core 1 (220-1201)** — 5 domains, pass line ≈ 75%
-- **Cisco CCNA (200-301)** — 6 domains, 120-minute timer, pass line ≈ 82%
+<p>
+  <img alt="Python" src="https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white">
+  <img alt="Flask" src="https://img.shields.io/badge/Flask-web%20app-000000?logo=flask&logoColor=white">
+  <img alt="Questions" src="https://img.shields.io/badge/Questions-4%2C574-2ea043">
+  <img alt="Exams" src="https://img.shields.io/badge/Exams-5-2f81f7">
+</p>
 
-Every time you start an exam you get a **different mix of questions**, so you can keep retesting.
-After grading, the app explains **every question you missed** — including **why each wrong option
-is wrong** — and builds a **personalised study plan** that ranks your weakest domains and topics.
+---
 
-## Features
+## What it does
 
-- **Weighted, exam-accurate composition** — questions are sampled to match each exam's official
-  domain percentages (Security+ 12/22/18/28/20; A+ Core 1 13/23/25/11/28).
-- **Performance-based questions** — matching, categorisation, and ordering PBQs, just like the real exam.
-- **Fresh exams every time** — the app tracks which questions you've already seen and pulls new ones
-  until the bank is exhausted. (Reset that history any time from the home page.)
-- **90-minute countdown timer**, like the real exam.
-- **Deep explanations** — for every question, the correct answer *and* a specific rationale for why
-  each distractor is wrong, plus an overall teaching explanation.
-- **Study plan** — score by domain, weakest topics ranked worst-first, and concrete advice on what
-  to study next.
-- **Optional AI mode** — with an Anthropic API key, generate *unlimited* brand-new questions.
+Pick a certification, choose your mode, and study. Every practice exam draws a **fresh mix** of questions weighted to the exam's official domain blueprint, grades you server-side, and then explains **every question you missed** — including *why each wrong option is wrong* — before building a study plan that ranks your weakest domains and topics.
+
+Each exam is calibrated to match its real-world counterpart. The CompTIA and Cisco banks use hard, scenario-based "best answer" items; the AZ-900 bank is deliberately tuned to Microsoft's actual fundamentals-level style and phrasing rather than being artificially difficult.
+
+## Exams included
+
+| Certification | Domains | Questions | Format |
+|---|--:|--:|---|
+| **CompTIA Security+** (SY0-701) | 5 | 1,842 | 90 q · 90 min · ≈83% pass · PBQs |
+| **Microsoft Azure Fundamentals** (AZ-900) | 3 | 1,016 | 40 q · 45 min · 70% pass · Yes/No & matching |
+| **Cisco CCNA** (200-301) | 6 | 648 | 100 q · 120 min · ≈82% pass |
+| **CompTIA A+ Core 1** (220-1201) | 5 | 558 | 90 q · 90 min · ≈75% pass · PBQs |
+| **CompTIA A+ Core 2** (220-1202) | 4 | 510 | 90 q · 90 min · ≈78% pass · PBQs |
+
+## Study modes
+
+- **📝 Practice exam** — full-length, timed, weighted to the official domain percentages, with a countdown timer and a no-repeat guarantee across sessions.
+- **🩺 Diagnostic test** — a short assessment that estimates your chance of passing, identifies strongest/weakest domains and subtopics, and reads *why* you miss questions (missing knowledge vs. misreading vs. rushing) from timing and answer patterns.
+- **📘 Study mode** — untimed, one question at a time with instant feedback and full explanations, filterable by domain and topic.
+- **🪤 Exam traps** — hands-on drills on the topics people miss most (log reading, firewall rules, IAM flows, risk math…), with visual aids: a ports reference, an interactive SLE/ALE/ARO calculator, and a network security-zone diagram.
+- **🎴 Flashcards** and **🔤 acronym drills** — quick daily reinforcement in multiple-choice or typed modes.
+- **📖 Study notes** — structured, exam-aligned notes for every topic, linked to the question bank so a missed question points you straight to the relevant note.
+
+## Why the questions are good
+
+- **Per-option rationales.** Every option — right and wrong — carries a specific explanation, so you learn the *reasoning*, not just the letter.
+- **Performance-based questions.** Matching, categorization, and ordering items that mirror the interactive tasks on the real CompTIA and Microsoft exams.
+- **Blueprint-accurate assembly.** Questions are sampled to match each exam's published domain weightings (e.g., Security+ 12/22/18/28/20).
+- **No-repeat rotation.** The app tracks what you've already seen and serves new questions until the bank is exhausted, so retakes stay fresh.
+- **Per-exam calibration.** Difficulty and item style are tuned to each exam individually — hard scenario items for the pro-level exams, faithful fundamentals-level items for AZ-900.
 
 ## Quick start
 
@@ -36,58 +54,40 @@ python app.py
 # open http://127.0.0.1:5000
 ```
 
-Pick the number of questions and PBQs, then start. Submit any time (or let the timer run out) to see
-your score, explanations, and study plan. Click **Generate another exam** for a fresh set.
+On Windows you can instead double-click **`Start Practice Exams.bat`**, which starts the server and opens your browser automatically.
 
-## Optional: unlimited AI-generated questions
+> **Optional AI mode:** set an `ANTHROPIC_API_KEY` environment variable and install `anthropic` to generate unlimited brand-new questions on the fly. The app works fully offline without it.
 
-The offline bank ships with 200+ hand-written questions and works with zero setup. To generate
-brand-new questions on demand:
+## How it's built
 
-```bash
-pip install anthropic
-export ANTHROPIC_API_KEY=sk-ant-...
-python app.py
-```
-
-A new **"Generate brand-new questions with AI"** checkbox appears on the home page. Each AI exam is
-freshly written and validated against the same schema. (Costs a few cents per exam; falls back to
-the offline bank automatically if the API is unavailable.)
-
-## How it's organised
+A clean, data-driven architecture — adding a whole new certification is just a new profile plus a question package, no changes to the engine.
 
 ```
-app.py                       Flask web app (routes, session, serving)
-requirements.txt
+app.py                     # Flask routes: exam, study, diagnostic, traps, flashcards, notes
 exam/
-  models.py                  Question schema + validation (single source of truth)
-  bank.py                    Loads & validates the offline question bank
-  generator.py               Weighted exam assembly, answer shuffling, "seen" tracking
-  grading.py                 Scoring, per-option explanations, study-plan builder
-  ai_generator.py            Optional Claude API question generation
-  catalog.py                 Exam profiles (domains, weights, pass mark, AI prompt)
-  questions/
-    secplus/                 Security+ SY0-701 bank (one module per domain + PBQs)
-    aplus_core1/             A+ Core 1 220-1201 bank (one module per domain + PBQs)
-    ccna_200_301/            Cisco CCNA 200-301 bank (one module per domain + PBQs)
-templates/                   index / exam / results pages
-static/                      style.css, exam.js
-data/seen_<exam>.json        Tracks seen questions per exam (auto-created, gitignored)
+  catalog.py               # ExamProfile registry: domains, weights, pass marks, timers
+  models.py                # question schema + validation (5 question types)
+  bank.py                  # auto-discovering question loader
+  generator.py             # weighted assembly + no-repeat rotation
+  grading.py               # server-side grading with per-option feedback
+  diagnostic.py            # pass-probability + behavioral analysis
+  traps.py                 # curated hands-on practice categories
+  questions/<exam>/        # the question banks (one package per exam)
+  notes/<exam>/            # study notes, linked to bank topics
+templates/ · static/       # server-rendered UI, vanilla JS (no framework)
 ```
 
-## Adding your own questions
+**Design highlights**
 
-Drop a new `QUESTIONS = [...]` list into any module under `exam/questions/` (or add to an existing
-one). Each question is a dict following the schema documented at the top of `exam/models.py`. The
-loader validates every question on startup and skips malformed ones, so a typo can't crash the app.
+- **Answer keys never reach the browser.** Questions are stripped of correct answers before rendering and graded server-side, so nothing can be inspected client-side.
+- **Schema-validated content.** Every question is validated on load (required fields, option counts, exactly-one vs. two-or-more correct), so malformed items can't slip into an exam.
+- **Separation of content and engine.** Questions, notes, flashcards, and acronyms are plain Python data modules auto-discovered at load time; the assembly/grading/diagnostic logic is fully exam-agnostic.
+- **Zero heavyweight dependencies.** Flask plus the standard library; the front end is server-rendered HTML with a small amount of vanilla JavaScript.
 
-## Scoring note
+## Tech stack
 
-The real SY0-701 is scored on a 100–900 scale with a 750 pass mark. This app reports raw percentage,
-an approximate scaled score, and pass/fail against the equivalent (~83%). Treat the scaled number as
-an estimate for self-assessment, not an official prediction.
+**Python · Flask · Jinja2 · vanilla JavaScript · HTML/CSS** — no front-end framework, no database (question banks are versioned Python data, session state is server-side).
 
-## Disclaimer
+---
 
-These are original practice questions for study purposes and are **not** real exam items. CompTIA and
-Security+ are trademarks of CompTIA, Inc.; this project is not affiliated with or endorsed by CompTIA.
+*Built as a personal study tool while preparing for these certifications.*
