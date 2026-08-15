@@ -5,7 +5,7 @@ A full-featured web application for studying five IT certifications — **CompTI
 Built with Python and Flask. Runs locally, no account required.
 
 <p>
-  <img alt="CI" src="https://github.com/kodjoahenkorah-dot/security-practice-exams/actions/workflows/ci.yml/badge.svg">
+  <img alt="CI" src="https://github.com/kodjoahenkorah-dot/IT-Cert-Prep/actions/workflows/ci.yml/badge.svg">
   <img alt="Python" src="https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white">
   <img alt="Flask" src="https://img.shields.io/badge/Flask-web%20app-000000?logo=flask&logoColor=white">
   <img alt="Questions" src="https://img.shields.io/badge/Questions-4%2C574-2ea043">
