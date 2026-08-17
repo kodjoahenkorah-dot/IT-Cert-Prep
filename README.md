@@ -10,7 +10,6 @@ Built with Python and Flask. Runs locally, no account required.
   <img alt="Flask" src="https://img.shields.io/badge/Flask-web%20app-000000?logo=flask&logoColor=white">
   <img alt="Questions" src="https://img.shields.io/badge/Questions-4%2C574-2ea043">
   <img alt="Exams" src="https://img.shields.io/badge/Exams-5-2f81f7">
-  <img alt="License" src="https://img.shields.io/badge/License-MIT-blue">
 </p>
 
 ![Home page](docs/screenshots/home.png)
@@ -104,7 +103,3 @@ templates/ · static/       # server-rendered UI, vanilla JS (no framework)
 ## Tech stack
 
 **Python · Flask · Jinja2 · vanilla JavaScript · HTML/CSS** — no front-end framework, no database (question banks are versioned Python data, session state is server-side).
-
----
-
-*Built as a personal study tool while preparing for these certifications.*
